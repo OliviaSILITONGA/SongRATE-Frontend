@@ -1,6 +1,9 @@
+import Logo from "../components/Logo";
+
 export default function ForgotPassword() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#1D2128]  to-[#30353F] px-6">
+      <Logo />
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
         {/* Title */}
         <h1 className="text-3xl font-bold text-center text-[#1B1D24] mb-4">

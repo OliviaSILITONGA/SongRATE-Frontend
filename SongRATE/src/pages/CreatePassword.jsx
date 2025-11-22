@@ -1,6 +1,9 @@
+import Logo from "../components/Logo";
+
 export default function CreatePassword() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#1D2128]  to-[#30353F] px-6">
+      <Logo />
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
         {/* Title */}
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-4">
@@ -38,7 +41,7 @@ export default function CreatePassword() {
           </div>
 
           {/* Button */}
-          <button className="bg-[#1B1D24] text-white font-bold py-2 rounded-lg hover:bg-[#A7A7A7] transition">
+          <button className="bg-[#1B1D24] text-white font-bold py-2 rounded-lg hover:bg-gray-800 transition">
             Change Password
           </button>
         </form>

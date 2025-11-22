@@ -4,6 +4,10 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import CreatePassword from "./pages/CreatePassword";
+import HomePage from "./pages/HomePage";
+import RateMusicPage from "./pages/RateMusicPage";
+import RatingMusicPage from "./pages/RatingMusicPage";
+import TopArtistPage from "./pages/TopArtistPage";
 
 function App() {
   return (
@@ -14,6 +18,10 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/create-password" element={<CreatePassword />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/rate" element={<RateMusicPage />} />
+        <Route path="/rating" element={<RatingMusicPage />} />
+        <Route path="/top-artist" element={<TopArtistPage />} />
       </Routes>
     </BrowserRouter>
   );
