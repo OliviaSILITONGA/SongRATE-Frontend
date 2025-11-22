@@ -1,9 +1,43 @@
 import Home from "../components/Home";
+import Banner from "../components/Banner";
+import SongRatingCard from "../components/SongRatingCard";
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
       <Home />
+      <Banner />
+
+      {/* Section Title */}
+      <h2 className="text-3xl font-bold mt-10">Songs Rating This Week</h2>
+
+      {/* Songs List */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 mt-6">
+        <SongRatingCard
+          number="01"
+          title="Let It Happen"
+          artist="Tame Impala"
+          albumCover="https://i.scdn.co/image/ab67616d0000b273c0481219777084d57c94bdfa"
+        />
+        <SongRatingCard
+          number="02"
+          title="Supermodel"
+          artist="Måneskin"
+          albumCover="https://i.scdn.co/image/ab67616d0000b27316f0a91860a1ac1e3f46a1ce"
+        />
+        <SongRatingCard
+          number="03"
+          title="Anti-Hero"
+          artist="Taylor Swift"
+          albumCover="https://i.scdn.co/image/ab67616d0000b273f4b79e927651c01fb9b31f57"
+        />
+        <SongRatingCard
+          number="04"
+          title="As It Was"
+          artist="Harry Styles"
+          albumCover="https://i.scdn.co/image/ab67616d0000b2735a4da1f2f7eacfa5f9c9f6b1"
+        />
+      </div>
 
       {/* FOOTER */}
       <footer className="bg-[#3E424B85] text-gray-300 py-10 px-20">
