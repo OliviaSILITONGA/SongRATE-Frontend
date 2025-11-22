@@ -1,6 +1,7 @@
 import Home from "../components/Home";
 import Banner from "../components/Banner";
 import SongRatingCard from "../components/SongRatingCard";
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
   return (
