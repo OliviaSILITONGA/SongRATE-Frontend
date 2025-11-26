@@ -2,7 +2,7 @@ import Logo from "../components/Logo";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#1D2128]  to-[#30353F] px-6">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#1D2128] to-[#30353F] px-6">
       <Logo />
       <div className="bg-[#1B1D24] shadow-xl rounded-2xl p-8 w-full max-w-md">
         {/* Title */}

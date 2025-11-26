@@ -1,17 +1,41 @@
-export default function SongRatingCard({ number, title, artist, albumCover }) {
+export default function SongRatingCard({
+  number,
+  title,
+  artist,
+  albumCover,
+  rating = 4,
+  totalRatings = 12,
+}) {
   return (
-    <div className="flex items-center gap-4 bg-[#1A1A1A] p-4 rounded-xl text-white">
-      <span className="text-3xl font-bold w-10 text-center">{number}</span>
+    <div className="flex items-center gap-6 bg-transparent p-6 rounded-2xl text-white min-h-[140px] shadow-lg w-[90%] max-w-[1600px]">
+      <span className="text-4xl font-extrabold w-12 text-center">{number}</span>
 
+      {/* COVER */}
       <img
         src={albumCover}
         alt={title}
-        className="w-16 h-16 rounded-lg object-cover"
+        className="w-20 h-20 rounded-xl object-cover"
       />
 
-      <div>
-        <h3 className="text-lg font-semibold">{title}</h3>
-        <p className="text-sm text-gray-300">{artist}</p>
+      {/* TEXT + RATING */}
+      <div className="flex justify-between items-center w-full">
+        {/* TEXT */}
+        <div>
+          <h3 className="text-xl font-bold">{title}</h3>
+          <p className="text-sm text-gray-300">{artist}</p>
+        </div>
+
+        {/* ⭐ RATING */}
+        <div className="flex items-center gap-2">
+          <div className="flex text-yellow-400 text-2xl">
+            {"★".repeat(rating)}
+            {"☆".repeat(5 - rating)}
+          </div>
+
+          <span className="text-gray-300 text-sm">
+            {totalRatings} {totalRatings < 10 ? "rating" : "ratings"}
+          </span>
+        </div>
       </div>
     </div>
   );

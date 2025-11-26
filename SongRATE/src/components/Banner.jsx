@@ -1,18 +1,14 @@
-import GrammyImg from "../assets/Grammy.png";
+import GrammyImg from "../assets/Grammy_Banner.png";
 
 export default function Banner() {
   return (
     <div
-      className="w-full h-[400px] bg-cover bg-center rounded-xl mt-6"
+      className="w-full h-[550px] bg-cover bg-center rounded-xl mt-30"
       style={{
         backgroundImage: `url(${GrammyImg})`,
       }}
     >
-      <div className="w-full h-full bg-black/40 flex items-end p-10 rounded-xl">
-        <h2 className="text-white text-4xl font-bold">
-          2026 Grammy Awards Nominations
-        </h2>
-      </div>
+      <div className="w-full h-ful flex items-end pt-20 p-10 rounded-xl"></div>
     </div>
   );
 }

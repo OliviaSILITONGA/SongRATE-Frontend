@@ -5,15 +5,17 @@ import { Link } from "react-router-dom";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
+    <div className="min-h-screen bg-gradient-to-r from-[#1D2128] to-[#30353F] text-white">
       <Home />
       <Banner />
 
       {/* Section Title */}
-      <h2 className="text-3xl font-bold mt-10">Songs Rating This Week</h2>
+      <h2 className="text-5xl text-center font-bold mt-20">
+        Top 5 Songs Rating This Week
+      </h2>
 
       {/* Songs List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 mt-6">
+      <div className="flex flex-col bg-transparent items-center gap-10 mt-10">
         <SongRatingCard
           number="01"
           title="Let It Happen"
