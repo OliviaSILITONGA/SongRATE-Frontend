@@ -1,7 +1,7 @@
 import Home from "../components/Home";
 import Banner from "../components/Banner";
 import SongRatingCard from "../components/SongRatingCard";
-import { Link } from "react-router-dom";
+import AlbumCard from "../components/AlbumCard";
 
 export default function HomePage() {
   return (
@@ -40,6 +40,72 @@ export default function HomePage() {
           artist="Harry Styles"
           albumCover="https://i.scdn.co/image/ab67616d0000b2735a4da1f2f7eacfa5f9c9f6b1"
         />
+      </div>
+
+      {/* Rate Your Favorite Music Button */}
+      <div className="flex justify-center mt-12">
+        <button className="bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-lg hover:bg-yellow-400 transition">
+          Rate Your Favorite Music
+        </button>
+      </div>
+
+      {/* Search Section */}
+      <div className="flex justify-center mt-8 mb-20">
+        <div className="relative w-full max-w-2xl mx-8">
+          <input
+            type="text"
+            placeholder="Find Artist, Albums or Artist"
+            className="w-full px-6 py-4 rounded-full bg-[#3E424B] text-gray-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 pl-12"
+          />
+          <svg
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </div>
+      </div>
+
+      {/* === POPULAR ALBUMS THIS WEEK === */}
+      <div className="mt-20 px-8">
+        <h2 className="text-2xl font-bold mb-6">Popular Albums This Week</h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+          <AlbumCard
+            title="Eternal Sunshine"
+            artist="Ariana Grande"
+            rating="4.9"
+            image="https://upload.wikimedia.org/wikipedia/en/3/3b/Ariana_Grande_-_Eternal_Sunshine.png"
+          />
+
+          <AlbumCard
+            title="The Life of a Showgirl"
+            artist="Taylor Swift"
+            rating="4.9"
+            image="https://i.scdn.co/image/ab67616d0000b273c0481219777084d57c94bdfa"
+          />
+
+          <AlbumCard
+            title="Debi Titar Mas Fotos"
+            artist="Bad Bunny"
+            rating="4.7"
+            image="https://i.scdn.co/image/ab67616d0000b2733bf889be4c2f2a92ce7498a6"
+          />
+
+          <AlbumCard
+            title="Music"
+            artist="Playboi Carti"
+            rating="4.7"
+            image="https://upload.wikimedia.org/wikipedia/commons/4/49/I_Am_Music_Cover.jpg"
+          />
+        </div>
       </div>
 
       {/* FOOTER */}

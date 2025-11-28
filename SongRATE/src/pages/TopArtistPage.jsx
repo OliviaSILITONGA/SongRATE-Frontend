@@ -1,20 +1,92 @@
 import Menu from "../components/Menu";
 
 export default function TopArtistPage() {
+  const artists = [
+    {
+      name: "Lady Gaga",
+      img: "https://i.imgur.com/fG4pCID.jpeg",
+    },
+    {
+      name: "Adele",
+      img: "https://i.imgur.com/lIuXqDm.jpeg",
+    },
+    {
+      name: "Bruno Mars",
+      img: "https://i.imgur.com/8N2k9M0.jpeg",
+    },
+    {
+      name: "The Weeknd",
+      img: "https://i.imgur.com/6uObQRA.jpeg",
+    },
+    {
+      name: "Taylor Swift",
+      img: "https://i.imgur.com/RjF1pku.jpeg",
+    },
+    {
+      name: "Bad Bunny",
+      img: "https://i.imgur.com/tJc5VxE.jpeg",
+    },
+    {
+      name: "Doja Cat",
+      img: "https://i.imgur.com/6vBvSPp.jpeg",
+    },
+    {
+      name: "Ed Sherran",
+      img: "https://i.imgur.com/9quvPAE.jpeg",
+    },
+    {
+      name: "Billie Eilish",
+      img: "https://i.imgur.com/xtokGHL.jpeg",
+    },
+    {
+      name: "Ariana Grande",
+      img: "https://i.imgur.com/gWnH3b5.jpeg",
+    },
+    {
+      name: "Justin Bieber",
+      img: "https://i.imgur.com/8Gh444m.jpeg",
+    },
+    {
+      name: "Kendrick Lamar",
+      img: "https://i.imgur.com/0cYcGJm.jpeg",
+    },
+    {
+      name: "SZA",
+      img: "https://i.imgur.com/txQRTY7.jpeg",
+    },
+    {
+      name: "Tyler, The Creator",
+      img: "https://i.imgur.com/o1tGk0a.jpeg",
+    },
+    {
+      name: "Sabrina Carpenter",
+      img: "https://i.imgur.com/Vg67UIB.jpeg",
+    },
+    {
+      name: "Benson Boone",
+      img: "https://i.imgur.com/nEq0uiw.jpeg",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
       <Menu />
 
-      <h2 className="text-4xl font-bold">Top Artist</h2>
-      <p className="text-gray-400 mt-2">
-        Discover the best artists with the most streamed songs.
-      </p>
+      {/* Title */}
+      <h2 className="text-5xl text-center font-bold mt-14">Top Artist</h2>
 
-      <div className="mt-10 flex justify-center">
-        <img
-          src="/mnt/data/Top Artist.png"
-          className="rounded-2xl shadow-2xl w-[90%]"
-        />
+      {/* Artist Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-y-12 gap-x-6 px-8 mt-16 mb-20">
+        {artists.map((artist, i) => (
+          <div key={i} className="flex flex-col items-center text-center">
+            <img
+              src={artist.img}
+              alt={artist.name}
+              className="w-40 h-40 md:w-48 md:h-48 object-cover rounded-full border-2 border-gray-600 shadow-lg"
+            />
+            <p className="mt-4 text-lg font-semibold">{artist.name}</p>
+          </div>
+        ))}
       </div>
 
       {/* FOOTER */}
@@ -24,9 +96,9 @@ export default function TopArtistPage() {
           <div>
             <h2 className="text-2xl font-bold mb-4">Contact</h2>
             <ul className="space-y-2">
-              <li>Email: songrate@gmail.com</li>
-              <li>Instagram: @songrate</li>
-              <li>Twitter: @songrate</li>
+              <li>Text Message</li>
+              <li>Instagram</li>
+              <li>TikTok</li>
             </ul>
           </div>
 
