@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage";
 import RateMusicPage from "./pages/RateMusicPage";
 import RatingMusicPage from "./pages/RatingMusicPage";
 import TopArtistPage from "./pages/TopArtistPage";
+import PostedPage from "./pages/PostedPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/rate" element={<RateMusicPage />} />
         <Route path="/rating" element={<RatingMusicPage />} />
         <Route path="/top-artist" element={<TopArtistPage />} />
+        <Route path="/posted" element={<PostedPage />} />
       </Routes>
     </BrowserRouter>
   );

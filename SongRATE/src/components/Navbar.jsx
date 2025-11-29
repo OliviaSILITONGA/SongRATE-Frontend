@@ -27,29 +27,6 @@ export default function Navbar() {
           </Link>
         </div>
       </nav>
-
-      {/* NAVBAR KEDUA (MENU) */}
-      <div className="w-full px-10 py-3 flex justify-center font-bold gap-10 text-lg bg-[#3E424B]">
-        <Link to="/top-artist" className="hover:text-yellow-300 duration-200">
-          Top Artist
-        </Link>
-
-        <Link to="/top-songs" className="hover:text-yellow-300 duration-200">
-          Top Songs
-        </Link>
-
-        <Link to="/chart" className="hover:text-yellow-300 duration-200">
-          Chart
-        </Link>
-
-        <Link to="/new-releases" className="hover:text-yellow-300 duration-200">
-          New Releases
-        </Link>
-
-        <Link to="/news" className="hover:text-yellow-300 duration-200">
-          News
-        </Link>
-      </div>
     </header>
   );
 }
