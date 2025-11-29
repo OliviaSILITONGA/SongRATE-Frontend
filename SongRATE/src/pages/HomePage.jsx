@@ -2,6 +2,7 @@ import Home from "../components/Home";
 import Banner from "../components/Banner";
 import SongRatingCard from "../components/SongRatingCard";
 import AlbumCard from "../components/AlbumCard";
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
   return (
@@ -44,9 +45,12 @@ export default function HomePage() {
 
       {/* Rate Your Favorite Music Button */}
       <div className="flex justify-center mt-12">
-        <button className="bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-lg hover:bg-yellow-400 transition">
+        <Link
+          to="/rate"
+          className="bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-lg hover:bg-yellow-400 transition"
+        >
           Rate Your Favorite Music
-        </button>
+        </Link>
       </div>
 
       {/* Search Section */}

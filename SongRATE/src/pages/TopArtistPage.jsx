@@ -69,11 +69,11 @@ export default function TopArtistPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
+    <div className="min-h-screen bg-gradient-to-bl pt-[140px] from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
       <Menu />
 
       {/* Title */}
-      <h2 className="text-5xl text-center font-bold mt-14">Top Artist</h2>
+      <h2 className="text-5xl text-center font-bold">Top Artist</h2>
 
       {/* Artist Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-y-12 gap-x-6 px-8 mt-16 mb-20">
