@@ -2,6 +2,10 @@ import { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import AlbumCard from "../components/AlbumCard";
 import ReviewCard from "../components/ReviewCard";
+import ArianaGrande from "../assets/images/EternalSunshine.png";
+import TaylorSwift from "../assets/images/Showgirl.png";
+import BadBunny from "../assets/images/Debi_Titar.png";
+import PlayboiCarti from "../assets/images/Playboy.png";
 import { Link } from "react-router-dom";
 
 export default function LandingPage() {
@@ -70,7 +74,7 @@ export default function LandingPage() {
               title="Eternal Sunshine"
               artist="Ariana Grande"
               rating="4.9"
-              image="https://upload.wikimedia.org/wikipedia/en/3/3b/Ariana_Grande_-_Eternal_Sunshine.png"
+              image={ArianaGrande}
             />
           </div>
 
@@ -79,7 +83,7 @@ export default function LandingPage() {
               title="The Life of a Showgirl"
               artist="Taylor Swift"
               rating="4.9"
-              image="https://i.scdn.co/image/ab67616d0000b273c0481219777084d57c94bdfa"
+              image={TaylorSwift}
             />
           </div>
 
@@ -88,7 +92,7 @@ export default function LandingPage() {
               title="Debi Titar Mas Fotos"
               artist="Bad Bunny"
               rating="4.7"
-              image="https://i.scdn.co/image/ab67616d0000b2733bf889be4c2f2a92ce7498a6"
+              image={BadBunny}
             />
           </div>
 
@@ -97,7 +101,7 @@ export default function LandingPage() {
               title="Music"
               artist="Playboi Carti"
               rating="4.7"
-              image="https://upload.wikimedia.org/wikipedia/commons/4/49/I_Am_Music_Cover.jpg"
+              image={PlayboiCarti}
             />
           </div>
         </div>
