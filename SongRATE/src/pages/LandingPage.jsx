@@ -1,28 +1,47 @@
+import { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import AlbumCard from "../components/AlbumCard";
 import ReviewCard from "../components/ReviewCard";
 import { Link } from "react-router-dom";
 
 export default function LandingPage() {
+  // === SCROLL REVEAL ANIMATION ===
+  useEffect(() => {
+    const revealElements = document.querySelectorAll(".reveal");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    revealElements.forEach((el) => observer.observe(el));
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
       <Navbar />
 
       {/* HERO */}
-      <section className="text-left mt-40">
-        <h1 className="text-4xl font-extrabold tracking-wide leading-tight px-10">
-          Discover.Rate.Share your music world.
+      <section className="text-left mt-40 px-10">
+        <h1 className="text-6xl font-extrabold tracking-wide leading-tight reveal">
+          Discover. Rate. Share your music world.
         </h1>
 
-        <h1 className="text-4xl font-bold tracking-wide leading-tight px-10">
+        <h1 className="text-4xl font-bold tracking-wide leading-tight mt-3 reveal">
           Keep track of every song and album you love. Express your thoughts
           through reviews and ratings.
         </h1>
       </section>
 
       {/* DESCRIPTION */}
-      <section className="text-right mt-24">
-        <p className="text-gray-300 mt-4 text-xl px-10 py-4">
+      <section className="text-right text-2xl mt-24 px-10 py-4">
+        <p className="text-gray-300 text-xl reveal">
           Songrate is a social platform for music lovers. A place to explore,
           rate, and discuss your favorite tracks with friends. Build your music
           journal, share opinions, and connect through the sound that moves you.
@@ -30,7 +49,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA BUTTON */}
-      <section className="text-center mt-24">
+      <section className="text-center mt-24 reveal">
         <Link
           to="/signup"
           className="px-10 py-4 bg-[#3E424B] border-4 text-yellow-400 font-semibold rounded-xl hover:bg-[#3E424B]"
@@ -41,64 +60,82 @@ export default function LandingPage() {
 
       {/* === POPULAR ALBUMS THIS WEEK === */}
       <div className="mt-20 px-8">
-        <h2 className="text-2xl font-bold mb-6">Popular Albums This Week</h2>
+        <h2 className="text-2xl font-bold mb-6 reveal">
+          Popular Albums This Week
+        </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-          <AlbumCard
-            title="Eternal Sunshine"
-            artist="Ariana Grande"
-            rating="4.9"
-            image="https://upload.wikimedia.org/wikipedia/en/3/3b/Ariana_Grande_-_Eternal_Sunshine.png"
-          />
+          <div className="reveal">
+            <AlbumCard
+              title="Eternal Sunshine"
+              artist="Ariana Grande"
+              rating="4.9"
+              image="https://upload.wikimedia.org/wikipedia/en/3/3b/Ariana_Grande_-_Eternal_Sunshine.png"
+            />
+          </div>
 
-          <AlbumCard
-            title="The Life of a Showgirl"
-            artist="Taylor Swift"
-            rating="4.9"
-            image="https://i.scdn.co/image/ab67616d0000b273c0481219777084d57c94bdfa"
-          />
+          <div className="reveal">
+            <AlbumCard
+              title="The Life of a Showgirl"
+              artist="Taylor Swift"
+              rating="4.9"
+              image="https://i.scdn.co/image/ab67616d0000b273c0481219777084d57c94bdfa"
+            />
+          </div>
 
-          <AlbumCard
-            title="Debi Titar Mas Fotos"
-            artist="Bad Bunny"
-            rating="4.7"
-            image="https://i.scdn.co/image/ab67616d0000b2733bf889be4c2f2a92ce7498a6"
-          />
+          <div className="reveal">
+            <AlbumCard
+              title="Debi Titar Mas Fotos"
+              artist="Bad Bunny"
+              rating="4.7"
+              image="https://i.scdn.co/image/ab67616d0000b2733bf889be4c2f2a92ce7498a6"
+            />
+          </div>
 
-          <AlbumCard
-            title="Music"
-            artist="Playboi Carti"
-            rating="4.7"
-            image="https://upload.wikimedia.org/wikipedia/commons/4/49/I_Am_Music_Cover.jpg"
-          />
+          <div className="reveal">
+            <AlbumCard
+              title="Music"
+              artist="Playboi Carti"
+              rating="4.7"
+              image="https://upload.wikimedia.org/wikipedia/commons/4/49/I_Am_Music_Cover.jpg"
+            />
+          </div>
         </div>
       </div>
 
       {/* POPULAR REVIEWS */}
       <section className="mt-20 px-20 mb-32">
-        <h2 className="text-3xl font-semibold mb-6">Popular Reviews</h2>
+        <h2 className="text-3xl font-semibold mb-6 reveal">Popular Reviews</h2>
 
         <div className="flex gap-8 flex-wrap">
-          <ReviewCard
-            image="https://placehold.co/100"
-            name="Alvian Kathur"
-            review="Salah satu album terbaik yang pernah saya dengar."
-          />
-          <ReviewCard
-            image="https://placehold.co/100"
-            name="Dinda Rahmah"
-            review="Flow-nya nyaman banget dan bikin nagih!"
-          />
-          <ReviewCard
-            image="https://placehold.co/100"
-            name="Jonathan Silalahi"
-            review="Album ini bener-bener masterpiece."
-          />
+          <div className="reveal">
+            <ReviewCard
+              image="https://placehold.co/100"
+              name="Alvian Kathur"
+              review="Salah satu album terbaik yang pernah saya dengar."
+            />
+          </div>
+
+          <div className="reveal">
+            <ReviewCard
+              image="https://placehold.co/100"
+              name="Dinda Rahmah"
+              review="Flow-nya nyaman banget dan bikin nagih!"
+            />
+          </div>
+
+          <div className="reveal">
+            <ReviewCard
+              image="https://placehold.co/100"
+              name="Jonathan Silalahi"
+              review="Album ini bener-bener masterpiece."
+            />
+          </div>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-[#3E424B85] text-gray-300 py-10 px-20">
+      <footer className="bg-[#3E424B85] text-gray-300 py-10 px-20 reveal">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* CONTACT */}
           <div>

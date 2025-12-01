@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import Home from "../components/Home";
+import SongRatingCard from "../components/SongRatingCard";
 
 // DATA TOP 5 SONGS (PERSIS SEPERTI GAMBAR)
 const topSongs = [
@@ -94,7 +95,7 @@ const newest = [
 
 export default function MusicRatings() {
   return (
-    <div className="w-full min-h-screen bg-[#0e0e0e] text-white pt-32 pb-20 px-6">
+    <div className="w-full min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white pt-32 pb-20 px-6">
       <Home />
       {/* TITLE */}
       <div className="text-center">
@@ -109,42 +110,40 @@ export default function MusicRatings() {
       <h2 className="text-2xl font-bold mt-16 mb-6">
         Top 5 Songs Rating This Week
       </h2>
-      <div className="space-y-5">
-        {topSongs.map((song, index) => (
-          <div
-            key={index}
-            className="bg-[#1b1b1b] rounded-2xl p-5 flex items-center gap-4 shadow-lg border border-white/5"
-          >
-            <div className="text-3xl font-bold text-yellow-400 w-10 text-center">
-              {song.rank}
-            </div>
 
-            <img
-              src={song.image}
-              alt={song.title}
-              className="w-20 h-20 rounded-xl object-cover"
-            />
-
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold">{song.title}</h3>
-              <p className="text-gray-400">{song.artist}</p>
-
-              <div className="flex items-center gap-1 mt-1">
-                {[...Array(song.rating)].map((_, i) => (
-                  <FaStar key={i} className="text-yellow-400" />
-                ))}
-                <span className="text-gray-400 text-sm ml-2">{song.total}</span>
-              </div>
-            </div>
-          </div>
-        ))}
+      {/* Songs List */}
+      <div className="flex flex-col bg-transparent items-center gap-10 mt-10">
+        <SongRatingCard
+          number="01"
+          title="Let It Happen"
+          artist="Tame Impala"
+          albumCover="https://i.scdn.co/image/ab67616d0000b273c0481219777084d57c94bdfa"
+        />
+        <SongRatingCard
+          number="02"
+          title="Supermodel"
+          artist="Måneskin"
+          albumCover="https://i.scdn.co/image/ab67616d0000b27316f0a91860a1ac1e3f46a1ce"
+        />
+        <SongRatingCard
+          number="03"
+          title="Anti-Hero"
+          artist="Taylor Swift"
+          albumCover="https://i.scdn.co/image/ab67616d0000b273f4b79e927651c01fb9b31f57"
+        />
+        <SongRatingCard
+          number="04"
+          title="As It Was"
+          artist="Harry Styles"
+          albumCover="https://i.scdn.co/image/ab67616d0000b2735a4da1f2f7eacfa5f9c9f6b1"
+        />
       </div>
 
-      {/* BUTTON RATE */}
-      <div className="text-center mt-10">
+      {/* Rate Your Favorite Music Button */}
+      <div className="flex justify-center mt-12">
         <Link
           to="/rate"
-          className="px-6 py-3 bg-yellow-500 text-black font-semibold rounded-xl hover:bg-yellow-400 transition"
+          className="bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-lg hover:bg-yellow-400 transition"
         >
           Rate Your Favorite Music
         </Link>

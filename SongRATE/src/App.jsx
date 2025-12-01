@@ -9,6 +9,9 @@ import RateMusicPage from "./pages/RateMusicPage";
 import RatingMusicPage from "./pages/RatingMusicPage";
 import TopArtistPage from "./pages/TopArtistPage";
 import PostedPage from "./pages/PostedPage";
+import ChartPage from "./pages/ChartPage";
+import NewReleasesPage from "./pages/NewReleasesPage";
+import NewsPage from "./pages/NewsPage";
 
 function App() {
   return (
@@ -24,6 +27,9 @@ function App() {
         <Route path="/rating" element={<RatingMusicPage />} />
         <Route path="/top-artist" element={<TopArtistPage />} />
         <Route path="/posted" element={<PostedPage />} />
+        <Route path="/chart" element={<ChartPage />} />
+        <Route path="/new-releases" element={<NewReleasesPage />} />
+        <Route path="/news" element={<NewsPage />} />
       </Routes>
     </BrowserRouter>
   );

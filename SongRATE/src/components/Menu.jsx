@@ -23,7 +23,7 @@ export default function Navbar() {
           Home
         </Link>
 
-        <Link to="/top-songs" className="hover:text-yellow-300 duration-200">
+        <Link to="/rating" className="hover:text-yellow-300 duration-200">
           Top Songs
         </Link>
 
