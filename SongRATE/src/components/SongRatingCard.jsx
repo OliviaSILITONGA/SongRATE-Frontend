@@ -7,14 +7,14 @@ export default function SongRatingCard({
   totalRatings = 12,
 }) {
   return (
-    <div className="flex items-center gap-6 bg-transparent p-6 rounded-2xl text-white min-h-[140px] shadow-lg w-[90%] max-w-[1600px]">
+    <div className="flex items-center gap-2 bg-transparent rounded-2xl text-white min-h-[140px] shadow-lg w-[90%] max-w-[1600px]">
       <span className="text-4xl font-extrabold w-12 text-center">{number}</span>
 
       {/* COVER */}
       <img
         src={albumCover}
         alt={title}
-        className="w-20 h-20 rounded-xl object-cover"
+        className="max-w-[100px] rounded-xl object-cover"
       />
 
       {/* TEXT + RATING */}
@@ -22,7 +22,7 @@ export default function SongRatingCard({
         {/* TEXT */}
         <div>
           <h3 className="text-xl font-bold">{title}</h3>
-          <p className="text-sm text-gray-300">{artist}</p>
+          <p className="text-xl text-gray-300">{artist}</p>
         </div>
 
         {/* ⭐ RATING */}
@@ -32,7 +32,7 @@ export default function SongRatingCard({
             {"☆".repeat(5 - rating)}
           </div>
 
-          <span className="text-gray-300 text-sm">
+          <span className="text-gray-300 text-xl">
             {totalRatings} {totalRatings < 10 ? "rating" : "ratings"}
           </span>
         </div>

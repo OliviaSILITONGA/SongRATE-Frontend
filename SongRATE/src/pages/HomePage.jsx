@@ -2,11 +2,19 @@ import Home from "../components/Home";
 import Banner from "../components/Banner";
 import SongRatingCard from "../components/SongRatingCard";
 import AlbumCard from "../components/AlbumCard";
+import ArianaGrande from "../assets/EternalSunshine.png";
+import TaylorSwift from "../assets/Showgirl.png";
+import BadBunny from "../assets/Debi_Titar.png";
+import PlayboiCarti from "../assets/Playboy.png";
+import HUNTRIX from "../assets/HUNTRIX.jpg";
+import AlexWarren from "../assets/MOON.png";
+import sombr from "../assets/22.png";
+import RAYE from "../assets/HEART.png";
 import { Link } from "react-router-dom";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-r from-[#1D2128] to-[#30353F] text-white">
+    <div className="min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
       <Home />
       <Banner />
 
@@ -18,28 +26,34 @@ export default function HomePage() {
       {/* Songs List */}
       <div className="flex flex-col bg-transparent items-center gap-10 mt-10">
         <SongRatingCard
-          number="01"
-          title="Let It Happen"
-          artist="Tame Impala"
-          albumCover="https://i.scdn.co/image/ab67616d0000b273c0481219777084d57c94bdfa"
-        />
-        <SongRatingCard
-          number="02"
-          title="Supermodel"
-          artist="Måneskin"
-          albumCover="https://i.scdn.co/image/ab67616d0000b27316f0a91860a1ac1e3f46a1ce"
-        />
-        <SongRatingCard
-          number="03"
-          title="Anti-Hero"
+          number="1."
+          title="The Fate of Ophelia"
           artist="Taylor Swift"
-          albumCover="https://i.scdn.co/image/ab67616d0000b273f4b79e927651c01fb9b31f57"
+          albumCover={TaylorSwift}
         />
         <SongRatingCard
-          number="04"
-          title="As It Was"
-          artist="Harry Styles"
-          albumCover="https://i.scdn.co/image/ab67616d0000b2735a4da1f2f7eacfa5f9c9f6b1"
+          number="2."
+          title="Golden"
+          artist="HUNTR/X, EJAE, AUDREY NUNA, REI AMI & KPop Demon Hunters Cast"
+          albumCover={HUNTRIX}
+        />
+        <SongRatingCard
+          number="3."
+          title="Ordinary"
+          artist="Alex Warren"
+          albumCover={AlexWarren}
+        />
+        <SongRatingCard
+          number="4."
+          title="back to friends"
+          artist="sombr"
+          albumCover={sombr}
+        />
+        <SongRatingCard
+          number="5."
+          title="WHERE IS MY HUSBAND!"
+          artist="RAYE"
+          albumCover={RAYE}
         />
       </div>
 
@@ -78,36 +92,35 @@ export default function HomePage() {
       </div>
 
       {/* === POPULAR ALBUMS THIS WEEK === */}
-      <div className="mt-20 px-8">
+      <div className="mt-20 px-8 mb-10">
         <h2 className="text-2xl font-bold mb-6">Popular Albums This Week</h2>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           <AlbumCard
             title="Eternal Sunshine"
             artist="Ariana Grande"
             rating="4.9"
-            image="https://upload.wikimedia.org/wikipedia/en/3/3b/Ariana_Grande_-_Eternal_Sunshine.png"
+            image={ArianaGrande}
           />
 
           <AlbumCard
             title="The Life of a Showgirl"
             artist="Taylor Swift"
             rating="4.9"
-            image="https://i.scdn.co/image/ab67616d0000b273c0481219777084d57c94bdfa"
+            image={TaylorSwift}
           />
 
           <AlbumCard
             title="Debi Titar Mas Fotos"
             artist="Bad Bunny"
             rating="4.7"
-            image="https://i.scdn.co/image/ab67616d0000b2733bf889be4c2f2a92ce7498a6"
+            image={BadBunny}
           />
 
           <AlbumCard
             title="Music"
             artist="Playboi Carti"
             rating="4.7"
-            image="https://upload.wikimedia.org/wikipedia/commons/4/49/I_Am_Music_Cover.jpg"
+            image={PlayboiCarti}
           />
         </div>
       </div>

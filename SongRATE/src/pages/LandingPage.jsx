@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import AlbumCard from "../components/AlbumCard";
 import ReviewCard from "../components/ReviewCard";
-import ArianaGrande from "../assets/images/EternalSunshine.png";
-import TaylorSwift from "../assets/images/Showgirl.png";
-import BadBunny from "../assets/images/Debi_Titar.png";
-import PlayboiCarti from "../assets/images/Playboy.png";
+import ArianaGrande from "../assets/EternalSunshine.png";
+import TaylorSwift from "../assets/Showgirl.png";
+import BadBunny from "../assets/Debi_Titar.png";
+import PlayboiCarti from "../assets/Playboy.png";
 import { Link } from "react-router-dom";
 
 export default function LandingPage() {
