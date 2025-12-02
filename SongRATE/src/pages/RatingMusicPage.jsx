@@ -2,51 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import Home from "../components/Home";
+import TaylorSwift from "../assets/Showgirl.png";
+import HUNTRIX from "../assets/HUNTRIX.jpg";
+import AlexWarren from "../assets/MOON.png";
+import sombr from "../assets/22.png";
+import RAYE from "../assets/HEART.png";
 import SongRatingCard from "../components/SongRatingCard";
-
-// DATA TOP 5 SONGS (PERSIS SEPERTI GAMBAR)
-const topSongs = [
-  {
-    rank: 1,
-    title: "The Fate of Ophelia",
-    artist: "Taylor Swift",
-    image: "/images/ophelia.jpg",
-    rating: 5,
-    total: "1,156 ratings",
-  },
-  {
-    rank: 2,
-    title: "Golden",
-    artist: "Jungle",
-    image: "/images/golden.jpg",
-    rating: 5,
-    total: "1,078 ratings",
-  },
-  {
-    rank: 3,
-    title: "Ordinary",
-    artist: "Alex Warren",
-    image: "/images/ordinary.jpg",
-    rating: 5,
-    total: "987 ratings",
-  },
-  {
-    rank: 4,
-    title: "back to friends",
-    artist: "sombir",
-    image: "/images/backtofriends.jpg",
-    rating: 5,
-    total: "956 ratings",
-  },
-  {
-    rank: 5,
-    title: "WHERE IS MY HUSBAND!",
-    artist: "RAYE",
-    image: "/images/wimh.jpg",
-    rating: 5,
-    total: "912 ratings",
-  },
-];
 
 // DATA REVIEW / NEWEST RATING
 const newest = [
@@ -98,44 +59,50 @@ export default function MusicRatings() {
     <div className="w-full min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white pt-32 pb-20 px-6">
       <Home />
       {/* TITLE */}
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-3">Music Ratings</h1>
-        <p className="text-gray-300 max-w-xl mx-auto">
+      <div className="text-left">
+        <h1 className="text-7xl font-bold mb-3">Music Ratings</h1>
+        <p className="text-gray-30font-bold text-xl max-w-xl mx-auto">
           Discover the most popular songs rated by the community. Vote your
           favorite music too!
         </p>
       </div>
 
       {/* TOP 5 */}
-      <h2 className="text-2xl font-bold mt-16 mb-6">
+      <h2 className="text-4xl font-bold mt-16 mb-6">
         Top 5 Songs Rating This Week
       </h2>
 
       {/* Songs List */}
       <div className="flex flex-col bg-transparent items-center gap-10 mt-10">
         <SongRatingCard
-          number="01"
-          title="Let It Happen"
-          artist="Tame Impala"
-          albumCover="https://i.scdn.co/image/ab67616d0000b273c0481219777084d57c94bdfa"
-        />
-        <SongRatingCard
-          number="02"
-          title="Supermodel"
-          artist="Måneskin"
-          albumCover="https://i.scdn.co/image/ab67616d0000b27316f0a91860a1ac1e3f46a1ce"
-        />
-        <SongRatingCard
-          number="03"
-          title="Anti-Hero"
+          number="1."
+          title="The Fate of Ophelia"
           artist="Taylor Swift"
-          albumCover="https://i.scdn.co/image/ab67616d0000b273f4b79e927651c01fb9b31f57"
+          albumCover={TaylorSwift}
         />
         <SongRatingCard
-          number="04"
-          title="As It Was"
-          artist="Harry Styles"
-          albumCover="https://i.scdn.co/image/ab67616d0000b2735a4da1f2f7eacfa5f9c9f6b1"
+          number="2."
+          title="Golden"
+          artist="HUNTR/X, EJAE, AUDREY NUNA, REI AMI & KPop Demon Hunters Cast"
+          albumCover={HUNTRIX}
+        />
+        <SongRatingCard
+          number="3."
+          title="Ordinary"
+          artist="Alex Warren"
+          albumCover={AlexWarren}
+        />
+        <SongRatingCard
+          number="4."
+          title="back to friends"
+          artist="sombr"
+          albumCover={sombr}
+        />
+        <SongRatingCard
+          number="5."
+          title="WHERE IS MY HUSBAND!"
+          artist="RAYE"
+          albumCover={RAYE}
         />
       </div>
 
