@@ -6,7 +6,7 @@ import Taylor_Swift from "../assets/TaylorSwift.png";
 import Bad_Bunny from "../assets/Bad_Bunny.png";
 import Doja_Cat from "../assets/Doja_Cat.png";
 import Ed_Sherran from "../assets/Ed_Sherran.jpg";
-import Billie_Eilish from "../assets/Billie_Eilish.png";
+import Billie_Eilish from "../assets/Billie_Ellish.png";
 import Ariana_Grande from "../assets/Ariana_Grande.png";
 import Justin_Bieber from "../assets/Justin_Bieber.png";
 import Kendrick_Lamar from "../assets/Kendrick_Lamar.png";
