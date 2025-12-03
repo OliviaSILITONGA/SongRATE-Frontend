@@ -12,6 +12,7 @@ import PostedPage from "./pages/PostedPage";
 import ChartPage from "./pages/ChartPage";
 import NewReleasesPage from "./pages/NewReleasesPage";
 import NewsPage from "./pages/NewsPage";
+import ArtistDetailPage from "./pages/ArtistDetailPage";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/chart" element={<ChartPage />} />
         <Route path="/new-releases" element={<NewReleasesPage />} />
         <Route path="/news" element={<NewsPage />} />
+        <Route path="/artist/:id" element={<ArtistDetailPage />} />
       </Routes>
     </BrowserRouter>
   );

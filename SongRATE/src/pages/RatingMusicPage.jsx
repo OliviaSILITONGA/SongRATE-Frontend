@@ -58,13 +58,23 @@ export default function MusicRatings() {
   return (
     <div className="w-full min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white pt-32 pb-20 px-6">
       <Home />
-      {/* TITLE */}
-      <div className="text-left">
-        <h1 className="text-7xl font-bold mb-3">Music Ratings</h1>
-        <p className="text-gray-30font-bold text-xl max-w-xl mx-auto">
-          Discover the most popular songs rated by the community. Vote your
-          favorite music too!
-        </p>
+      {/* TITLE + IMAGE */}
+      <div className="flex items-center justify-between w-full mt-10 px-4">
+        {/* TEXT LEFT */}
+        <div className="text-left">
+          <h1 className="text-9xl font-bold mb-3">Music Ratings</h1>
+          <p className="text-gray-300 font-bold text-3xl max-w-lg">
+            Discover the most popular songs rated by the community. Vote your
+            favorite music too!
+          </p>
+        </div>
+
+        {/* IMAGE RIGHT */}
+        <img
+          src={TaylorSwift}
+          alt="Album"
+          className="w-[400px] h-[400px] rounded-xl object-cover shadow-xl hidden md:block"
+        />
       </div>
 
       {/* TOP 5 */}
@@ -119,35 +129,59 @@ export default function MusicRatings() {
       {/* NEWEST RATING */}
       <h2 className="text-2xl font-bold mt-16 mb-6">Newest Rating</h2>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-10 mt-8 px-2">
         {newest.map((item, idx) => (
           <div
             key={idx}
-            className="bg-[#1b1b1b] p-6 rounded-2xl shadow-lg border border-white/5 flex gap-4"
+            className="bg-[#1C1D22] w-full rounded-2xl p-6 shadow-md border border-white/10 mb-6"
           >
-            <img
-              src={item.image}
-              alt={item.title}
-              className="w-20 h-20 rounded-xl object-cover"
-            />
-
-            <div className="flex-1">
-              <h3 className="font-semibold">{item.title}</h3>
-              <p className="text-gray-400">{item.artist}</p>
-
-              <div className="flex items-center gap-1 my-1">
-                {[...Array(item.rating)].map((_, i) => (
-                  <FaStar key={i} className="text-yellow-400" />
-                ))}
+            {/* HEADER */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <img
+                  src={item.avatar}
+                  alt={item.username}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+                <span className="font-semibold">@{item.username}</span>
               </div>
 
-              <p className="text-sm text-gray-300 italic">"{item.review}"</p>
+              {/* STARS */}
+              <div className="flex gap-1 text-yellow-400">
+                {[...Array(item.rating)].map((_, i) => (
+                  <FaStar key={i} />
+                ))}
+              </div>
+            </div>
 
-              <div className="flex justify-between mt-3 text-sm text-gray-400">
-                <span>
-                  {item.username} · {item.time}
-                </span>
-                <span>❤️ {item.likes}</span>
+            {/* CONTENT */}
+            <div className="flex gap-4">
+              {/* COVER IMAGE */}
+              <img
+                src={item.image}
+                alt={item.title}
+                className="w-20 h-20 rounded-xl object-cover"
+              />
+
+              <div className="flex-1">
+                {/* TITLE */}
+                <h3 className="font-bold text-lg">{item.title}</h3>
+                <p className="text-gray-400 text-sm mb-2">{item.artist}</p>
+
+                {/* REVIEW */}
+                <p className="text-gray-200 text-sm mb-3 leading-relaxed">
+                  {item.review}
+                </p>
+
+                {/* FOOTER */}
+                <div className="flex justify-between items-center text-gray-400 text-sm">
+                  <span>{item.time}</span>
+
+                  <div className="flex items-center gap-1">
+                    <span className="text-red-500 text-lg">❤️</span>
+                    <span>{item.likes}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
