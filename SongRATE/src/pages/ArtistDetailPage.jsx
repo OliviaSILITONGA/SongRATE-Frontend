@@ -17,7 +17,7 @@ export default function ArtistDetailPage() {
   return (
     <div className="min-h-screen bg-gradient-to-bl pt-[140px] from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
       <Menu />
-
+      
       {/* Header */}
       <div className="max-w-5xl mx-auto mt-10 flex flex-col md:flex-row items-center gap-10 px-10">
         <img
