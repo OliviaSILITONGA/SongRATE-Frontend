@@ -20,106 +20,103 @@ export default function HomePage() {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
     window.addEventListener("resize", checkMobile);
-    
+
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white overflow-x-hidden">
+    <div
+      className="min-h-screen bg-gradient-to-bl 
+      from-[#2E333E] via-[#1C1F26] to-[#171A1F]
+      text-white overflow-x-hidden pageFadeIn"
+    >
       <Home />
 
-      <div className="pt-28"></div>
-      <Banner />
-      
-      {/* Banner dengan animasi */}
-      <div className="relative mt-8 mx-4 md:mx-8 overflow-hidden rounded-2xl">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-500 opacity-80 animate-gradient-x"></div>
-        
-        {/* Decorative elements */}
-        <div className="absolute top-0 left-0 w-32 h-32 bg-white/5 rounded-full -translate-x-16 -translate-y-16"></div>
-        <div className="absolute bottom-0 right-0 w-40 h-40 bg-white/5 rounded-full translate-x-20 translate-y-20"></div>
+      <div className="pt-20 md:pt-28"></div>
+
+      {/* Banner */}
+      <div className="px-4 md:px-8">
+        <Banner />
       </div>
 
-      {/* Section Title dengan animasi */}
-      <h2 className="text-3xl md:text-4xl lg:text-5xl text-center font-bold mt-16 md:mt-20 mb-8 md:mb-10 px-4 animate-fade-in">
+      {/* Title */}
+      <h2
+        className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center font-bold 
+        mt-16 md:mt-20 mb-8 md:mb-10 px-4"
+      >
         Top 5 Songs Rating This Week
       </h2>
 
-      {/* Songs List - Responsive grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 px-4 md:px-8 max-w-7xl mx-auto mt-8">
+      {/* Songs List */}
+      <div className="flex flex-col gap-6 px-4 md:px-8 max-w-3xl mx-auto mt-8">
         {[
           {
             number: "1.",
             title: "The Fate of Ophelia",
             artist: "Taylor Swift",
             albumCover: TaylorSwift,
-            ratings: "1,158 ratings"
+            ratings: "1,158 ratings",
           },
           {
             number: "2.",
             title: "Golden",
-            artist: "HUNTR/X, EJAE, AUDREY NUNA, REI AMI & KPop Demon Hunters Cast",
+            artist:
+              "HUNTR/X, EJAE, AUDREY NUNA, REI AMI & KPop Demon Hunters Cast",
             albumCover: HUNTRIX,
-            ratings: "1,078 ratings"
+            ratings: "1,078 ratings",
           },
           {
             number: "3.",
             title: "Ordinary",
             artist: "Alex Warren",
             albumCover: AlexWarren,
-            ratings: "997 ratings"
+            ratings: "997 ratings",
           },
           {
             number: "4.",
             title: "back to friends",
             artist: "sombr",
             albumCover: sombr,
-            ratings: "956 ratings"
+            ratings: "956 ratings",
           },
           {
             number: "5.",
             title: "WHERE IS MY HUSBAND!",
             artist: "RAYE",
             albumCover: RAYE,
-            ratings: "912 ratings"
-          }
+            ratings: "912 ratings",
+          },
         ].map((song, index) => (
-          <div 
-            key={index} 
-            className="animate-fade-in-up"
-            style={{ animationDelay: `${index * 100}ms` }}
-          >
-            <SongRatingCard
-              number={song.number}
-              title={song.title}
-              artist={song.artist}
-              albumCover={song.albumCover}
-              ratings={song.ratings}
-            />
+          <div key={index}>
+            <SongRatingCard {...song} />
           </div>
         ))}
       </div>
 
-      {/* Rate Your Favorite Music Button dengan animasi */}
-      <div className="flex justify-center mt-10 md:mt-12 px-4 animate-fade-in-up">
+      {/* Button */}
+      <div className="flex justify-center mt-10 md:mt-12 px-4">
         <Link
           to="/rate"
-          className="bg-yellow-500 text-black font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg text-base md:text-lg hover:bg-yellow-400 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl animate-pulse-subtle"
+          className="bg-yellow-500 text-black font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg
+          text-base md:text-lg hover:bg-yellow-400 transition-all duration-300 transform hover:scale-105
+          shadow-lg hover:shadow-xl"
         >
           Rate Your Favorite Music
         </Link>
       </div>
 
-      {/* Search Section */}
+      {/* Search */}
       <div className="flex justify-center mt-8 md:mt-12 mb-16 md:mb-20 px-4">
-        <div className="relative w-full max-w-2xl animate-fade-in">
+        <div className="relative w-full max-w-2xl">
           <input
             type="text"
             placeholder="Find Artist, Albums or Artist"
-            className="w-full px-6 py-3 md:py-4 rounded-full bg-[#3E424B] text-gray-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 pl-12 md:pl-14 text-sm md:text-base transition-all duration-300"
+            className="w-full px-6 py-3 md:py-4 rounded-full bg-[#3E424B] text-gray-200
+            focus:outline-none focus:ring-2 focus:ring-yellow-500 pl-12 md:pl-14 text-sm md:text-base
+            transition-all duration-300"
           />
           <svg
             className="absolute left-4 md:left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
@@ -137,71 +134,76 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* === POPULAR ALBUMS THIS WEEK === */}
+      {/* Albums */}
       <div className="mt-16 md:mt-20 px-4 md:px-8 mb-10 md:mb-16 max-w-7xl mx-auto">
-        <h2 className="text-xl md:text-2xl font-bold mb-6 animate-fade-in">
+        <h2 className="text-xl md:text-2xl font-bold mb-6">
           Popular Albums This Week
         </h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {[
             {
               title: "Eternal Sunshine",
               artist: "Ariana Grande",
               rating: "4.9",
-              image: ArianaGrande
+              image: ArianaGrande,
             },
             {
               title: "The Life of a Showgirl",
               artist: "Taylor Swift",
               rating: "4.9",
-              image: TaylorSwift
+              image: TaylorSwift,
             },
             {
               title: "Debi Titar Mas Fotos",
               artist: "Bad Bunny",
               rating: "4.7",
-              image: BadBunny
+              image: BadBunny,
             },
             {
               title: "Music",
               artist: "Playboi Carti",
               rating: "4.7",
-              image: PlayboiCarti
-            }
+              image: PlayboiCarti,
+            },
           ].map((album, index) => (
-            <div 
-              key={index} 
-              className="animate-fade-in-up"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <AlbumCard
-                title={album.title}
-                artist={album.artist}
-                rating={album.rating}
-                image={album.image}
-              />
-            </div>
+            <AlbumCard key={index} {...album} />
           ))}
         </div>
       </div>
 
-      {/* FOOTER */}
-      <footer className="bg-[#3E424B85] text-gray-300 py-8 md:py-10 px-4 md:px-8 lg:px-20">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+       {/* FOOTER */}
+      <footer className="bg-[#3E424B85] text-gray-300 py-10 px-4 md:px-20">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* CONTACT */}
-          <div className="animate-fade-in">
-            <h2 className="text-xl md:text-2xl font-bold mb-4">Contact</h2>
-            <ul className="space-y-2 text-sm md:text-base">
-              <li>Email: songrate@gmail.com</li>
-              <li>Instagram: @songrate</li>
-              <li>Twitter: @songrate</li>
+          <div>
+            <h2 className="text-2xl font-bold mb-4">Contact</h2>
+            <ul className="space-y-2">
+              <li className="flex items-center">
+                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                </svg>
+                Text Message
+              </li>
+              <li className="flex items-center">
+                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
+                </svg>
+                Instagram
+              </li>
+              <li className="flex items-center">
+                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.441 16.892c-2.102.144-6.784.144-8.883 0C5.279 16.736 5.018 15.022 5 12c.018-3.024.279-4.736 2.558-4.892 2.099-.144 6.782-.144 8.883 0C18.721 7.264 18.982 8.978 19 12c-.018 3.024-.279 4.736-2.559 4.892zM10 9.658l4.917 2.338L10 14.342V9.658z"/>
+                </svg>
+                TikTok
+              </li>
             </ul>
           </div>
 
           {/* SUBSCRIBE */}
-          <div className="animate-fade-in" style={{ animationDelay: "100ms" }}>
-            <h2 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Subscribe to Us</h2>
-            <p className="text-xs md:text-sm mb-4">
+          <div>
+            <h2 className="text-lg font-semibold mb-4">Subscribe to Us</h2>
+            <p className="text-sm mb-4">
               We'll send you the latest releases, news, and offers.
             </p>
 
@@ -209,9 +211,9 @@ export default function HomePage() {
               <input
                 type="email"
                 placeholder="Email"
-                className="w-full px-4 py-2 rounded-l-lg bg-[#3E424B] text-gray-200 focus:outline-none text-sm md:text-base"
+                className="w-full px-4 py-2 rounded-l-lg bg-[#3E424B] text-gray-200 focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
-              <button className="bg-yellow-500 px-4 rounded-r-lg hover:bg-yellow-400 transition-all duration-300">
+              <button className="bg-yellow-500 px-4 rounded-r-lg hover:bg-yellow-600 transition duration-300">
                 <svg width="20" height="20" fill="black" viewBox="0 0 24 24">
                   <path d="M2 21l21-9L2 3v7l15 2-15 2z" />
                 </svg>
@@ -220,82 +222,10 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="text-center text-gray-500 text-xs md:text-sm mt-8 md:mt-10 animate-fade-in">
+        <div className="text-center text-gray-500 text-sm mt-10">
           © 2025 SongRate
         </div>
       </footer>
-
-      {/* Tambahkan style CSS untuk animasi */}
-      <style jsx>{`
-        @keyframes gradient-x {
-          0%, 100% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-        }
-        
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-        
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
-        }
-        
-        @keyframes pulse-subtle {
-          0%, 100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0.9;
-          }
-        }
-        
-        .animate-gradient-x {
-          background-size: 200% 200%;
-          animation: gradient-x 3s ease infinite;
-        }
-        
-        .animate-fade-in-up {
-          animation: fadeInUp 0.6s ease-out forwards;
-          opacity: 0;
-        }
-        
-        .animate-fade-in {
-          animation: fadeIn 0.8s ease-out forwards;
-        }
-        
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-        
-        .animate-pulse-subtle {
-          animation: pulse-subtle 2s ease-in-out infinite;
-        }
-      `}</style>
     </div>
   );
 }

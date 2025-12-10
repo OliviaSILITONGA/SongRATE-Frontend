@@ -16,6 +16,7 @@ export default function Navbar() {
             alt="SongRATE Logo" 
             className="h-8 sm:h-10 md:h-12 w-auto" 
           />
+
         </div>
 
         {/* Desktop Navigation */}
@@ -94,31 +95,7 @@ export default function Navbar() {
             >
               Log In
             </Link>
-            
-            {/* Optional: Add more mobile menu items if needed */}
-            <div className="pt-4 mt-4 border-t border-gray-700">
-              <Link
-                to="/"
-                className="block py-2 text-gray-300 hover:text-white transition-colors duration-300"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Home
-              </Link>
-              <Link
-                to="/discover"
-                className="block py-2 text-gray-300 hover:text-white transition-colors duration-300"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Discover
-              </Link>
-              <Link
-                to="/reviews"
-                className="block py-2 text-gray-300 hover:text-white transition-colors duration-300"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Reviews
-              </Link>
-            </div>
+
           </div>
         </div>
       )}

@@ -50,7 +50,7 @@ export default function ChartPage() {
       streams: "34.1M",
       change: "down",
       changeAmount: 2,
-      image: "https://images.unsplash.com/photo-1520707136151-2f494b6c6d8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      image: "https://i.scdn.co/image/ab67616d0000b2732e8b4358d044b75807e30bf0",
       duration: "3:51"
     },
     {
@@ -238,9 +238,8 @@ export default function ChartPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-bl pt-[140px] from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
+    <div className="min-h-screen bg-gradient-to-bl pt-[180px] from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
       <Menu />
-
       {/* Title */}
       <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-5xl text-center font-bold mb-2">Top Charts</h2>

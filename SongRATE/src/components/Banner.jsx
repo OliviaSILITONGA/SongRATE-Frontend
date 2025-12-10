@@ -7,7 +7,7 @@ export default function Banner() {
   return (
     <div className="relative mt-24 mx-4 md:mx-8 lg:mx-16 mb-12 md:mb-16">
       {/* Background dengan gradient dan efek blur */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#3A1C71] via-[#5C258D] to-[#3A1C71] rounded-2xl opacity-95"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-[#2E333E] via-[#292E37] to-[#1D21288A] rounded-2xl opacity-95"></div>
 
       {/* Efek cahaya di belakang */}
       <div className="absolute inset-0 rounded-2xl overflow-hidden">
