@@ -50,7 +50,7 @@ export default function ChartPage() {
       streams: "34.1M",
       change: "down",
       changeAmount: 2,
-      image: "https://images.unsplash.com/photo-1520707136151-2f494b6c6d8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      image: "https://i.scdn.co/image/ab67616d0000b2732e8b4358d044b75807e30bf0",
       duration: "3:51"
     },
     {

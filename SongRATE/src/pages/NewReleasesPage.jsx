@@ -4,6 +4,18 @@ import { useState } from "react";
 export default function NewReleasesPage() {
   const [releaseType, setReleaseType] = useState("all");
   const [timeFilter, setTimeFilter] = useState("thisWeek");
+  
+  // STATE UNTUK LIKE
+  const [likedItems, setLikedItems] = useState([]);
+
+  // FUNGSI TOGGLE LIKE
+  const toggleLike = (id) => {
+    if (likedItems.includes(id)) {
+      setLikedItems(likedItems.filter((itemId) => itemId !== id));
+    } else {
+      setLikedItems([...likedItems, id]);
+    }
+  };
 
   const newReleasesData = {
     featured: [
@@ -16,7 +28,7 @@ export default function NewReleasesPage() {
         genre: "Pop",
         tracks: 16,
         duration: "65:22",
-        image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        image: "https://i.scdn.co/image/ab67616d0000b2738ecc33f195df6aa257c39eaa",
         description: "Taylor Swift's highly anticipated 11th studio album exploring themes of heartbreak, poetry, and self-discovery.",
         highlight: true
       }
@@ -31,7 +43,7 @@ export default function NewReleasesPage() {
         genre: "Alternative Pop",
         tracks: 10,
         duration: "42:15",
-        image: "https://images.unsplash.com/photo-1517230878791-4d28214057c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQODF6BfOgkBmIePFVoq5xwp2u5nvFpi4UGIA&s",
         description: "Billie Eilish's third studio album featuring a blend of soft ballads and hard-hitting tracks."
       },
       {
@@ -43,7 +55,7 @@ export default function NewReleasesPage() {
         genre: "Dance-pop",
         tracks: 11,
         duration: "48:30",
-        image: "https://images.unsplash.com/photo-1517230878791-4d28214057c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        image: "https://upload.wikimedia.org/wikipedia/en/thumb/f/fa/Dua_Lipa_-_Radical_Optimism.png/250px-Dua_Lipa_-_Radical_Optimism.png",
         description: "Dua Lipa's psychedelic-inspired third album exploring themes of joy and resilience."
       },
       {
@@ -55,7 +67,7 @@ export default function NewReleasesPage() {
         genre: "Folk-pop",
         tracks: 14,
         duration: "52:10",
-        image: "https://images.unsplash.com/photo-1520707136151-2f494b6c6d8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        image: "https://upload.wikimedia.org/wikipedia/en/0/03/Deacon_Blue_-_The_Great_Western_Road.webp",
         description: "A soulful journey through Americana and folk traditions."
       }
     ],
@@ -68,7 +80,7 @@ export default function NewReleasesPage() {
         releaseDate: "April 12, 2024",
         genre: "Pop",
         duration: "3:02",
-        image: "https://images.unsplash.com/photo-1517230878791-4d28214057c2?ixlib=rb-4.0.3&auto=format&fit=crop&w-600&q=80",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiuI0SOAGRbcUPg4kdJMo_5356l8oiTLCmGA&s",
         description: "Upbeat summer pop anthem about morning coffee and romance."
       },
       {
@@ -79,7 +91,7 @@ export default function NewReleasesPage() {
         releaseDate: "April 5, 2024",
         genre: "Country Rap",
         duration: "3:48",
-        image: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        image: "https://i.scdn.co/image/ab67616d0000b273efa97e80fdb012456a40532c",
         description: "Country-meets-hip-hop track about weekend celebrations."
       },
       {
@@ -90,7 +102,7 @@ export default function NewReleasesPage() {
         releaseDate: "April 19, 2024",
         genre: "Synth-pop",
         duration: "3:32",
-        image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        image: "https://i.abcnewsfe.com/a/19621697-7e0f-4f53-8fe0-a53b91293ade/taylor-swift-03-ht-jt-240820_1724193669006_hpEmbed_21x11.jpg",
         description: "Upbeat synth-pop track about performing through pain."
       },
       {
@@ -101,7 +113,7 @@ export default function NewReleasesPage() {
         releaseDate: "April 26, 2024",
         genre: "R&B",
         duration: "2:55",
-        image: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        image: "https://www.billboard.com/wp-content/uploads/2024/04/Tommy-Richman-cr-Alf-Bordallo-press-2024-billboard-1548.jpg",
         description: "Smooth R&B track about luxury and success."
       }
     ],
@@ -115,7 +127,7 @@ export default function NewReleasesPage() {
         genre: "Art Rock",
         tracks: 4,
         duration: "15:20",
-        image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        image: "https://i.ytimg.com/vi/-7LsBjrqqHA/maxresdefault.jpg",
         description: "Experimental art rock EP exploring digital consciousness."
       },
       {
@@ -127,7 +139,7 @@ export default function NewReleasesPage() {
         genre: "Electronic",
         tracks: 5,
         duration: "22:45",
-        image: "https://images.unsplash.com/photo-1499364615650-ec38552f4f34?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        image: "https://i.ytimg.com/vi/CHX-Dso7KzU/maxresdefault.jpg",
         description: "Late-night electronic jazz fusion EP."
       }
     ]
@@ -181,9 +193,7 @@ export default function NewReleasesPage() {
       releases = newReleasesData.eps;
     }
 
-    // Apply time filter
     if (timeFilter === "today") {
-      // For demo, filter to show some items
       return releases.slice(0, 3);
     } else if (timeFilter === "thisWeek") {
       return releases;
@@ -267,14 +277,25 @@ export default function NewReleasesPage() {
                       </svg>
                       Listen Now
                     </button>
-                    <button className="px-6 py-3 border border-gray-600 rounded-lg hover:bg-gray-700 transition duration-300">
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+                    
+                    {/* BUTTON 1: LIKE ICON (Sekarang di kiri) */}
+                    <button 
+                        onClick={() => toggleLike(newReleasesData.featured[0].id)}
+                        className={`px-6 py-3 border border-gray-600 rounded-lg transition duration-300 ${
+                            likedItems.includes(newReleasesData.featured[0].id) 
+                            ? "bg-red-500/20 border-red-500 text-red-500 hover:bg-red-500/30" 
+                            : "hover:bg-gray-700 text-white"
+                        }`}
+                    >
+                      <svg className="w-5 h-5" fill={likedItems.includes(newReleasesData.featured[0].id) ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                       </svg>
                     </button>
-                    <button className="px-6 py-3 border border-gray-600 rounded-lg hover:bg-gray-700 transition duration-300">
+
+                    {/* BUTTON 2: SHARE ICON (Sekarang di kanan) */}
+                    <button className="px-6 py-3 border border-gray-600 rounded-lg hover:bg-gray-700 transition duration-300 text-white">
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
                       </svg>
                     </button>
                   </div>
@@ -380,18 +401,32 @@ export default function NewReleasesPage() {
                     <span className="text-gray-500 text-xs">{release.genre}</span>
                   </div>
                   <p className="text-gray-300 text-sm line-clamp-2 mb-4">{release.description}</p>
+                  
+                  {/* CARD ACTIONS: LIKE & SHARE (SWAPPED) */}
                   <div className="flex items-center justify-between">
                     <div className="flex space-x-2">
-                      <button className="p-2 hover:bg-gray-700 rounded-full transition">
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                      
+                      {/* BUTTON 1: LIKE ICON (Sekarang di Kiri) */}
+                      <button 
+                        onClick={() => toggleLike(release.id)}
+                        className={`p-2 rounded-full transition transform active:scale-95 ${
+                            likedItems.includes(release.id) 
+                            ? "text-red-500" 
+                            : "text-gray-400 hover:text-white hover:bg-gray-700"
+                        }`}
+                      >
+                        <svg className="w-4 h-4" fill={likedItems.includes(release.id) ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
                       </button>
-                      <button className="p-2 hover:bg-gray-700 rounded-full transition">
+
+                      {/* BUTTON 2: SHARE ICON (Sekarang di Kanan) */}
+                      <button className="p-2 hover:bg-gray-700 rounded-full transition text-white">
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
                         </svg>
                       </button>
+
                     </div>
                     <span className="text-gray-400 text-sm">
                       {release.tracks ? `${release.tracks} tracks` : release.duration}
@@ -403,7 +438,7 @@ export default function NewReleasesPage() {
           </div>
         </div>
 
-        {/* Upcoming Releases */}
+        {/* Upcoming Releases & Newsletter */}
         <div className="mb-16">
           <h3 className="text-2xl font-bold mb-6 flex items-center">
             <svg className="w-6 h-6 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
@@ -490,7 +525,7 @@ export default function NewReleasesPage() {
               </li>
               <li className="flex items-center">
                 <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.441 16.892c-2.102.144六.784.144-8.883 0C5.279 16.736 5.018 15.022 5 12c.018-3.024.279-4.736 2.558-4.892 2.099-.144 6.782-.144 8.883 0C18.721 7.264 18.982 8.978 19 12c-.018 3.024-.279 4.736-2.559 4.892zM10 9.658l4.917 2.338L10 14.342V9.658z"/>
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.441 16.892c-2.102.144-6.784.144-8.883 0C5.279 16.736 5.018 15.022 5 12c.018-3.024.279-4.736 2.558-4.892 2.099-.144 6.782-.144 8.883 0C18.721 7.264 18.982 8.978 19 12c-.018 3.024-.279 4.736-2.559 4.892zM10 9.658l4.917 2.338L10 14.342V9.658z"/>
                 </svg>
                 TikTok
               </li>
