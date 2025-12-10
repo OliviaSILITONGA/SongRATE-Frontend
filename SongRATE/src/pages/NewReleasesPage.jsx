@@ -217,7 +217,7 @@ export default function NewReleasesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-bl pt-[140px] from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
+    <div className="min-h-screen bg-gradient-to-bl pt-[180px] from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
       <Menu />
 
       <div className="max-w-7xl mx-auto px-4">

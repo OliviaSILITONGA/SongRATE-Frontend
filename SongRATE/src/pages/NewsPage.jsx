@@ -62,9 +62,9 @@ export default function NewsPage() {
     fullContent: "Beyoncé has sent shockwaves through the music industry with the announcement of Renaissance World Tour Part II. The additional leg comes after the unprecedented success of her original 56-show tour, which grossed over $580 million and broke attendance records in multiple stadiums worldwide. Part II will include stops in Tokyo, Seoul, Sydney, Melbourne, and several other major cities across Asia and Australia. Insiders suggest the production will be even more elaborate than the first leg, with new costume designs and innovative stage technology. Ticket pre-sales for verified fans begin on February 15, with general sales starting February 22."
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-bl pt-[140px] from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
-      <Menu />
+     return (
+       <div className="min-h-screen bg-gradient-to-bl pt-[180px] from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
+         <Menu />
 
       {/* Title */}
       <h2 className="text-5xl text-center font-bold mb-2">News</h2>

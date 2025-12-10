@@ -238,9 +238,8 @@ export default function ChartPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-bl pt-[140px] from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
+    <div className="min-h-screen bg-gradient-to-bl pt-[180px] from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
       <Menu />
-
       {/* Title */}
       <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-5xl text-center font-bold mb-2">Top Charts</h2>
