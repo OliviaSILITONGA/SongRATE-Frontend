@@ -13,10 +13,18 @@ import HUNTRIX from "../assets/HUNTRIX.jpg";
 import AlexWarren from "../assets/MOON.png";
 import sombr from "../assets/22.png";
 import RAYE from "../assets/HEART.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
   const [isMobile, setIsMobile] = useState(false);
+
+  // --- PERBAIKAN: Definisi hooks animasi yang sebelumnya hilang ---
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    threshold: 0.1,
+    triggerOnce: true
+  });
+  // ----------------------------------------------------------------
 
   useEffect(() => {
     const checkMobile = () => {
@@ -213,9 +221,9 @@ export default function HomePage() {
         </div>
       </motion.div>
 
-      {/* Albums */}
+      {/* Albums - Tambahkan ref={ref} di sini untuk scroll reveal */}
       <motion.div
-        ref={ref}
+        ref={ref} 
         initial="hidden"
         animate={controls}
         variants={containerVariants}
