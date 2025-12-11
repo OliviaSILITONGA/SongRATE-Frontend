@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react"; // <--- TAMBAHAN PENTING: Import Navbar
+import { useState, useEffect } from "react";
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 import Home from "../components/Home";
 import Banner from "../components/Banner";
 import SongRatingCard from "../components/SongRatingCard";
@@ -15,16 +17,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function HomePage() {
   const [isMobile, setIsMobile] = useState(false);
-  const navigate = useNavigate();
-
-  // Cek apakah user sudah login. Jika belum, tendang ke halaman login.
-  // (Opsional, hapus useEffect ini jika Home boleh diakses tamu)
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (!user) {
-      navigate("/login");
-    }
-  }, [navigate]);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -37,11 +29,58 @@ export default function HomePage() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible");
+    }
+  }, [controls, inView]);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 100 }
+    }
+  };
+
+  const fadeInUpVariants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
+  };
+
+  const scaleVariants = {
+    hidden: { scale: 0.9, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: { duration: 0.5 }
+    }
+  };
+
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
       className="min-h-screen bg-gradient-to-bl 
       from-[#2E333E] via-[#1C1F26] to-[#171A1F]
-      text-white overflow-x-hidden pageFadeIn"
+      text-white overflow-x-hidden"
     >
 
       {/* Konten Home Asli */}
@@ -50,20 +89,33 @@ export default function HomePage() {
       <div className="pt-20 md:pt-28"></div>
 
       {/* Banner */}
-      <div className="px-4 md:px-8">
+      <motion.div
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="px-4 md:px-8"
+      >
         <Banner />
-      </div>
+      </motion.div>
 
       {/* Title */}
-      <h2
+      <motion.h2
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
         className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center font-bold 
         mt-16 md:mt-20 mb-8 md:mb-10 px-4"
       >
         Top 5 Songs Rating This Week
-      </h2>
+      </motion.h2>
 
       {/* Songs List */}
-      <div className="flex flex-col gap-6 px-4 md:px-8 max-w-3xl mx-auto mt-8">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="flex flex-col gap-6 px-4 md:px-8 max-w-3xl mx-auto mt-8"
+      >
         {[
           {
             number: "1.",
@@ -102,33 +154,48 @@ export default function HomePage() {
             ratings: "912 ratings",
           },
         ].map((song, index) => (
-          <div key={index}>
+          <motion.div
+            key={index}
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
             <SongRatingCard {...song} />
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Button */}
-      <div className="flex justify-center mt-10 md:mt-12 px-4">
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.8 }}
+        className="flex justify-center mt-10 md:mt-12 px-4"
+      >
         <Link
           to="/rate"
           className="bg-yellow-500 text-black font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg
           text-base md:text-lg hover:bg-yellow-400 transition-all duration-300 transform hover:scale-105
-          shadow-lg hover:shadow-xl"
+          shadow-lg hover:shadow-xl shadow-yellow-500/20 hover:shadow-yellow-500/30"
         >
           Rate Your Favorite Music
         </Link>
-      </div>
+      </motion.div>
 
       {/* Search */}
-      <div className="flex justify-center mt-8 md:mt-12 mb-16 md:mb-20 px-4">
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, delay: 1 }}
+        className="flex justify-center mt-8 md:mt-12 mb-16 md:mb-20 px-4"
+      >
         <div className="relative w-full max-w-2xl">
           <input
             type="text"
             placeholder="Find Artist, Albums or Artist"
             className="w-full px-6 py-3 md:py-4 rounded-full bg-[#3E424B] text-gray-200
             focus:outline-none focus:ring-2 focus:ring-yellow-500 pl-12 md:pl-14 text-sm md:text-base
-            transition-all duration-300"
+            transition-all duration-300 focus:scale-105"
           />
           <svg
             className="absolute left-4 md:left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
@@ -144,13 +211,19 @@ export default function HomePage() {
             />
           </svg>
         </div>
-      </div>
+      </motion.div>
 
       {/* Albums */}
-      <div className="mt-16 md:mt-20 px-4 md:px-8 mb-10 md:mb-16 max-w-7xl mx-auto">
-        <h2 className="text-xl md:text-2xl font-bold mb-6">
+      <motion.div
+        ref={ref}
+        initial="hidden"
+        animate={controls}
+        variants={containerVariants}
+        className="mt-16 md:mt-20 px-4 md:px-8 mb-10 md:mb-16 max-w-7xl mx-auto"
+      >
+        <motion.h2 variants={fadeInUpVariants} className="text-xl md:text-2xl font-bold mb-6">
           Popular Albums This Week
-        </h2>
+        </motion.h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {[
@@ -179,16 +252,31 @@ export default function HomePage() {
               image: PlayboiCarti,
             },
           ].map((album, index) => (
-            <AlbumCard key={index} {...album} />
+            <motion.div
+              key={index}
+              variants={scaleVariants}
+              whileHover={{ y: -10, transition: { duration: 0.2 } }}
+            >
+              <AlbumCard {...album} />
+            </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
-       {/* FOOTER */}
-      <footer className="bg-[#3E424B85] text-gray-300 py-10 px-4 md:px-20">
+      {/* FOOTER */}
+      <motion.footer
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, delay: 1.2 }}
+        className="bg-[#3E424B85] text-gray-300 py-10 px-4 md:px-20"
+      >
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* CONTACT */}
-          <div>
+          <motion.div
+            variants={fadeInUpVariants}
+            initial="hidden"
+            animate="visible"
+          >
             <h2 className="text-2xl font-bold mb-4">Contact</h2>
             <ul className="space-y-2">
               <li className="flex items-center">
@@ -210,10 +298,15 @@ export default function HomePage() {
                 TikTok
               </li>
             </ul>
-          </div>
+          </motion.div>
 
           {/* SUBSCRIBE */}
-          <div>
+          <motion.div
+            variants={fadeInUpVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 0.1 }}
+          >
             <h2 className="text-lg font-semibold mb-4">Subscribe to Us</h2>
             <p className="text-sm mb-4">
               We'll send you the latest releases, news, and offers.
@@ -231,13 +324,18 @@ export default function HomePage() {
                 </svg>
               </button>
             </div>
-          </div>
+          </motion.div>
         </div>
 
-        <div className="text-center text-gray-500 text-sm mt-10">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+          className="text-center text-gray-500 text-sm mt-10"
+        >
           © 2025 SongRate
-        </div>
-      </footer>
-    </div>
+        </motion.div>
+      </motion.footer>
+    </motion.div>
   );
 }
