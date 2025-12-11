@@ -278,7 +278,6 @@ export default function NewReleasesPage() {
                       Listen Now
                     </button>
                     
-                    {/* BUTTON 1: LIKE ICON (Sekarang di kiri) */}
                     <button 
                         onClick={() => toggleLike(newReleasesData.featured[0].id)}
                         className={`px-6 py-3 border border-gray-600 rounded-lg transition duration-300 ${
@@ -292,7 +291,6 @@ export default function NewReleasesPage() {
                       </svg>
                     </button>
 
-                    {/* BUTTON 2: SHARE ICON (Sekarang di kanan) */}
                     <button className="px-6 py-3 border border-gray-600 rounded-lg hover:bg-gray-700 transition duration-300 text-white">
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
@@ -406,7 +404,6 @@ export default function NewReleasesPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex space-x-2">
                       
-                      {/* BUTTON 1: LIKE ICON (Sekarang di Kiri) */}
                       <button 
                         onClick={() => toggleLike(release.id)}
                         className={`p-2 rounded-full transition transform active:scale-95 ${
@@ -420,7 +417,6 @@ export default function NewReleasesPage() {
                         </svg>
                       </button>
 
-                      {/* BUTTON 2: SHARE ICON (Sekarang di Kanan) */}
                       <button className="p-2 hover:bg-gray-700 rounded-full transition text-white">
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />

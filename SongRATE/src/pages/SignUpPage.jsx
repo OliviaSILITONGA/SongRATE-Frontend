@@ -12,48 +12,42 @@ export default function SignUpPage() {
     confirmPassword: "",
   });
 
-  // Handle input changes
+  const [errors, setErrors] = useState({});
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  // Handle form submission with validation
   const handleSubmit = (e) => {
     e.preventDefault();
+    const newErrors = {};
 
-    // Validasi jika field kosong
-    if (
-      !formData.username.trim() ||
-      !formData.email.trim() ||
-      !formData.password.trim() ||
-      !formData.confirmPassword.trim()
-    ) {
-      alert("Please fill in all required fields!");
-      return;
+    if (!formData.username.trim()) newErrors.username = "Username is required";
+    
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) newErrors.email = "Invalid email address";
     }
 
-    // Validasi format email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      alert("Please enter a valid email address!");
-      return;
+    if (!formData.password) {
+        newErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+        newErrors.password = "Password must be at least 6 characters";
     }
 
-    // Validasi minimal panjang password
-    if (formData.password.length < 6) {
-      alert("Password must be at least 6 characters long!");
-      return;
-    }
-
-    // Validasi kecocokan password
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match! Please confirm your password correctly.");
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
+
     navigate("/home");
   };
 
@@ -62,26 +56,21 @@ export default function SignUpPage() {
       <Logo />
       <div className="pt-30 w-full flex justify-center">
         <div className="bg-[#1B1D24] shadow-xl rounded-2xl p-8 w-full max-w-md">
-          {/* Title */}
-          <h1 className="text-3xl font-bold text-center text-white mb-6">
-            Welcome!
-          </h1>
+          <h1 className="text-3xl font-bold text-center text-white mb-6">Welcome!</h1>
 
-          {/* Form */}
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             {/* Username */}
             <div className="flex flex-col text-left">
-              <label className="text-white font-medium mb-1">
-                Full Name or Username
-              </label>
+              <label className="text-white font-medium mb-1">Full Name or Username</label>
               <input
                 type="text"
                 name="username"
-                className="border rounded-lg text-gray-200 px-4 py-2 bg-[#3E424B] focus:outline-none focus:ring-2 focus:ring-[#FAD64F]"
+                className={`border rounded-lg text-gray-200 px-4 py-2 bg-[#3E424B] focus:outline-none focus:ring-2 ${errors.username ? "border-red-500 focus:ring-red-500" : "border-transparent focus:ring-[#FAD64F]"}`}
                 placeholder="Enter your name"
                 value={formData.username}
                 onChange={handleInputChange}
               />
+              {errors.username && <p className="text-red-400 text-sm mt-1">{errors.username}</p>}
             </div>
 
             {/* Email */}
@@ -90,11 +79,12 @@ export default function SignUpPage() {
               <input
                 type="email"
                 name="email"
-                className="border rounded-lg text-gray-200 px-4 py-2 bg-[#3E424B] focus:outline-none focus:ring-2 focus:ring-[#FAD64F]"
+                className={`border rounded-lg text-gray-200 px-4 py-2 bg-[#3E424B] focus:outline-none focus:ring-2 ${errors.email ? "border-red-500 focus:ring-red-500" : "border-transparent focus:ring-[#FAD64F]"}`}
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleInputChange}
               />
+              {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
             </div>
 
             {/* Password */}
@@ -103,43 +93,35 @@ export default function SignUpPage() {
               <input
                 type="password"
                 name="password"
-                className="border rounded-lg text-gray-200 px-4 py-2 bg-[#3E424B] focus:outline-none focus:ring-2 focus:ring-[#FAD64F]"
+                className={`border rounded-lg text-gray-200 px-4 py-2 bg-[#3E424B] focus:outline-none focus:ring-2 ${errors.password ? "border-red-500 focus:ring-red-500" : "border-transparent focus:ring-[#FAD64F]"}`}
                 placeholder="Create a password"
                 value={formData.password}
                 onChange={handleInputChange}
               />
+              {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
             </div>
 
             {/* Confirm Password */}
             <div className="flex flex-col text-left">
-              <label className="text-white font-medium mb-1">
-                Confirm Password
-              </label>
+              <label className="text-white font-medium mb-1">Confirm Password</label>
               <input
                 type="password"
                 name="confirmPassword"
-                className="border rounded-lg text-gray-200 px-4 py-2 bg-[#3E424B] focus:outline-none focus:ring-2 focus:ring-[#FAD64F]"
+                className={`border rounded-lg text-gray-200 px-4 py-2 bg-[#3E424B] focus:outline-none focus:ring-2 ${errors.confirmPassword ? "border-red-500 focus:ring-red-500" : "border-transparent focus:ring-[#FAD64F]"}`}
                 placeholder="Confirm your password"
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
               />
+              {errors.confirmPassword && <p className="text-red-400 text-sm mt-1">{errors.confirmPassword}</p>}
             </div>
 
-            {/* Button */}
-            <button
-              type="submit"
-              className="bg-yellow-300 text-black font-bold py-2 rounded-lg hover:bg-yellow-200 transition"
-            >
+            <button type="submit" className="bg-yellow-300 text-black font-bold py-2 rounded-lg hover:bg-yellow-200 transition">
               Sign Up
             </button>
           </form>
 
-          {/* Link to login */}
           <p className="text-center font-medium text-gray-500 mt-4">
-            Already have an account?{" "}
-            <a href="/login" className="text-white font-medium hover:underline">
-              Login
-            </a>
+            Already have an account? <a href="/login" className="text-white font-medium hover:underline">Login</a>
           </p>
         </div>
       </div>

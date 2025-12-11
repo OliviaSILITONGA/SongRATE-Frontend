@@ -37,7 +37,6 @@ export default function HomePage() {
 
       <div className="pt-20 md:pt-28"></div>
 
-      {/* Banner */}
       <div className="px-4 md:px-8">
         <Banner />
       </div>
