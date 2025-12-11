@@ -12,6 +12,8 @@ export default function SignUpPage() {
     confirmPassword: "",
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -22,7 +24,7 @@ export default function SignUpPage() {
   };
 
   // Handle form submission with validation
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validasi jika field kosong
@@ -54,7 +56,36 @@ export default function SignUpPage() {
       alert("Passwords do not match! Please confirm your password correctly.");
       return;
     }
-    navigate("/home");
+
+    setIsLoading(true); // Mulai loading
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Regristasi selesai. silahkan login!.");
+        navigate("/login"); // Arahkan ke login agar user bisa masuk dengan akun baru
+      } else {
+        // Jika gagal (misal: email sudah terdaftar)
+        alert(data.message || "Regristasi gagal. Email anda sudah terdaftar");
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      alert("Failed to connect to the server. Is the backend running?");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
