@@ -1,20 +1,21 @@
 import { useState } from "react";
 import Home from "../components/Home";
-import Logo from "../assets/SongRATE_White.png";
+import Logo from "../assets/SongRATE_White.png"; // Pastikan path gambar benar
 import { Link, useNavigate } from "react-router-dom";
 
 export default function RateMusicPage() {
   const [rating, setRating] = useState(0); 
   const [hover, setHover] = useState(0); 
+  // Perhatikan: State bernama 'form', bukan 'formData'
   const [form, setForm] = useState({
     title: "",
     artist: "",
     message: "",
   });
   const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false); // State loading
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const navigate = useNavigate(); // Hook untuk navigasi
+  const navigate = useNavigate();
 
   // HANDLE INPUT
   const handleChange = (e) => {
@@ -41,59 +42,53 @@ export default function RateMusicPage() {
       return;
     }
 
-    //  Ambil User ID dari LocalStorage (Pastikan user sudah login)
+    // Ambil User ID dari LocalStorage
     const storedUser = localStorage.getItem("user"); 
     const currentUser = storedUser ? JSON.parse(storedUser) : null;
-    const userId = currentUser?.id; // Sesuaikan properti id dari object user Anda
+    // Gunakan fallback jika id disimpan sebagai 'userId' atau 'id'
+    const userId = currentUser?.id || currentUser?.userId; 
 
     if (!userId) {
-      alert("You must be logged in to rate music!");
-      navigate("/login"); // Redirect ke halaman login jika belum login
+      alert("You must be logged in to rate!");
+      navigate("/login");
       return;
     }
+
+    // --- PERBAIKAN DI SINI ---
+    // Menggunakan variabel 'form' dan state 'rating' yang benar
+    const reviewData = {
+      userId: userId,
+      title: form.title,      // Diperbaiki dari formData.title
+      artist: form.artist,    // Diperbaiki dari formData.artist
+      rating: rating,         // Diperbaiki: ambil langsung dari state rating
+      message: form.message   // Diperbaiki dari formData.message
+    };
 
     setIsSubmitting(true);
 
     try {
-      //  Kirim Request ke Backend
-      const response = await fetch("http://localhost:5000/api/reviews", {
-        method: "POST",
+      const response = await fetch('http://localhost:5000/api/reviews', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          userId: userId,
-          title: form.title,
-          artist: form.artist,
-          rating: rating,
-          message: form.message,
-        }),
+        body: JSON.stringify(reviewData),
       });
 
-      const data = await response.json();
+      const result = await response.json();
 
       if (response.ok) {
-        // SUCCESS
-        alert("Your rating has been submitted successfully!");
-        
-        // RESET FORM
-        setForm({
-          title: "",
-          artist: "",
-          message: "",
-        });
-        setRating(0);
-        setErrors({});
-        
-        // Redirect ke halaman Posted atau Home
-        navigate("/posted"); 
+        alert("Rating submitted successfully!");
+        setForm({ title: "", artist: "", message: "" }); // Reset form
+        setRating(0); // Reset rating
+        navigate("/rating"); // Redirect ke halaman list rating
       } else {
-        // ERROR DARI BACKEND
-        alert(data.error || "Failed to submit rating.");
+        console.error("Server Error:", result);
+        alert(`Failed: ${result.error || "Unknown error"}`);
       }
     } catch (error) {
-      console.error("Error submitting rating:", error);
-      alert("Network error. Please try again later.");
+      console.error("Network Error:", error);
+      alert("Network error. Please ensure backend server is running on port 5000.");
     } finally {
       setIsSubmitting(false);
     }
@@ -103,7 +98,6 @@ export default function RateMusicPage() {
     <div className="min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
       <Home />
 
-      {/* CONTENT */}
       <div className="max-w-3xl mx-auto pt-40 pb-20 relative px-6">
         {/* BG LOGO */}
         <img
@@ -114,7 +108,6 @@ export default function RateMusicPage() {
 
         <h1 className="text-5xl font-bold text-center mb-14">Rate Music</h1>
 
-        {/* FORM */}
         <form onSubmit={handleSubmit} className="space-y-10 relative">
           
           {/* SONG TITLE */}
@@ -204,7 +197,6 @@ export default function RateMusicPage() {
         </form>
       </div>
 
-       {/* FOOTER */}
       <footer className="bg-[#3E424B85] text-gray-300 py-10 px-4 md:px-20">
         <div className="text-center text-gray-500 text-sm mt-10">
           © 2025 SongRate

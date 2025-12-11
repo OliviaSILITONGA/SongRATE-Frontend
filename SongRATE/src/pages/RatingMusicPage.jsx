@@ -5,7 +5,7 @@ import Home from "../components/Home";
 import ReviewSongs from "../components/ReviewSongs";
 import SongRatingCard from "../components/SongRatingCard";
 
-// Import gambar statis (untuk bagian Top 5 - Tetap ada)
+// Import gambar statis
 import TaylorSwift from "../assets/Showgirl.png";
 import HUNTRIX from "../assets/HUNTRIX.jpg";
 import AlexWarren from "../assets/MOON.png";
@@ -14,7 +14,6 @@ import RAYE from "../assets/HEART.png";
 
 // Placeholder images
 import DefaultUser from "../assets/SongRATE_White.png"; 
-// import DefaultAlbum dihapus karena tidak lagi ditampilkan
 
 export default function MusicRatings() {
   const containerRef = useRef(null);
@@ -23,6 +22,7 @@ export default function MusicRatings() {
 
   // Fungsi Helper Time Ago
   const timeAgo = (date) => {
+    if (!date) return "just now";
     const seconds = Math.floor((new Date() - new Date(date)) / 1000);
     let interval = seconds / 3600;
     if (interval > 24) return Math.floor(interval / 24) + "d";
@@ -36,13 +36,20 @@ export default function MusicRatings() {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/reviews");
-        const data = await response.json();
+        // Pastikan backend berjalan di port 5000 (sesuai app.js Anda)
+        const response = await fetch("http://localhost:5000/api/reviews", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
         
         if (response.ok) {
-          setReviews(data);
+          const data = await response.json();
+          // Validasi agar yang masuk state selalu array
+          setReviews(Array.isArray(data) ? data : []);
         } else {
-          console.error("Failed to fetch reviews");
+          console.error("Failed to fetch reviews:", response.status);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -214,7 +221,7 @@ export default function MusicRatings() {
           >
             {reviews.map((item, idx) => (
               <motion.div
-                key={item.id}
+                key={item.id || idx}
                 variants={itemVariants}
                 className="animate-on-scroll"
                 initial={{ y: 30 }}
@@ -231,7 +238,6 @@ export default function MusicRatings() {
                   review={item.message}
                   songTitle={item.title}
                   artist={item.artist}
-                  // songImage={DefaultAlbum} <-- BAGIAN INI DIHAPUS
                 />
               </motion.div>
             ))}
