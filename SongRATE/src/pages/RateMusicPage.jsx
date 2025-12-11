@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Menu from "../components/Menu";
+import Home from "../components/Home";
 import Logo from "../assets/SongRATE_White.png";
 import { Link } from "react-router-dom";
 
@@ -8,7 +8,6 @@ export default function RateMusicPage() {
   const [hover, setHover] = useState(0); // hover effect
   const [form, setForm] = useState({
     title: "",
-    album: "",
     artist: "",
     message: "",
   });
@@ -24,7 +23,6 @@ export default function RateMusicPage() {
   const validateForm = () => {
     const newErrors = {};
     if (!form.title) newErrors.title = "Song Title is required";
-    if (!form.album) newErrors.album = "Album is required";
     if (!form.artist) newErrors.artist = "Artist is required";
     if (!rating) newErrors.rating = "Rating is required";
     if (!form.message) newErrors.message = "Message is required";
@@ -47,7 +45,6 @@ export default function RateMusicPage() {
     // RESET FORM
     setForm({
       title: "",
-      album: "",
       artist: "",
       message: "",
     });
@@ -57,7 +54,7 @@ export default function RateMusicPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
-      <Menu />
+      <Home />
 
       {/* CONTENT */}
       <div className="max-w-3xl mx-auto pt-40 pb-20 relative px-6">
@@ -88,21 +85,7 @@ export default function RateMusicPage() {
             )}
           </div>
 
-          {/* ALBUM */}
-          <div>
-            <label className="block mb-2 text-gray-300">Album</label>
-            <input
-              type="text"
-              name="album"
-              value={form.album}
-              onChange={handleChange}
-              placeholder="Insert here..."
-              className="w-full px-5 py-3 rounded-lg bg-[#3E424B] text-gray-200 outline-none"
-            />
-            {errors.album && (
-              <p className="text-red-400 mt-1 text-sm">{errors.album}</p>
-            )}
-          </div>
+          
 
           {/* ARTIST */}
           <div>

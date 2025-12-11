@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Menu from "../components/Menu";
+import Home from "../components/Home";
 import { useNavigate } from "react-router-dom";
 
 export default function PostedPage() {
@@ -16,7 +16,7 @@ export default function PostedPage() {
         fade ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
       }`}
     >
-      <Menu />
+      <Home />
 
       {/* MAIN CONTENT */}
       <div className="flex flex-col items-center pt-40 pb-32 px-6 text-center select-none">

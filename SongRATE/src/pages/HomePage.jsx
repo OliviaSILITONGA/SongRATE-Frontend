@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"; // <--- TAMBAHAN PENTING: Import Navbar
 import Home from "../components/Home";
 import Banner from "../components/Banner";
 import SongRatingCard from "../components/SongRatingCard";
@@ -11,10 +11,20 @@ import HUNTRIX from "../assets/HUNTRIX.jpg";
 import AlexWarren from "../assets/MOON.png";
 import sombr from "../assets/22.png";
 import RAYE from "../assets/HEART.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function HomePage() {
   const [isMobile, setIsMobile] = useState(false);
+  const navigate = useNavigate();
+
+  // Cek apakah user sudah login. Jika belum, tendang ke halaman login.
+  // (Opsional, hapus useEffect ini jika Home boleh diakses tamu)
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -33,6 +43,8 @@ export default function HomePage() {
       from-[#2E333E] via-[#1C1F26] to-[#171A1F]
       text-white overflow-x-hidden pageFadeIn"
     >
+
+      {/* Konten Home Asli */}
       <Home />
 
       <div className="pt-20 md:pt-28"></div>

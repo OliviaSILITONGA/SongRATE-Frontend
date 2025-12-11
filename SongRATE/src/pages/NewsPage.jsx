@@ -1,4 +1,4 @@
-import Menu from "../components/Menu";
+import Home from "../components/Home";
 
 export default function NewsPage() {
   const newsArticles = [
@@ -64,7 +64,7 @@ export default function NewsPage() {
 
      return (
        <div className="min-h-screen bg-gradient-to-bl pt-[180px] from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
-         <Menu />
+         <Home />
 
       {/* Title */}
       <h2 className="text-5xl text-center font-bold mb-2">News</h2>
