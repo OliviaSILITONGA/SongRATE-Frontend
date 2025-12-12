@@ -32,11 +32,13 @@ export default function MusicRatings() {
     return "now";
   };
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   // Fetch Data
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/reviews", {
+        const response = await fetch(`${API_URL}/reviews`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"

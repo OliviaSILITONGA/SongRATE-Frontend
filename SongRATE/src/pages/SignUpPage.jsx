@@ -23,6 +23,8 @@ export default function SignUpPage() {
     }));
   };
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   // Handle form submission with validation
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,7 +61,7 @@ export default function SignUpPage() {
 
     setIsLoading(true); // Mulai loading
     try {
-      const response = await fetch("http://localhost:3000/api/auth/signup", {
+      const response = await fetch(`${API_URL}/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
