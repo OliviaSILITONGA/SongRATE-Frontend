@@ -67,7 +67,7 @@ export default function RateMusicPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:3000/api/reviews', {
+      const response = await fetch(`${API_URL}/api/reviews`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

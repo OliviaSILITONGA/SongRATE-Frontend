@@ -38,7 +38,7 @@ export default function MusicRatings() {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch(`${API_URL}/reviews`, {
+        const response = await fetch(`${API_URL}/api/reviews`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
