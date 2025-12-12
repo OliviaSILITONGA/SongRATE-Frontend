@@ -1,12 +1,11 @@
 import { useState } from "react";
 import Home from "../components/Home";
-import Logo from "../assets/SongRATE_White.png"; // Pastikan path gambar benar
-import { Link, useNavigate } from "react-router-dom";
+import Logo from "../assets/SongRATE_White.png";
+import { useNavigate } from "react-router-dom";
 
 export default function RateMusicPage() {
   const [rating, setRating] = useState(0); 
   const [hover, setHover] = useState(0); 
-  // Perhatikan: State bernama 'form', bukan 'formData'
   const [form, setForm] = useState({
     title: "",
     artist: "",
@@ -16,19 +15,25 @@ export default function RateMusicPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const navigate = useNavigate();
+  // Gunakan Environment Variable agar dinamis
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // HANDLE INPUT
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    // Hapus error jika user mulai mengetik
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: null });
+    }
   };
 
   // VALIDASI
   const validateForm = () => {
     const newErrors = {};
-    if (!form.title) newErrors.title = "Song Title is required";
-    if (!form.artist) newErrors.artist = "Artist is required";
-    if (!rating) newErrors.rating = "Rating is required";
-    if (!form.message) newErrors.message = "Message is required";
+    if (!form.title.trim()) newErrors.title = "Song Title is required";
+    if (!form.artist.trim()) newErrors.artist = "Artist is required";
+    if (rating === 0) newErrors.rating = "Please select a star rating";
+    if (!form.message.trim()) newErrors.message = "Review message is required";
     return newErrors;
   };
 
@@ -42,35 +47,43 @@ export default function RateMusicPage() {
       return;
     }
 
-    // Ambil User ID dari LocalStorage
-    const storedUser = localStorage.getItem("user"); 
-    const currentUser = storedUser ? JSON.parse(storedUser) : null;
-    // Gunakan fallback jika id disimpan sebagai 'userId' atau 'id'
-    const userId = currentUser?.id || currentUser?.userId; 
+    // Ambil User ID dari LocalStorage dengan aman
+    let userId = null;
+    try {
+      const storedUser = localStorage.getItem("user");
+      const currentUser = storedUser ? JSON.parse(storedUser) : null;
+      userId = currentUser?.id || currentUser?.userId;
+    } catch (err) {
+      console.error("Error parsing user data:", err);
+    }
 
     if (!userId) {
-      alert("You must be logged in to rate!");
+      alert("Session expired or invalid. Please Login again.");
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
       navigate("/login");
       return;
     }
 
-    // --- PERBAIKAN DI SINI ---
-    // Menggunakan variabel 'form' dan state 'rating' yang benar
     const reviewData = {
       userId: userId,
-      title: form.title,      // Diperbaiki dari formData.title
-      artist: form.artist,    // Diperbaiki dari formData.artist
-      rating: rating,         // Diperbaiki: ambil langsung dari state rating
-      message: form.message   // Diperbaiki dari formData.message
+      title: form.title,
+      artist: form.artist,
+      rating: rating,
+      message: form.message
     };
 
     setIsSubmitting(true);
 
     try {
+      console.log("Sending Review Data:", reviewData); // DEBUG LOG
+
+      // PERBAIKAN: Gunakan API_URL + path '/api/reviews'
       const response = await fetch(`${API_URL}/api/reviews`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          // 'Authorization': `Bearer ${localStorage.getItem('token')}` // Uncomment jika nanti pakai JWT Token
         },
         body: JSON.stringify(reviewData),
       });
@@ -79,16 +92,24 @@ export default function RateMusicPage() {
 
       if (response.ok) {
         alert("Rating submitted successfully!");
-        setForm({ title: "", artist: "", message: "" }); // Reset form
-        setRating(0); // Reset rating
+        setForm({ title: "", artist: "", message: "" });
+        setRating(0);
         navigate("/rating"); // Redirect ke halaman list rating
       } else {
-        console.error("Server Error:", result);
-        alert(`Failed: ${result.error || "Unknown error"}`);
+        console.error("Server Error Response:", result);
+        
+        // Deteksi error Foreign Key (User tidak ditemukan di DB karena DB reset)
+        // HANYA jika pesan error spesifik, BUKAN semua error 500
+        if (result.details && result.details.toLowerCase().includes('foreign key') && result.details.toLowerCase().includes('user')) {
+           alert("Failed: User ID not found in database. Please Logout and Login again to refresh your session.");
+        } else {
+           // Tampilkan error asli dari server untuk debugging
+           alert(`Failed: ${result.error || result.message || "Unknown error occurred"}`);
+        }
       }
     } catch (error) {
       console.error("Network Error:", error);
-      alert("Network error. Please ensure backend server is running on port 3000.");
+      alert(`Network error. Is the backend running at ${API_URL}? Check console for details.`);
     } finally {
       setIsSubmitting(false);
     }
@@ -99,7 +120,6 @@ export default function RateMusicPage() {
       <Home />
 
       <div className="max-w-3xl mx-auto pt-40 pb-20 relative px-6">
-        {/* BG LOGO */}
         <img
           src={Logo}
           className="absolute opacity-10 w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none"
@@ -120,10 +140,9 @@ export default function RateMusicPage() {
               onChange={handleChange}
               placeholder="Insert here..."
               className="w-full px-5 py-3 rounded-lg bg-[#3E424B] text-gray-200 outline-none focus:ring-2 focus:ring-yellow-500 transition"
+              disabled={isSubmitting}
             />
-            {errors.title && (
-              <p className="text-red-400 mt-1 text-sm">{errors.title}</p>
-            )}
+            {errors.title && <p className="text-red-400 mt-1 text-sm">{errors.title}</p>}
           </div>
 
           {/* ARTIST */}
@@ -136,10 +155,9 @@ export default function RateMusicPage() {
               onChange={handleChange}
               placeholder="Insert here..."
               className="w-full px-5 py-3 rounded-lg bg-[#3E424B] text-gray-200 outline-none focus:ring-2 focus:ring-yellow-500 transition"
+              disabled={isSubmitting}
             />
-            {errors.artist && (
-              <p className="text-red-400 mt-1 text-sm">{errors.artist}</p>
-            )}
+            {errors.artist && <p className="text-red-400 mt-1 text-sm">{errors.artist}</p>}
           </div>
 
           {/* RATING */}
@@ -149,21 +167,17 @@ export default function RateMusicPage() {
                 <span
                   key={star}
                   className={`cursor-pointer transition transform hover:scale-110 ${
-                    (hover || rating) >= star
-                      ? "text-yellow-400"
-                      : "text-gray-500"
+                    (hover || rating) >= star ? "text-yellow-400" : "text-gray-500"
                   }`}
-                  onMouseEnter={() => setHover(star)}
-                  onMouseLeave={() => setHover(0)}
-                  onClick={() => setRating(star)}
+                  onMouseEnter={() => !isSubmitting && setHover(star)}
+                  onMouseLeave={() => !isSubmitting && setHover(0)}
+                  onClick={() => !isSubmitting && setRating(star)}
                 >
                   ★
                 </span>
               ))}
             </div>
-            {errors.rating && (
-              <p className="text-red-400 mt-2 text-sm">{errors.rating}</p>
-            )}
+            {errors.rating && <p className="text-red-400 mt-2 text-sm">{errors.rating}</p>}
           </div>
 
           {/* MESSAGE */}
@@ -176,10 +190,9 @@ export default function RateMusicPage() {
               onChange={handleChange}
               placeholder="Tell us what you think about this song..."
               className="w-full px-5 py-3 rounded-lg bg-[#3E424B] text-gray-200 outline-none focus:ring-2 focus:ring-yellow-500 transition"
+              disabled={isSubmitting}
             ></textarea>
-            {errors.message && (
-              <p className="text-red-400 mt-1 text-sm">{errors.message}</p>
-            )}
+            {errors.message && <p className="text-red-400 mt-1 text-sm">{errors.message}</p>}
           </div>
 
           {/* SUBMIT BUTTON */}
