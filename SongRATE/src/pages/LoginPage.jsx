@@ -10,6 +10,8 @@ export default function LoginPage() {
     password: "",
   });
 
+  const [isLoading, setIsLoading] = useState(false); // Indikator loading
+
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -19,31 +21,54 @@ export default function LoginPage() {
     }));
   };
 
-  // Handle form submission with validation
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validasi jika field kosong
+    // 1. Validasi Input Dasar
     if (!formData.email.trim() || !formData.password.trim()) {
-      alert("Please fill in both username/email and password fields!");
+      alert("Please fill in both email and password fields!");
       return;
     }
 
-    // Validasi format email (jika input mengandung @)
-    if (formData.email.includes("@")) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.email)) {
-        alert("Please enter a valid email address!");
-        return;
+    setIsLoading(true); // Mulai loading
+
+    const API_URL = import.meta.env.VITE_API_URL;
+
+    try {
+      // 2. Panggil API Backend untuk Cek Database
+      const response = await fetch(`${API_URL}/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // 3. Jika Login Sukses (Email & Password Cocok)
+        // Simpan token (opsional: simpan user info juga)
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        
+        alert("Login successful!");
+        navigate("/home"); // Pindah ke halaman utama
+      } else {
+        // 4. Jika Gagal (Email tidak ada ATAU Password salah)
+        // Backend mengirim pesan: "Invalid credentials"
+        alert(data.message || "Login failed. Please check your email and password.");
       }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Failed to connect to the server. Make sure backend is running.");
+    } finally {
+      setIsLoading(false); // Selesai loading
     }
-
-    // Validasi minimal panjang password
-    if (formData.password.length < 6) {
-      alert("Password must be at least 6 characters long!");
-      return;
-    }
-    navigate("/home");
   };
 
   return (
@@ -60,15 +85,16 @@ export default function LoginPage() {
           {/* Email */}
           <div className="flex flex-col text-left">
             <label className="text-white font-medium mb-1">
-              Username or Email
+              Email
             </label>
             <input
               type="text"
               name="email"
               className="border rounded-lg text-gray-200 px-4 py-2 bg-[#3E424B] focus:outline-none focus:ring-2 focus:ring-[#FAD64F]"
-              placeholder="Username or Email"
+              placeholder="Enter your email"
               value={formData.email}
               onChange={handleInputChange}
+              disabled={isLoading}
             />
           </div>
 
@@ -82,6 +108,7 @@ export default function LoginPage() {
               placeholder="Enter your password"
               value={formData.password}
               onChange={handleInputChange}
+              disabled={isLoading}
             />
           </div>
 
@@ -96,9 +123,14 @@ export default function LoginPage() {
           {/* Login Button */}
           <button
             type="submit"
-            className="bg-[#FAD64F] text-black font-bold py-2 rounded-lg hover:bg-[#e6c247] transition"
+            disabled={isLoading}
+            className={`font-bold py-2 rounded-lg transition ${
+              isLoading 
+                ? "bg-gray-500 cursor-not-allowed text-gray-300" 
+                : "bg-[#FAD64F] text-black hover:bg-[#e6c247]"
+            }`}
           >
-            Log in
+            {isLoading ? "Checking..." : "Log in"}
           </button>
         </form>
 

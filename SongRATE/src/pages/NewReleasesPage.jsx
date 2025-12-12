@@ -1,4 +1,4 @@
-import Menu from "../components/Menu";
+import Home from "../components/Home";
 import { useState } from "react";
 
 export default function NewReleasesPage() {
@@ -228,7 +228,7 @@ export default function NewReleasesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-bl pt-[180px] from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
-      <Menu />
+      <Home />
 
       <div className="max-w-7xl mx-auto px-4">
         {/* Title */}

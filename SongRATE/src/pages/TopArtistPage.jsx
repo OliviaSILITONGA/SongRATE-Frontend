@@ -1,11 +1,11 @@
-import Menu from "../components/Menu";
+import Home from "../components/Home";
 import topArtists from "../data/topArtists";
 import { Link } from "react-router-dom";
 
 export default function TopArtistPage() {
   return (
     <div className="min-h-screen bg-gradient-to-bl pt-[140px] from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
-      <Menu />
+      <Home />
 
       <h2 className="text-5xl text-center font-bold">Top Artist</h2>
 

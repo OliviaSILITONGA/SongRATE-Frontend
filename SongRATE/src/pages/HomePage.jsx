@@ -17,8 +17,14 @@ import { Link } from "react-router-dom";
 
 export default function HomePage() {
   const [isMobile, setIsMobile] = useState(false);
+
+  // --- PERBAIKAN: Definisi hooks animasi yang sebelumnya hilang ---
   const controls = useAnimation();
-  const [ref, inView] = useInView();
+  const [ref, inView] = useInView({
+    threshold: 0.1,
+    triggerOnce: true
+  });
+  // ----------------------------------------------------------------
 
   useEffect(() => {
     const checkMobile = () => {
@@ -84,6 +90,8 @@ export default function HomePage() {
       from-[#2E333E] via-[#1C1F26] to-[#171A1F]
       text-white overflow-x-hidden"
     >
+
+      {/* Konten Home Asli */}
       <Home />
 
       <div className="pt-20 md:pt-28"></div>
@@ -213,9 +221,9 @@ export default function HomePage() {
         </div>
       </motion.div>
 
-      {/* Albums */}
+      {/* Albums - Tambahkan ref={ref} di sini untuk scroll reveal */}
       <motion.div
-        ref={ref}
+        ref={ref} 
         initial="hidden"
         animate={controls}
         variants={containerVariants}
