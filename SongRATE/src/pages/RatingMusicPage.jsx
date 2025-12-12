@@ -36,8 +36,7 @@ export default function MusicRatings() {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        // Pastikan backend berjalan di port 5000 (sesuai app.js Anda)
-        const response = await fetch("http://localhost:5000/api/reviews", {
+        const response = await fetch("http://localhost:3000/api/reviews", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
