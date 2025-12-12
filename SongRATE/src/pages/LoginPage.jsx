@@ -37,7 +37,7 @@ export default function LoginPage() {
 
     try {
       // 2. Panggil API Backend untuk Cek Database
-      const response = await fetch("${API_URL}/auth/login", {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
