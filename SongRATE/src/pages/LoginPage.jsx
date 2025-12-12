@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Logo from "../components/Logo";
 import { useNavigate } from "react-router-dom";
+import Modal from "../components/Modal";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -10,33 +11,45 @@ export default function LoginPage() {
     password: "",
   });
 
-  const [isLoading, setIsLoading] = useState(false); // Indikator loading
+  const [errors, setErrors] = useState({}); 
+  const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false); 
 
-  // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
+    if (errors[name]) {
+        setErrors((prev) => ({ ...prev, [name]: null }));
+    }
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const newErrors = {};
 
-    // 1. Validasi Input Dasar
-    if (!formData.email.trim() || !formData.password.trim()) {
-      alert("Please fill in both email and password fields!");
-      return;
+    if (!formData.email.trim()) {
+        newErrors.email = "Email is required";
+    } else if (!formData.email.includes("@")) { 
+        newErrors.email = "Invalid email format (must contain @)";
     }
 
-    setIsLoading(true); // Mulai loading
+    if (!formData.password.trim()) {
+        newErrors.password = "Password is required";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return;
+    }
+
+    setIsLoading(true);
 
     const API_URL = import.meta.env.VITE_API_URL;
 
     try {
-      // 2. Panggil API Backend untuk Cek Database
       const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
@@ -51,36 +64,48 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (response.ok) {
-        // 3. Jika Login Sukses (Email & Password Cocok)
-        // Simpan token (opsional: simpan user info juga)
+        // Simpan token
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
         
-        alert("Login successful!");
-        navigate("/home"); // Pindah ke halaman utama
+        // Tampilkan Modal Sukses
+        setShowModal(true);
       } else {
-        // 4. Jika Gagal (Email tidak ada ATAU Password salah)
-        // Backend mengirim pesan: "Invalid credentials"
-        alert(data.message || "Login failed. Please check your email and password.");
+        console.log(data);
+        if (data.message?.toLowerCase().includes("password")) {
+            setErrors({ password: "Incorrect password" });
+        } else if (data.message?.toLowerCase().includes("user") || data.message?.toLowerCase().includes("email")) {
+            setErrors({ email: "Email not found" });
+        } else {
+            // Error umum jika tidak spesifik
+            setErrors({ email: data.message || "Login failed" });
+        }
       }
     } catch (error) {
       console.error("Login error:", error);
-      alert("Failed to connect to the server. Make sure backend is running.");
+      alert("Failed to connect to server.");
     } finally {
-      setIsLoading(false); // Selesai loading
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#1D2128] to-[#30353F] px-6">
+      {/* Modal Sukses */}
+      <Modal 
+        isOpen={showModal} 
+        onClose={() => navigate("/home")} 
+        title="Welcome Back!" 
+        message="Login successful."
+        type="success"
+      />
+
       <Logo />
-      <div className="bg-[#1B1D24] shadow-xl rounded-2xl p-8 w-full max-w-md">
-        {/* Title */}
+      <div className="bg-[#1B1D24] shadow-xl rounded-2xl p-8 w-full max-w-md border border-gray-700/50">
         <h1 className="text-3xl font-bold text-center text-white mb-6">
           Welcome Back!
         </h1>
 
-        {/* Form */}
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           {/* Email */}
           <div className="flex flex-col text-left">
@@ -96,6 +121,8 @@ export default function LoginPage() {
               onChange={handleInputChange}
               disabled={isLoading}
             />
+            {/* Error Merah */}
+            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
 
           {/* Password */}
@@ -110,9 +137,10 @@ export default function LoginPage() {
               onChange={handleInputChange}
               disabled={isLoading}
             />
+            {/* Error Merah */}
+            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
           </div>
 
-          {/* Forgot password */}
           <a
             className="text-right text-sm text-white hover:underline cursor-pointer"
             href="/forgot-password"
@@ -120,7 +148,6 @@ export default function LoginPage() {
             Forgot Password?
           </a>
 
-          {/* Login Button */}
           <button
             type="submit"
             disabled={isLoading}
@@ -134,7 +161,6 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Sign Up */}
         <p className="text-center text-gray-300 mt-4">
           Don't have an account?{" "}
           <a href="/signup" className="text-white font-medium hover:underline">
