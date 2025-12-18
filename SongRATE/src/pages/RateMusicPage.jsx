@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Home from "../components/Home";
 import Logo from "../assets/SongRATE_White.png";
 import { useNavigate } from "react-router-dom";
@@ -15,9 +15,22 @@ export default function RateMusicPage() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showModal, setShowModal] = useState(false); 
+  const [user, setUser] = useState(null); // State untuk menyimpan data user untuk Navbar dinamis
   
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
+
+  // Mengambil data user saat halaman dimuat untuk keperluan tampilan profil
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (err) {
+        console.error("Error parsing user data for profile display:", err);
+      }
+    }
+  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -79,7 +92,7 @@ export default function RateMusicPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // PERBAIKAN UTAMA: Mengirimkan token dengan format Bearer agar lolos authMiddleware di backend
+          // PERBAIKAN: Mengirimkan token dengan format Bearer agar lolos authMiddleware
           'Authorization': `Bearer ${token}` 
         },
         body: JSON.stringify(reviewData),
@@ -90,10 +103,10 @@ export default function RateMusicPage() {
       if (response.ok) {
         setShowModal(true); 
       } else {
-        // PENANGANAN ERROR SPESIFIK: Token Expired atau Invalid (Status 401)
+        // PENANGANAN ERROR TOKEN: Status 401
         if (response.status === 401) {
             alert("Token tidak valid atau sudah kedaluwarsa. Silakan Login ulang.");
-            localStorage.removeItem("token"); // Bersihkan token yang rusak
+            localStorage.removeItem("token");
             navigate("/login");
         } else {
             alert(`Gagal: ${result.error || result.message || "Terjadi kesalahan pada server"}`);
@@ -101,7 +114,7 @@ export default function RateMusicPage() {
       }
     } catch (error) {
       console.error("Network Error:", error);
-      alert(`Gagal terhubung ke server. Pastikan koneksi internet stabil.`);
+      alert(`Gagal terhubung ke server.`);
     } finally {
       setIsSubmitting(false);
     }
@@ -124,6 +137,7 @@ export default function RateMusicPage() {
         type="success"
       />
 
+      {/* Komponen Home/Navbar akan menggunakan data user yang sudah di-fetch di atas */}
       <Home />
 
       <div className="max-w-3xl mx-auto pt-40 pb-20 relative px-6">

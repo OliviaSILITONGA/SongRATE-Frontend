@@ -230,9 +230,9 @@ export default function MusicRatings() {
                 transition={{ delay: idx * 0.15 }}
               >
                 <ReviewSongs
-                  image={DefaultUser} 
+                  image={item.user_image || DefaultUser} 
                   reviewer={item.username || "Anonymous"}
-                  reviewerHandle={`@${item.username || "user"}`}
+                  reviewerHandle={item.username || "user"}
                   name={timeAgo(item.createdAt)}
                   likes={0} 
                   rating={item.rating}
