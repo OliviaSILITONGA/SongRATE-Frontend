@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Home from "../components/Home";
 import Logo from "../assets/SongRATE_White.png";
 import { useNavigate } from "react-router-dom";
+import Modal from "../components/Modal";
 
 export default function RateMusicPage() {
   const [rating, setRating] = useState(0);
@@ -13,21 +14,35 @@ export default function RateMusicPage() {
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+<<<<<<< HEAD
 
+=======
+  const [showModal, setShowModal] = useState(false); 
+  const [user, setUser] = useState(null); // State untuk menyimpan data user untuk Navbar dinamis
+  
+>>>>>>> 20e3511cac466a6bc5c2f2d5ab4fb7d5efa4ecd0
   const navigate = useNavigate();
-  // Gunakan Environment Variable agar dinamis
   const API_URL = import.meta.env.VITE_API_URL;
 
-  // HANDLE INPUT
+  // Mengambil data user saat halaman dimuat untuk keperluan tampilan profil
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (err) {
+        console.error("Error parsing user data for profile display:", err);
+      }
+    }
+  }, []);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    // Hapus error jika user mulai mengetik
     if (errors[e.target.name]) {
       setErrors({ ...errors, [e.target.name]: null });
     }
   };
 
-  // VALIDASI
   const validateForm = () => {
     const newErrors = {};
     if (!form.title.trim()) newErrors.title = "Song Title is required";
@@ -37,7 +52,6 @@ export default function RateMusicPage() {
     return newErrors;
   };
 
-  // HANDLE SUBMIT KE DATABASE
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -47,9 +61,28 @@ export default function RateMusicPage() {
       return;
     }
 
+<<<<<<< HEAD
     const token = localStorage.getItem("token");
     if (!token) {
       alert("You must login first.");
+=======
+    let userId = null;
+    let token = null;
+
+    try {
+      // MENGAMBIL DATA USER DAN TOKEN DARI LOCALSTORAGE
+      const storedUser = localStorage.getItem("user");
+      token = localStorage.getItem("token"); 
+      const currentUser = storedUser ? JSON.parse(storedUser) : null;
+      userId = currentUser?.id || currentUser?.userId;
+    } catch (err) {
+      console.error("Error parsing user data:", err);
+    }
+
+    // PROTEKSI: JIKA SESSION TIDAK ADA, CEGAH SUBMIT
+    if (!userId || !token) {
+      alert("Sesi Anda habis atau Anda belum login. Silakan Login kembali.");
+>>>>>>> 20e3511cac466a6bc5c2f2d5ab4fb7d5efa4ecd0
       navigate("/login");
       return;
     }
@@ -67,16 +100,36 @@ export default function RateMusicPage() {
       const response = await fetch(`${API_URL}/api/reviews`, {
         method: "POST",
         headers: {
+<<<<<<< HEAD
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
+=======
+          'Content-Type': 'application/json',
+          // PERBAIKAN: Mengirimkan token dengan format Bearer agar lolos authMiddleware
+          'Authorization': `Bearer ${token}` 
+>>>>>>> 20e3511cac466a6bc5c2f2d5ab4fb7d5efa4ecd0
         },
         body: JSON.stringify(reviewData),
       });
 
       const result = await response.json();
 
+<<<<<<< HEAD
       if (!response.ok) {
         throw new Error(result.message || "Failed to submit review");
+=======
+      if (response.ok) {
+        setShowModal(true); 
+      } else {
+        // PENANGANAN ERROR TOKEN: Status 401
+        if (response.status === 401) {
+            alert("Token tidak valid atau sudah kedaluwarsa. Silakan Login ulang.");
+            localStorage.removeItem("token");
+            navigate("/login");
+        } else {
+            alert(`Gagal: ${result.error || result.message || "Terjadi kesalahan pada server"}`);
+        }
+>>>>>>> 20e3511cac466a6bc5c2f2d5ab4fb7d5efa4ecd0
       }
 
       alert("Rating submitted successfully!");
@@ -84,14 +137,35 @@ export default function RateMusicPage() {
       setRating(0);
       navigate("/rating");
     } catch (error) {
+<<<<<<< HEAD
       alert(error.message);
+=======
+      console.error("Network Error:", error);
+      alert(`Gagal terhubung ke server.`);
+>>>>>>> 20e3511cac466a6bc5c2f2d5ab4fb7d5efa4ecd0
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setForm({ title: "", artist: "", message: "" });
+    setRating(0);
+    navigate("/rating"); 
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
+      <Modal 
+        isOpen={showModal} 
+        onClose={handleCloseModal} 
+        title="Success!" 
+        message="Your rating has been submitted successfully."
+        type="success"
+      />
+
+      {/* Komponen Home/Navbar akan menggunakan data user yang sudah di-fetch di atas */}
       <Home />
 
       <div className="max-w-3xl mx-auto pt-40 pb-20 relative px-6">
@@ -104,7 +178,10 @@ export default function RateMusicPage() {
         <h1 className="text-5xl font-bold text-center mb-14">Rate Music</h1>
 
         <form onSubmit={handleSubmit} className="space-y-10 relative">
+<<<<<<< HEAD
           {/* SONG TITLE */}
+=======
+>>>>>>> 20e3511cac466a6bc5c2f2d5ab4fb7d5efa4ecd0
           <div>
             <label className="block mb-2 text-gray-300">Song Title</label>
             <input
@@ -121,7 +198,6 @@ export default function RateMusicPage() {
             )}
           </div>
 
-          {/* ARTIST */}
           <div>
             <label className="block mb-2 text-gray-300">Artist</label>
             <input
@@ -138,7 +214,6 @@ export default function RateMusicPage() {
             )}
           </div>
 
-          {/* RATING */}
           <div className="text-center">
             <div className="flex justify-center gap-6 text-4xl text-gray-400">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -162,7 +237,6 @@ export default function RateMusicPage() {
             )}
           </div>
 
-          {/* MESSAGE */}
           <div>
             <label className="block mb-2 text-gray-300">Message</label>
             <textarea
@@ -179,7 +253,6 @@ export default function RateMusicPage() {
             )}
           </div>
 
-          {/* SUBMIT BUTTON */}
           <div className="flex justify-center">
             <button
               type="submit"

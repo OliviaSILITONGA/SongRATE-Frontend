@@ -13,11 +13,77 @@ import sombr from "../assets/22.png";
 import RAYE from "../assets/HEART.png";
 
 // Placeholder images
-import DefaultUser from "../assets/SongRATE_White.png"; 
+import DefaultUser from "../assets/SongRATE_White.png";
+import DefaultSong from "../assets/SongRATE_White.png";
+
+// Import more song images for mapping
+import EternalSunshine from "../assets/EternalSunshine.png";
+import ArianaGrande from "../assets/Ariana_Grande.png";
+import BillieEilish from "../assets/Billie_Ellish.png";
+import BrunoMars from "../assets/Bruno_Mars.jpg";
+import ThWeeknd from "../assets/The_Weeknd.png";
+import SZA from "../assets/SZA.png";
+import KendrickLamar from "../assets/Kendrick_Lamar.png";
+import DojaCat from "../assets/Doja_Cat.png";
+import BadBunny from "../assets/Bad_Bunny.png";
+import JustinBieber from "../assets/Justin_Bieber.png";
+
+// Mapping judul lagu ke gambar cover
+const songImageMap = {
+  // Taylor Swift songs
+  "the fate of ophelia": TaylorSwift,
+  "showgirl": TaylorSwift,
+  // HUNTRX songs
+  "golden": HUNTRIX,
+  // Alex Warren songs
+  "ordinary": AlexWarren,
+  "moon": AlexWarren,
+  // sombr songs
+  "back to friends": sombr,
+  "22": sombr,
+  // RAYE songs
+  "where is my husband!": RAYE,
+  "heart": RAYE,
+  // Ariana Grande
+  "eternal sunshine": EternalSunshine,
+  "we can't be friends": ArianaGrande,
+  "yes, and?": ArianaGrande,
+  // Billie Eilish
+  "birds of a feather": BillieEilish,
+  "lunch": BillieEilish,
+  // Bruno Mars
+  "apt.": BrunoMars,
+  "die with a smile": BrunoMars,
+  // The Weeknd
+  "blinding lights": ThWeeknd,
+  "save your tears": ThWeeknd,
+  // SZA
+  "kill bill": SZA,
+  "snooze": SZA,
+  // Kendrick Lamar
+  "not like us": KendrickLamar,
+  "humble": KendrickLamar,
+  // Doja Cat
+  "paint the town red": DojaCat,
+  "woman": DojaCat,
+  // Bad Bunny
+  "monaco": BadBunny,
+  "tití me preguntó": BadBunny,
+  // Justin Bieber
+  "peaches": JustinBieber,
+  "ghost": JustinBieber,
+};
+
+// Helper function to get song image based on title
+const getSongImage = (title) => {
+  if (!title) return DefaultSong;
+  const normalizedTitle = title.toLowerCase().trim();
+  return songImageMap[normalizedTitle] || DefaultSong;
+};
 
 export default function MusicRatings() {
   const containerRef = useRef(null);
-  const [reviews, setReviews] = useState([]); 
+  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Fungsi Helper Time Ago
@@ -39,12 +105,12 @@ export default function MusicRatings() {
     const fetchReviews = async () => {
       try {
         const response = await fetch(`${API_URL}/api/reviews`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
         });
-        
+
         if (response.ok) {
           const data = await response.json();
           // Validasi agar yang masuk state selalu array
@@ -82,9 +148,9 @@ export default function MusicRatings() {
   }, [reviews]);
 
   const containerVariants = {
-    hidden: { },
-    visible: { 
-      transition: { 
+    hidden: {},
+    visible: {
+      transition: {
         staggerChildren: 0.2,
         delayChildren: 0.3
       }
@@ -93,7 +159,7 @@ export default function MusicRatings() {
 
   const itemVariants = {
     hidden: { y: 20 },
-    visible: { 
+    visible: {
       y: 0,
       transition: { type: "spring", stiffness: 100 }
     }
@@ -104,14 +170,14 @@ export default function MusicRatings() {
       <Home />
 
       {/* HERO SECTION */}
-      <motion.div 
+      <motion.div
         initial={{ y: -50 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
         className="flex flex-col md:flex-row items-center justify-between mt-10 gap-8 animate-on-scroll"
       >
         <div className="text-left max-w-xl">
-          <motion.h1 
+          <motion.h1
             initial={{ x: -30 }}
             animate={{ x: 0 }}
             transition={{ delay: 0.2 }}
@@ -119,7 +185,7 @@ export default function MusicRatings() {
           >
             Music Ratings
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ x: -30 }}
             animate={{ x: 0 }}
             transition={{ delay: 0.3 }}
@@ -146,7 +212,7 @@ export default function MusicRatings() {
         animate="visible"
         ref={containerRef}
       >
-        <motion.h2 
+        <motion.h2
           variants={itemVariants}
           className="text-2xl md:text-3xl font-bold mt-16 mb-6 animate-on-scroll"
         >
@@ -181,7 +247,7 @@ export default function MusicRatings() {
       </motion.div>
 
       {/* RATE BUTTON */}
-      <motion.div 
+      <motion.div
         initial={{ scale: 0.9 }}
         animate={{ scale: 1 }}
         transition={{ delay: 0.8 }}
@@ -200,7 +266,7 @@ export default function MusicRatings() {
         transition={{ delay: 1 }}
         className="mt-16"
       >
-        <motion.h2 
+        <motion.h2
           initial={{ y: 20 }}
           animate={{ y: 0 }}
           transition={{ delay: 1.1 }}
@@ -214,40 +280,49 @@ export default function MusicRatings() {
         ) : reviews.length === 0 ? (
           <p className="text-gray-400">No ratings yet. Be the first to rate!</p>
         ) : (
-          <motion.div 
+          <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
             className="grid gap-6 mt-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-2"
           >
-            {reviews.map((item, idx) => (
-              <motion.div
-                key={item.id || idx}
-                variants={itemVariants}
-                className="animate-on-scroll"
-                initial={{ y: 30 }}
-                animate={{ y: 0 }}
-                transition={{ delay: idx * 0.15 }}
-              >
-                <ReviewSongs
-                  image={DefaultUser} 
-                  reviewer={item.username || "Anonymous"}
-                  reviewerHandle={`@${item.username || "user"}`}
-                  name={timeAgo(item.createdAt)}
-                  likes={0} 
-                  rating={item.rating}
-                  review={item.message}
-                  songTitle={item.title}
-                  artist={item.artist}
-                />
-              </motion.div>
-            ))}
+            {reviews.map((item, idx) => {
+              // Handle potential nested user object (e.g. item.User or item.user)
+              const userObj = item.User || item.user || {};
+              const username = item.username || userObj.username || "Anonymous";
+              const userHandle = item.username || userObj.username || "user";
+              const userImage = item.user_image || item.userImg || userObj.image || userObj.profileImage || DefaultUser;
+
+              return (
+                <motion.div
+                  key={item.id || idx}
+                  variants={itemVariants}
+                  className="animate-on-scroll"
+                  initial={{ y: 30 }}
+                  animate={{ y: 0 }}
+                  transition={{ delay: idx * 0.15 }}
+                >
+                  <ReviewSongs
+                    reviewId={item.id || `review-${idx}`}
+                    reviewer={username}
+                    reviewerHandle={userHandle}
+                    name={timeAgo(item.createdAt)}
+                    likes={item.likes || 0}
+                    rating={item.rating}
+                    review={item.message}
+                    songTitle={item.title}
+                    artist={item.artist}
+                    songImage={getSongImage(item.title)}
+                  />
+                </motion.div>
+              );
+            })}
           </motion.div>
         )}
       </motion.div>
 
       {/* FOOTER */}
-      <motion.footer 
+      <motion.footer
         initial={{ y: 50 }}
         animate={{ y: 0 }}
         transition={{ delay: 1.5 }}
