@@ -50,14 +50,14 @@ export default function RateMusicPage() {
     try {
       // MENGAMBIL DATA USER DAN TOKEN DARI LOCALSTORAGE
       const storedUser = localStorage.getItem("user");
-      token = localStorage.getItem("token"); // Ambil token yang disimpan saat login
+      token = localStorage.getItem("token"); 
       const currentUser = storedUser ? JSON.parse(storedUser) : null;
       userId = currentUser?.id || currentUser?.userId;
     } catch (err) {
       console.error("Error parsing user data:", err);
     }
 
-    // JIKA USER ID ATAU TOKEN TIDAK ADA, ARAHKAN KE LOGIN
+    // PROTEKSI: JIKA SESSION TIDAK ADA, CEGAH SUBMIT
     if (!userId || !token) {
       alert("Sesi Anda habis atau Anda belum login. Silakan Login kembali.");
       navigate("/login");
@@ -79,7 +79,7 @@ export default function RateMusicPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // PERBAIKAN: Menambahkan Header Authorization agar diterima oleh authMiddleware di backend
+          // PERBAIKAN UTAMA: Mengirimkan token dengan format Bearer agar lolos authMiddleware di backend
           'Authorization': `Bearer ${token}` 
         },
         body: JSON.stringify(reviewData),
@@ -90,17 +90,18 @@ export default function RateMusicPage() {
       if (response.ok) {
         setShowModal(true); 
       } else {
-        // Jika backend mengirim 401, berarti token tidak valid atau expired
+        // PENANGANAN ERROR SPESIFIK: Token Expired atau Invalid (Status 401)
         if (response.status === 401) {
-            alert("Token tidak valid atau kedaluwarsa. Silakan Login ulang.");
+            alert("Token tidak valid atau sudah kedaluwarsa. Silakan Login ulang.");
+            localStorage.removeItem("token"); // Bersihkan token yang rusak
             navigate("/login");
         } else {
-            alert(`Gagal: ${result.error || result.message || "Terjadi kesalahan"}`);
+            alert(`Gagal: ${result.error || result.message || "Terjadi kesalahan pada server"}`);
         }
       }
     } catch (error) {
       console.error("Network Error:", error);
-      alert(`Terjadi kesalahan jaringan.`);
+      alert(`Gagal terhubung ke server. Pastikan koneksi internet stabil.`);
     } finally {
       setIsSubmitting(false);
     }
