@@ -48,7 +48,7 @@ export default function RateMusicPage() {
     let token = null;
 
     try {
-      // Mengambil data user dan token dari localStorage
+      // MENGAMBIL DATA USER DAN TOKEN DARI LOCALSTORAGE
       const storedUser = localStorage.getItem("user");
       token = localStorage.getItem("token"); // Ambil token yang disimpan saat login
       const currentUser = storedUser ? JSON.parse(storedUser) : null;
@@ -57,9 +57,9 @@ export default function RateMusicPage() {
       console.error("Error parsing user data:", err);
     }
 
-    // Jika user ID atau token tidak ada, arahkan ke login
+    // JIKA USER ID ATAU TOKEN TIDAK ADA, ARAHKAN KE LOGIN
     if (!userId || !token) {
-      alert("Session expired or you are not logged in. Please Login again.");
+      alert("Sesi Anda habis atau Anda belum login. Silakan Login kembali.");
       navigate("/login");
       return;
     }
@@ -79,7 +79,7 @@ export default function RateMusicPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Menambahkan Header Authorization agar diterima oleh authMiddleware di backend
+          // PERBAIKAN: Menambahkan Header Authorization agar diterima oleh authMiddleware di backend
           'Authorization': `Bearer ${token}` 
         },
         body: JSON.stringify(reviewData),
@@ -90,15 +90,17 @@ export default function RateMusicPage() {
       if (response.ok) {
         setShowModal(true); 
       } else {
-        // Jika backend mengirim 401, tampilkan pesan spesifik
-        alert(`Failed: ${result.error || result.message || "Unauthorized access"}`);
+        // Jika backend mengirim 401, berarti token tidak valid atau expired
         if (response.status === 401) {
-          navigate("/login");
+            alert("Token tidak valid atau kedaluwarsa. Silakan Login ulang.");
+            navigate("/login");
+        } else {
+            alert(`Gagal: ${result.error || result.message || "Terjadi kesalahan"}`);
         }
       }
     } catch (error) {
       console.error("Network Error:", error);
-      alert(`Network error. Please check your connection.`);
+      alert(`Terjadi kesalahan jaringan.`);
     } finally {
       setIsSubmitting(false);
     }
