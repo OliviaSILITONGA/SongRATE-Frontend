@@ -45,16 +45,21 @@ export default function RateMusicPage() {
     }
 
     let userId = null;
+    let token = null;
+
     try {
+      // Mengambil data user dan token dari localStorage
       const storedUser = localStorage.getItem("user");
+      token = localStorage.getItem("token"); // Ambil token yang disimpan saat login
       const currentUser = storedUser ? JSON.parse(storedUser) : null;
       userId = currentUser?.id || currentUser?.userId;
     } catch (err) {
       console.error("Error parsing user data:", err);
     }
 
-    if (!userId) {
-      alert("Session expired. Please Login again.");
+    // Jika user ID atau token tidak ada, arahkan ke login
+    if (!userId || !token) {
+      alert("Session expired or you are not logged in. Please Login again.");
       navigate("/login");
       return;
     }
@@ -74,6 +79,8 @@ export default function RateMusicPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          // Menambahkan Header Authorization agar diterima oleh authMiddleware di backend
+          'Authorization': `Bearer ${token}` 
         },
         body: JSON.stringify(reviewData),
       });
@@ -81,13 +88,17 @@ export default function RateMusicPage() {
       const result = await response.json();
 
       if (response.ok) {
-        setShowModal(true); // Tampilkan Modal Sukses
+        setShowModal(true); 
       } else {
-        alert(`Failed: ${result.message || "Unknown error occurred"}`);
+        // Jika backend mengirim 401, tampilkan pesan spesifik
+        alert(`Failed: ${result.error || result.message || "Unauthorized access"}`);
+        if (response.status === 401) {
+          navigate("/login");
+        }
       }
     } catch (error) {
       console.error("Network Error:", error);
-      alert(`Network error.`);
+      alert(`Network error. Please check your connection.`);
     } finally {
       setIsSubmitting(false);
     }
