@@ -14,13 +14,6 @@ export default function RateMusicPage() {
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-<<<<<<< HEAD
-
-=======
-  const [showModal, setShowModal] = useState(false); 
-  const [user, setUser] = useState(null); // State untuk menyimpan data user untuk Navbar dinamis
-  
->>>>>>> 20e3511cac466a6bc5c2f2d5ab4fb7d5efa4ecd0
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -61,28 +54,9 @@ export default function RateMusicPage() {
       return;
     }
 
-<<<<<<< HEAD
     const token = localStorage.getItem("token");
     if (!token) {
       alert("You must login first.");
-=======
-    let userId = null;
-    let token = null;
-
-    try {
-      // MENGAMBIL DATA USER DAN TOKEN DARI LOCALSTORAGE
-      const storedUser = localStorage.getItem("user");
-      token = localStorage.getItem("token"); 
-      const currentUser = storedUser ? JSON.parse(storedUser) : null;
-      userId = currentUser?.id || currentUser?.userId;
-    } catch (err) {
-      console.error("Error parsing user data:", err);
-    }
-
-    // PROTEKSI: JIKA SESSION TIDAK ADA, CEGAH SUBMIT
-    if (!userId || !token) {
-      alert("Sesi Anda habis atau Anda belum login. Silakan Login kembali.");
->>>>>>> 20e3511cac466a6bc5c2f2d5ab4fb7d5efa4ecd0
       navigate("/login");
       return;
     }
@@ -100,24 +74,16 @@ export default function RateMusicPage() {
       const response = await fetch(`${API_URL}/api/reviews`, {
         method: "POST",
         headers: {
-<<<<<<< HEAD
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
-=======
-          'Content-Type': 'application/json',
-          // PERBAIKAN: Mengirimkan token dengan format Bearer agar lolos authMiddleware
-          'Authorization': `Bearer ${token}` 
->>>>>>> 20e3511cac466a6bc5c2f2d5ab4fb7d5efa4ecd0
         },
         body: JSON.stringify(reviewData),
       });
 
       const result = await response.json();
 
-<<<<<<< HEAD
       if (!response.ok) {
         throw new Error(result.message || "Failed to submit review");
-=======
       if (response.ok) {
         setShowModal(true); 
       } else {
@@ -129,7 +95,6 @@ export default function RateMusicPage() {
         } else {
             alert(`Gagal: ${result.error || result.message || "Terjadi kesalahan pada server"}`);
         }
->>>>>>> 20e3511cac466a6bc5c2f2d5ab4fb7d5efa4ecd0
       }
 
       alert("Rating submitted successfully!");
@@ -137,12 +102,9 @@ export default function RateMusicPage() {
       setRating(0);
       navigate("/rating");
     } catch (error) {
-<<<<<<< HEAD
       alert(error.message);
-=======
       console.error("Network Error:", error);
       alert(`Gagal terhubung ke server.`);
->>>>>>> 20e3511cac466a6bc5c2f2d5ab4fb7d5efa4ecd0
     } finally {
       setIsSubmitting(false);
     }
@@ -178,10 +140,7 @@ export default function RateMusicPage() {
         <h1 className="text-5xl font-bold text-center mb-14">Rate Music</h1>
 
         <form onSubmit={handleSubmit} className="space-y-10 relative">
-<<<<<<< HEAD
           {/* SONG TITLE */}
-=======
->>>>>>> 20e3511cac466a6bc5c2f2d5ab4fb7d5efa4ecd0
           <div>
             <label className="block mb-2 text-gray-300">Song Title</label>
             <input
