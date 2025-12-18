@@ -10,16 +10,22 @@ export default function ReviewSongs({
   artist,
   songImage
 }) {
+  // Get first letter of username for avatar (like navbar in Home.jsx)
+  const getInitial = () => {
+    if (reviewerHandle) return reviewerHandle.charAt(0).toUpperCase();
+    if (reviewer) return reviewer.charAt(0).toUpperCase();
+    return "?";
+  };
+
   return (
     <div className="bg-[#1C1D22] w-full rounded-2xl p-5 shadow-md border border-white/10 text-white">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <img
-            src={image}
-            alt={reviewer}
-            className="w-10 h-10 rounded-full object-cover"
-          />
+          {/* Profile Avatar with Initial - like navbar */}
+          <div className="w-10 h-10 rounded-full bg-green-600 border-2 border-yellow-400 flex items-center justify-center text-white font-bold shadow-sm text-sm">
+            {getInitial()}
+          </div>
           <span className="font-semibold text-sm md:text-base">
             {reviewerHandle}
           </span>
