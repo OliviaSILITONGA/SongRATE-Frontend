@@ -1,14 +1,14 @@
-export default function ReviewSongs({ 
-  image, 
-  name, 
-  review, 
-  rating, 
-  likes, 
-  reviewer, 
-  reviewerHandle, 
-  songTitle, 
-  artist, 
-  songImage 
+export default function ReviewSongs({
+  image,
+  name,
+  review,
+  rating,
+  likes,
+  reviewer,
+  reviewerHandle,
+  songTitle,
+  artist,
+  songImage
 }) {
   return (
     <div className="bg-[#1C1D22] w-full rounded-2xl p-5 shadow-md border border-white/10 text-white">
@@ -21,7 +21,7 @@ export default function ReviewSongs({
             className="w-10 h-10 rounded-full object-cover"
           />
           <span className="font-semibold text-sm md:text-base">
-            @{reviewerHandle}
+            {reviewerHandle}
           </span>
         </div>
         <div className="flex gap-1 text-yellow-400">
@@ -44,7 +44,7 @@ export default function ReviewSongs({
           alt={songTitle}
           className="w-16 h-16 rounded-lg object-cover border border-gray-700"
         />
-        
+
         <div className="flex-1">
           <h3 className="font-bold text-lg text-white">{songTitle}</h3>
           <p className="text-gray-400 text-sm mb-2">{artist}</p>

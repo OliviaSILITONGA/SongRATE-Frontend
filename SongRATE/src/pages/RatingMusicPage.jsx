@@ -14,6 +14,72 @@ import RAYE from "../assets/HEART.png";
 
 // Placeholder images
 import DefaultUser from "../assets/SongRATE_White.png";
+import DefaultSong from "../assets/SongRATE_White.png";
+
+// Import more song images for mapping
+import EternalSunshine from "../assets/EternalSunshine.png";
+import ArianaGrande from "../assets/Ariana_Grande.png";
+import BillieEilish from "../assets/Billie_Ellish.png";
+import BrunoMars from "../assets/Bruno_Mars.jpg";
+import ThWeeknd from "../assets/The_Weeknd.png";
+import SZA from "../assets/SZA.png";
+import KendrickLamar from "../assets/Kendrick_Lamar.png";
+import DojaCat from "../assets/Doja_Cat.png";
+import BadBunny from "../assets/Bad_Bunny.png";
+import JustinBieber from "../assets/Justin_Bieber.png";
+
+// Mapping judul lagu ke gambar cover
+const songImageMap = {
+  // Taylor Swift songs
+  "the fate of ophelia": TaylorSwift,
+  "showgirl": TaylorSwift,
+  // HUNTRX songs
+  "golden": HUNTRIX,
+  // Alex Warren songs
+  "ordinary": AlexWarren,
+  "moon": AlexWarren,
+  // sombr songs
+  "back to friends": sombr,
+  "22": sombr,
+  // RAYE songs
+  "where is my husband!": RAYE,
+  "heart": RAYE,
+  // Ariana Grande
+  "eternal sunshine": EternalSunshine,
+  "we can't be friends": ArianaGrande,
+  "yes, and?": ArianaGrande,
+  // Billie Eilish
+  "birds of a feather": BillieEilish,
+  "lunch": BillieEilish,
+  // Bruno Mars
+  "apt.": BrunoMars,
+  "die with a smile": BrunoMars,
+  // The Weeknd
+  "blinding lights": ThWeeknd,
+  "save your tears": ThWeeknd,
+  // SZA
+  "kill bill": SZA,
+  "snooze": SZA,
+  // Kendrick Lamar
+  "not like us": KendrickLamar,
+  "humble": KendrickLamar,
+  // Doja Cat
+  "paint the town red": DojaCat,
+  "woman": DojaCat,
+  // Bad Bunny
+  "monaco": BadBunny,
+  "tití me preguntó": BadBunny,
+  // Justin Bieber
+  "peaches": JustinBieber,
+  "ghost": JustinBieber,
+};
+
+// Helper function to get song image based on title
+const getSongImage = (title) => {
+  if (!title) return DefaultSong;
+  const normalizedTitle = title.toLowerCase().trim();
+  return songImageMap[normalizedTitle] || DefaultSong;
+};
 
 export default function MusicRatings() {
   const containerRef = useRef(null);
@@ -246,7 +312,7 @@ export default function MusicRatings() {
                     review={item.message}
                     songTitle={item.title}
                     artist={item.artist}
-                    songImage={item.songImage || DefaultUser} // Fallback for song image if needed
+                    songImage={getSongImage(item.title)}
                   />
                 </motion.div>
               );
