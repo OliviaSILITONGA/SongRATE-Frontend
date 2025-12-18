@@ -4,8 +4,8 @@ import Logo from "../assets/SongRATE_White.png";
 import { useNavigate } from "react-router-dom";
 
 export default function RateMusicPage() {
-  const [rating, setRating] = useState(0); 
-  const [hover, setHover] = useState(0); 
+  const [rating, setRating] = useState(0);
+  const [hover, setHover] = useState(0);
   const [form, setForm] = useState({
     title: "",
     artist: "",
@@ -13,7 +13,7 @@ export default function RateMusicPage() {
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const navigate = useNavigate();
   // Gunakan Environment Variable agar dinamis
   const API_URL = import.meta.env.VITE_API_URL;
@@ -47,69 +47,44 @@ export default function RateMusicPage() {
       return;
     }
 
-    // Ambil User ID dari LocalStorage dengan aman
-    let userId = null;
-    try {
-      const storedUser = localStorage.getItem("user");
-      const currentUser = storedUser ? JSON.parse(storedUser) : null;
-      userId = currentUser?.id || currentUser?.userId;
-    } catch (err) {
-      console.error("Error parsing user data:", err);
-    }
-
-    if (!userId) {
-      alert("Session expired or invalid. Please Login again.");
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("You must login first.");
       navigate("/login");
       return;
     }
 
     const reviewData = {
-      userId: userId,
       title: form.title,
       artist: form.artist,
       rating: rating,
-      message: form.message
+      message: form.message,
     };
 
     setIsSubmitting(true);
 
     try {
-      console.log("Sending Review Data:", reviewData); // DEBUG LOG
-
-      // PERBAIKAN: Gunakan API_URL + path '/api/reviews'
       const response = await fetch(`${API_URL}/api/reviews`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${localStorage.getItem('token')}` // Uncomment jika nanti pakai JWT Token
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(reviewData),
       });
 
       const result = await response.json();
 
-      if (response.ok) {
-        alert("Rating submitted successfully!");
-        setForm({ title: "", artist: "", message: "" });
-        setRating(0);
-        navigate("/rating"); // Redirect ke halaman list rating
-      } else {
-        console.error("Server Error Response:", result);
-        
-        // Deteksi error Foreign Key (User tidak ditemukan di DB karena DB reset)
-        // HANYA jika pesan error spesifik, BUKAN semua error 500
-        if (result.details && result.details.toLowerCase().includes('foreign key') && result.details.toLowerCase().includes('user')) {
-           alert("Failed: User ID not found in database. Please Logout and Login again to refresh your session.");
-        } else {
-           // Tampilkan error asli dari server untuk debugging
-           alert(`Failed: ${result.error || result.message || "Unknown error occurred"}`);
-        }
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to submit review");
       }
+
+      alert("Rating submitted successfully!");
+      setForm({ title: "", artist: "", message: "" });
+      setRating(0);
+      navigate("/rating");
     } catch (error) {
-      console.error("Network Error:", error);
-      alert(`Network error. Is the backend running at ${API_URL}? Check console for details.`);
+      alert(error.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -129,7 +104,6 @@ export default function RateMusicPage() {
         <h1 className="text-5xl font-bold text-center mb-14">Rate Music</h1>
 
         <form onSubmit={handleSubmit} className="space-y-10 relative">
-          
           {/* SONG TITLE */}
           <div>
             <label className="block mb-2 text-gray-300">Song Title</label>
@@ -142,7 +116,9 @@ export default function RateMusicPage() {
               className="w-full px-5 py-3 rounded-lg bg-[#3E424B] text-gray-200 outline-none focus:ring-2 focus:ring-yellow-500 transition"
               disabled={isSubmitting}
             />
-            {errors.title && <p className="text-red-400 mt-1 text-sm">{errors.title}</p>}
+            {errors.title && (
+              <p className="text-red-400 mt-1 text-sm">{errors.title}</p>
+            )}
           </div>
 
           {/* ARTIST */}
@@ -157,7 +133,9 @@ export default function RateMusicPage() {
               className="w-full px-5 py-3 rounded-lg bg-[#3E424B] text-gray-200 outline-none focus:ring-2 focus:ring-yellow-500 transition"
               disabled={isSubmitting}
             />
-            {errors.artist && <p className="text-red-400 mt-1 text-sm">{errors.artist}</p>}
+            {errors.artist && (
+              <p className="text-red-400 mt-1 text-sm">{errors.artist}</p>
+            )}
           </div>
 
           {/* RATING */}
@@ -167,7 +145,9 @@ export default function RateMusicPage() {
                 <span
                   key={star}
                   className={`cursor-pointer transition transform hover:scale-110 ${
-                    (hover || rating) >= star ? "text-yellow-400" : "text-gray-500"
+                    (hover || rating) >= star
+                      ? "text-yellow-400"
+                      : "text-gray-500"
                   }`}
                   onMouseEnter={() => !isSubmitting && setHover(star)}
                   onMouseLeave={() => !isSubmitting && setHover(0)}
@@ -177,7 +157,9 @@ export default function RateMusicPage() {
                 </span>
               ))}
             </div>
-            {errors.rating && <p className="text-red-400 mt-2 text-sm">{errors.rating}</p>}
+            {errors.rating && (
+              <p className="text-red-400 mt-2 text-sm">{errors.rating}</p>
+            )}
           </div>
 
           {/* MESSAGE */}
@@ -192,7 +174,9 @@ export default function RateMusicPage() {
               className="w-full px-5 py-3 rounded-lg bg-[#3E424B] text-gray-200 outline-none focus:ring-2 focus:ring-yellow-500 transition"
               disabled={isSubmitting}
             ></textarea>
-            {errors.message && <p className="text-red-400 mt-1 text-sm">{errors.message}</p>}
+            {errors.message && (
+              <p className="text-red-400 mt-1 text-sm">{errors.message}</p>
+            )}
           </div>
 
           {/* SUBMIT BUTTON */}
