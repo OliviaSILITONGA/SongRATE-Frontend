@@ -303,11 +303,11 @@ export default function MusicRatings() {
                   transition={{ delay: idx * 0.15 }}
                 >
                   <ReviewSongs
-                    image={userImage}
+                    reviewId={item.id || `review-${idx}`}
                     reviewer={username}
                     reviewerHandle={userHandle}
                     name={timeAgo(item.createdAt)}
-                    likes={0}
+                    likes={item.likes || 0}
                     rating={item.rating}
                     review={item.message}
                     songTitle={item.title}
