@@ -7,6 +7,7 @@ import Modal from "../components/Modal";
 export default function RateMusicPage() {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
+  const [user, setUser] = useState(null);
   const [form, setForm] = useState({
     title: "",
     artist: "",
@@ -14,6 +15,7 @@ export default function RateMusicPage() {
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -83,24 +85,20 @@ export default function RateMusicPage() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || "Failed to submit review");
-      if (response.ok) {
-        setShowModal(true); 
-      } else {
         // PENANGANAN ERROR TOKEN: Status 401
         if (response.status === 401) {
-            alert("Token tidak valid atau sudah kedaluwarsa. Silakan Login ulang.");
-            localStorage.removeItem("token");
-            navigate("/login");
+          alert("Token tidak valid atau sudah kedaluwarsa. Silakan Login ulang.");
+          localStorage.removeItem("token");
+          navigate("/login");
         } else {
-            alert(`Gagal: ${result.error || result.message || "Terjadi kesalahan pada server"}`);
+          throw new Error(result.error || result.message || "Terjadi kesalahan pada server");
         }
+      } else {
+        setShowModal(true);
+        setForm({ title: "", artist: "", message: "" });
+        setRating(0);
+        // navigation is handled when modal is closed (handleCloseModal)
       }
-
-      alert("Rating submitted successfully!");
-      setForm({ title: "", artist: "", message: "" });
-      setRating(0);
-      navigate("/rating");
     } catch (error) {
       alert(error.message);
       console.error("Network Error:", error);
