@@ -67,9 +67,14 @@ export default function LoginPage() {
         // Simpan token
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("role", data.user.role); // 🔑 PENTING
         
-        // Tampilkan Modal Sukses
-        setShowModal(true);
+        // Redirect berdasarkan role
+        if (data.user.role === "admin") {
+          navigate("/admin");
+        } else {
+          setShowModal(true);
+        }
       } else {
         console.log(data);
         if (data.message?.toLowerCase().includes("password")) {

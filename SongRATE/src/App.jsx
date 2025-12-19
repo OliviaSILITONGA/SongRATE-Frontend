@@ -13,9 +13,8 @@ import ChartPage from "./pages/ChartPage";
 import NewReleasesPage from "./pages/NewReleasesPage";
 import NewsPage from "./pages/NewsPage";
 import ArtistDetailPage from "./pages/ArtistDetailPage";
-import AdminPage from "./pages/AdminPage";
-import LoginAdmin from "./pages/LoginAdmin";
-import ProtectedRoute from "./components/ProtectedRoute";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminRoute from "./components/AdminRoute";
 
 function App() {
   return (
@@ -35,9 +34,14 @@ function App() {
         <Route path="/new-releases" element={<NewReleasesPage />} />
         <Route path="/news" element={<NewsPage />} />
         <Route path="/artist/:id" element={<ArtistDetailPage />} />
-        <Route path="/admin/:id" element={<AdminPage />} />
-        <Route path="/admin-login/:id" element={<LoginAdmin />} />
-        <Route path="/route/:id" element={<ProtectedRoute />} />
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
