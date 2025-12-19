@@ -18,6 +18,7 @@ Jika mendapat error "Failed to Fetch" saat login, ikuti langkah-langkah ini:
    - 🚨 = Exception details
 
 **Contoh output yang baik:**
+
 ```
 🔐 Login attempt to: http://localhost:3000/api/auth/login
 📧 Email: admin@songrate.com
@@ -28,6 +29,7 @@ Jika mendapat error "Failed to Fetch" saat login, ikuti langkah-langkah ini:
 ```
 
 **Contoh output error:**
+
 ```
 🔐 Login attempt to: http://localhost:3000/api/auth/login
 ❌ Login error: fetch failed
@@ -39,12 +41,15 @@ Jika mendapat error "Failed to Fetch" saat login, ikuti langkah-langkah ini:
 ## 🔍 Step 2: Check Backend URL
 
 ### Current Configuration
+
 File `.env` sekarang berisi:
+
 ```
 VITE_API_URL=https://backendsongrate-production.up.railway.app
 ```
 
 ### Kemungkinan Issue:
+
 1. **Production URL tidak jalan** → gunakan local backend
 2. **Backend URL berbeda** → update `.env`
 3. **Endpoint path salah** → check API documentation
@@ -56,16 +61,19 @@ VITE_API_URL=https://backendsongrate-production.up.railway.app
 Jika backend Anda di local, ganti `.env`:
 
 **Jika backend running di local (http://localhost:3000):**
+
 ```
 VITE_API_URL=http://localhost:3000
 ```
 
 **Jika backend di production:**
+
 ```
 VITE_API_URL=https://your-backend-url.com
 ```
 
 **Setelah edit .env:**
+
 1. Simpan file
 2. Refresh browser (bukan Ctrl+Shift+R)
 3. Coba login lagi
@@ -77,11 +85,13 @@ VITE_API_URL=https://your-backend-url.com
 ### Check API Endpoint Path
 
 **Default yang digunakan:**
+
 ```
 POST /api/auth/login
 ```
 
 **Jika endpoint berbeda, tell me:**
+
 - Endpoint path (misalnya `/auth/login`, `/login`, dll)
 - Request format (body format)
 - Response format (token field, user field, dll)
@@ -93,6 +103,7 @@ POST /api/auth/login
 ### Gunakan Postman atau cURL
 
 **cURL Test:**
+
 ```bash
 curl -X POST http://localhost:3000/api/auth/login \
   -H "Content-Type: application/json" \
@@ -103,6 +114,7 @@ curl -X POST http://localhost:3000/api/auth/login \
 ```
 
 **Expected Response (200 OK):**
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiIs...",
@@ -116,6 +128,7 @@ curl -X POST http://localhost:3000/api/auth/login \
 ```
 
 **Error Response (401):**
+
 ```json
 {
   "message": "Email not found"
@@ -131,11 +144,13 @@ Jika using production backend, pastikan CORS enabled di backend:
 ```javascript
 // Backend harus allow request dari frontend
 // Example (Node.js/Express):
-const cors = require('cors');
-app.use(cors({
-  origin: 'http://localhost:5175',
-  credentials: true
-}));
+const cors = require("cors");
+app.use(
+  cors({
+    origin: "http://localhost:5175",
+    credentials: true,
+  })
+);
 ```
 
 ---
@@ -143,27 +158,35 @@ app.use(cors({
 ## 🐛 Step 7: Common Issues & Solutions
 
 ### Issue: "Failed to fetch"
+
 **Cause:** Backend tidak running atau URL salah
 **Solution:**
+
 - [ ] Pastikan backend sudah running
 - [ ] Verifikasi URL di `.env`
 - [ ] Cek di browser DevTools → Network tab
 
 ### Issue: CORS error
+
 **Cause:** Backend tidak allow frontend domain
 **Solution:**
+
 - [ ] Enable CORS di backend
 - [ ] Allow frontend URL
 
 ### Issue: "Email not found"
+
 **Cause:** Email tidak terdaftar
 **Solution:**
+
 - [ ] Check database, pastikan user ada
 - [ ] Gunakan email yang benar
 
 ### Issue: "Incorrect password"
+
 **Cause:** Password salah
 **Solution:**
+
 - [ ] Verify password di database
 - [ ] Cek caps lock
 
@@ -187,15 +210,16 @@ app.use(cors({
 Jika login berhasil tapi tidak redirect:
 
 **Di browser console, jalankan:**
+
 ```javascript
 // Check token
-console.log(localStorage.getItem("token"))
+console.log(localStorage.getItem("token"));
 
 // Check user
-console.log(JSON.parse(localStorage.getItem("user")))
+console.log(JSON.parse(localStorage.getItem("user")));
 
 // Check role
-console.log(localStorage.getItem("role"))
+console.log(localStorage.getItem("role"));
 ```
 
 **Seharusnya muncul data, bukan null/undefined**
@@ -220,12 +244,14 @@ console.log(localStorage.getItem("role"))
 Untuk fix issue Anda, saya butuh:
 
 1. **Backend URL**: Berapa URL backend Anda?
+
    ```
    - Production: https://...?
    - Local: http://localhost:3000?
    ```
 
 2. **Endpoint path**: Path login endpoint apa?
+
    ```
    - /api/auth/login?
    - /auth/login?
@@ -233,6 +259,7 @@ Untuk fix issue Anda, saya butuh:
    ```
 
 3. **Console error**: Apa exact error message di console?
+
    ```
    (copy paste dari console)
    ```
@@ -249,6 +276,7 @@ Untuk fix issue Anda, saya butuh:
 Jika backend running di local **http://localhost:3000**:
 
 1. Edit `.env`:
+
 ```
 VITE_API_URL=http://localhost:3000
 ```
@@ -264,6 +292,7 @@ VITE_API_URL=http://localhost:3000
 ## 📞 Next Action
 
 **Tell me:**
+
 1. Backend URL yang sekarang (production atau local?)
 2. API endpoint path yang correct
 3. Console error message yang muncul

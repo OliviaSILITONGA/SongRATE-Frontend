@@ -3,6 +3,7 @@
 ## ✅ Fitur yang Berhasil Diimplementasikan
 
 ### 1. **Login System**
+
 - ✅ Form login dengan validasi email dan password
 - ✅ Error handling yang spesifik (email not found, incorrect password)
 - ✅ Loading state selama proses login
@@ -10,15 +11,18 @@
 - ✅ Auth helper untuk reusable login logic
 
 ### 2. **Role-Based Redirect**
+
 - ✅ **Admin**: Langsung ke `/admin` (Admin Dashboard) tanpa modal
 - ✅ **Regular User**: Tampilkan modal → Redirect ke `/home`
 
 ### 3. **Protected Routes**
+
 - ✅ Route `/admin` dilindungi oleh `AdminRoute` component
 - ✅ Token dan role verification
 - ✅ Auto redirect ke login jika tidak authorized
 
 ### 4. **Session Management**
+
 - ✅ Token disimpan di localStorage
 - ✅ User data dan role disimpan
 - ✅ Logout membersihkan semua data
@@ -28,6 +32,7 @@
 ## 🧪 Testing Login
 
 ### Test Credentials
+
 Gunakan credentials dari backend Anda sendiri. Pastikan ada user dengan role "admin":
 
 ```
@@ -43,55 +48,65 @@ Regular User:
 ### Test Steps
 
 #### 1️⃣ Test Admin Login
+
 1. Buka http://localhost:5175/login
 2. Masukkan email dan password admin
 3. Klik "Log in"
 4. **Expected Result**: Langsung redirect ke `/admin` (Admin Dashboard)
-5. **Verifikasi**: 
+5. **Verifikasi**:
    - Lihat dashboard dengan stats
    - Sidebar navigation muncul
    - Profile menunjukkan email admin
 
 #### 2️⃣ Test Regular User Login
+
 1. Buka http://localhost:5175/login
 2. Masukkan email dan password user biasa
 3. Klik "Log in"
 4. **Expected Result**: Modal "Welcome Back!" muncul → Redirect ke `/home`
 
 #### 3️⃣ Test Email Validation
+
 1. Kosongkan email field
 2. Klik "Log in"
 3. **Expected**: Error "Email is required"
 
 #### 4️⃣ Test Email Format
+
 1. Masukkan email tanpa @, contoh: "useremail"
 2. Klik "Log in"
 3. **Expected**: Error "Invalid email format (must contain @)"
 
 #### 5️⃣ Test Password Validation
+
 1. Kosongkan password field
 2. Klik "Log in"
 3. **Expected**: Error "Password is required"
 
 #### 6️⃣ Test Wrong Email
+
 1. Login dengan email yang tidak terdaftar
 2. **Expected**: Error "Email not found"
 
 #### 7️⃣ Test Wrong Password
+
 1. Login dengan email yang benar tapi password salah
 2. **Expected**: Error "Incorrect password"
 
 #### 8️⃣ Test Protected Route
+
 1. Logout atau clear localStorage
 2. Akses langsung http://localhost:5175/admin
 3. **Expected**: Redirect ke `/login`
 
 #### 9️⃣ Test Regular User Access Admin
+
 1. Login sebagai regular user
 2. Akses langsung http://localhost:5175/admin
 3. **Expected**: Redirect ke `/home`
 
 #### 🔟 Test Session Persistence
+
 1. Login sebagai admin
 2. Refresh halaman (F5)
 3. **Expected**: Tetap di admin dashboard (tidak logout)
@@ -103,13 +118,13 @@ Regular User:
 
 ## 📁 File yang Telah Dimodifikasi/Dibuat
 
-| File | Status | Keterangan |
-|------|--------|-----------|
-| [src/pages/LoginPage.jsx](src/pages/LoginPage.jsx) | ✅ Modified | Login form dengan role-based redirect |
-| [src/pages/AdminDashboard.jsx](src/pages/AdminDashboard.jsx) | ✅ Modified | Validasi user, import useNavigate |
-| [src/components/AdminRoute.jsx](src/components/AdminRoute.jsx) | ✅ Modified | Better error handling |
-| [src/utils/authHelper.js](src/utils/authHelper.js) | ✨ NEW | Auth helper functions |
-| [.env](.env) | ✓ Exists | API URL configuration |
+| File                                                           | Status      | Keterangan                            |
+| -------------------------------------------------------------- | ----------- | ------------------------------------- |
+| [src/pages/LoginPage.jsx](src/pages/LoginPage.jsx)             | ✅ Modified | Login form dengan role-based redirect |
+| [src/pages/AdminDashboard.jsx](src/pages/AdminDashboard.jsx)   | ✅ Modified | Validasi user, import useNavigate     |
+| [src/components/AdminRoute.jsx](src/components/AdminRoute.jsx) | ✅ Modified | Better error handling                 |
+| [src/utils/authHelper.js](src/utils/authHelper.js)             | ✨ NEW      | Auth helper functions                 |
+| [.env](.env)                                                   | ✓ Exists    | API URL configuration                 |
 
 ---
 
@@ -145,7 +160,7 @@ Regular User:
        ▼           ▼
     Save Token  Handle Error
     Save User   Show Message
-    Save Role   
+    Save Role
        │
        ▼
     Check Role
@@ -169,6 +184,7 @@ Regular User:
 ## 🔐 Security Features
 
 ### ✅ Implemented
+
 - JWT Token-based authentication
 - Role-based access control (RBAC)
 - Protected routes with verification
@@ -177,6 +193,7 @@ Regular User:
 - Error handling without exposing sensitive info
 
 ### ⚠️ Notes
+
 - Token disimpan di localStorage (aman untuk dev, gunakan sessionStorage atau secure cookies untuk production)
 - Implement refresh token mechanism untuk production
 - Add CSRF protection
@@ -187,11 +204,13 @@ Regular User:
 ## 🛠️ Environment Setup
 
 ### File .env
+
 ```dotenv
 VITE_API_URL=https://backendsongrate-production.up.railway.app
 ```
 
 ### Atau untuk Local Backend
+
 ```dotenv
 VITE_API_URL=http://localhost:3000
 ```
@@ -203,6 +222,7 @@ VITE_API_URL=http://localhost:3000
 Backend harus mengembalikan response dengan format:
 
 ### ✅ Success Response (200)
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiIs...",
@@ -216,6 +236,7 @@ Backend harus mengembalikan response dengan format:
 ```
 
 ### ❌ Error Response (400, 401, 404)
+
 ```json
 {
   "message": "Email not found"
@@ -234,13 +255,13 @@ Atau
 
 ## 🚀 URL Endpoints
 
-| Path | Akses | Deskripsi |
-|------|-------|-----------|
-| `/login` | Public | Login page |
-| `/signup` | Public | Sign up page |
-| `/home` | Protected (user) | User home page |
-| `/admin` | Protected (admin) | Admin dashboard |
-| `/forgot-password` | Public | Forgot password page |
+| Path               | Akses             | Deskripsi            |
+| ------------------ | ----------------- | -------------------- |
+| `/login`           | Public            | Login page           |
+| `/signup`          | Public            | Sign up page         |
+| `/home`            | Protected (user)  | User home page       |
+| `/admin`           | Protected (admin) | Admin dashboard      |
+| `/forgot-password` | Public            | Forgot password page |
 
 ---
 

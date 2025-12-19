@@ -3,11 +3,13 @@
 ## ⚡ 5 Menit Setup
 
 ### Step 1: Pastikan Backend Running
+
 - Backend API harus running dan accessible
 - Default URL: `https://backendsongrate-production.up.railway.app`
 - Atau local: `http://localhost:3000`
 
 ### Step 2: Start Development Server
+
 ```bash
 cd SongRATE
 npm run dev
@@ -18,12 +20,14 @@ Server akan running di: **http://localhost:5173** (atau port berikutnya jika tak
 ### Step 3: Test Login
 
 #### 🔓 Admin Login
+
 1. Buka http://localhost:5173/login
 2. Masukkan **admin email** dan **admin password**
 3. Klik "Log in"
 4. ✅ **Expected**: Langsung masuk ke **Admin Dashboard** (`/admin`)
 
 #### 👤 Regular User Login
+
 1. Buka http://localhost:5173/login
 2. Masukkan **user email** dan **user password**
 3. Klik "Log in"
@@ -54,22 +58,26 @@ SongRATE/
 ## 🎨 Admin Dashboard Features
 
 ### Dashboard Tab
+
 - 📊 Stats cards (Total Songs, Users, Ratings)
 - 📈 Recent activity
 - 👥 User list
 
 ### Songs Tab
+
 - 🎵 Semua lagu dalam tabel
 - ➕ Tombol "Tambah Lagu"
 - ✏️ Edit button untuk ubah lagu
 - 🗑️ Delete button untuk hapus lagu
 
 ### Users Tab
+
 - 👥 Daftar semua user yang login
 - 📧 Email, nama, tanggal daftar
 - ✅ Status (Aktif/Tidak Aktif)
 
 ### Sidebar
+
 - 📊 Dashboard
 - 👥 Users
 - 🎵 Songs
@@ -84,10 +92,11 @@ SongRATE/
 ## 🔐 What's Stored in Browser
 
 After login, browser stores:
+
 ```javascript
-localStorage.getItem("token")     // JWT token
-localStorage.getItem("user")      // User data: {id, email, name, role}
-localStorage.getItem("role")      // Role: "admin" atau "user"
+localStorage.getItem("token"); // JWT token
+localStorage.getItem("user"); // User data: {id, email, name, role}
+localStorage.getItem("role"); // Role: "admin" atau "user"
 ```
 
 **Clear data**: `localStorage.clear()` di console
@@ -97,27 +106,32 @@ localStorage.getItem("role")      // Role: "admin" atau "user"
 ## 🐛 Common Issues & Solutions
 
 ### ❌ "Email not found"
+
 - Email tidak terdaftar di backend
 - ✓ Gunakan email yang sudah register
 
 ### ❌ "Incorrect password"
+
 - Password salah
 - ✓ Pastikan caps lock off
 - ✓ Coba reset password di forgot-password
 
 ### ❌ "Failed to connect to server"
+
 - Backend tidak running atau API URL salah
 - ✓ Pastikan backend running
 - ✓ Check `.env` file untuk API URL yang benar
 - ✓ Pastikan CORS enabled di backend
 
 ### ❌ Login tapi stuck loading
+
 - API call slow atau error
 - ✓ Check browser DevTools → Network tab
 - ✓ Check browser Console untuk error message
 - ✓ Restart server: `npm run dev`
 
 ### ❌ Admin tidak masuk ke /admin
+
 - User role bukan "admin" di database
 - ✓ Check database, set role = "admin"
 - ✓ Check API response mengandung role field
@@ -143,24 +157,26 @@ localStorage.getItem("role")      // Role: "admin" atau "user"
 ## 💡 Tips & Tricks
 
 ### Cek session di browser console:
+
 ```javascript
 // Lihat token
-console.log(localStorage.getItem("token"))
+console.log(localStorage.getItem("token"));
 
 // Lihat user data
-console.log(JSON.parse(localStorage.getItem("user")))
+console.log(JSON.parse(localStorage.getItem("user")));
 
 // Lihat role
-console.log(localStorage.getItem("role"))
+console.log(localStorage.getItem("role"));
 
 // Clear semua
-localStorage.clear()
+localStorage.clear();
 
 // Force redirect
-window.location.href = "/login"
+window.location.href = "/login";
 ```
 
 ### Network debugging:
+
 1. Buka DevTools (F12)
 2. Ke tab "Network"
 3. Submit login form
@@ -191,6 +207,7 @@ window.location.href = "/login"
 ## ☎️ Support
 
 Jika ada issue:
+
 1. Cek documentation files
 2. Check browser console (F12)
 3. Check network requests (DevTools)

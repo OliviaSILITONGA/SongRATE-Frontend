@@ -3,12 +3,15 @@
 ## 🎯 Ikuti langkah ini:
 
 ### 1️⃣ Buka Console (F12)
+
 Tekan **F12** → buka tab **Console**
 
 ### 2️⃣ Coba Login
+
 Masukkan email & password → klik "Log in"
 
 ### 3️⃣ Lihat Error di Console
+
 Catat semua message yang muncul (terutama yang punya emoji 🔐, 🚨, ❌)
 
 ---
@@ -20,16 +23,19 @@ Catat semua message yang muncul (terutama yang punya emoji 🔐, 🚨, ❌)
 Jika backend running di local, update `.env`:
 
 **Dari:**
+
 ```
 VITE_API_URL=https://backendsongrate-production.up.railway.app
 ```
 
 **Menjadi:**
+
 ```
 VITE_API_URL=http://localhost:3000
 ```
 
 **Atau sesuai port backend Anda:**
+
 ```
 VITE_API_URL=http://localhost:8000
 VITE_API_URL=http://localhost:5000
@@ -37,6 +43,7 @@ VITE_API_URL=http://192.168.x.x:3000
 ```
 
 Setelah edit:
+
 - Simpan file
 - Refresh browser (Ctrl+R atau F5)
 - Coba login lagi
@@ -48,16 +55,20 @@ Setelah edit:
 Jika production, pastikan backend enable CORS:
 
 **Node.js/Express:**
+
 ```javascript
-const cors = require('cors');
+const cors = require("cors");
 app.use(cors());
 ```
 
 **Atau:**
+
 ```javascript
-app.use(cors({
-  origin: 'http://localhost:5175'
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5175",
+  })
+);
 ```
 
 ---
@@ -79,7 +90,7 @@ app.use(cors({
 1. Download Postman
 2. Create **POST** request
 3. URL: `http://localhost:3000/api/auth/login` (adjust port)
-4. Headers: 
+4. Headers:
    ```
    Content-Type: application/json
    ```
@@ -99,15 +110,18 @@ app.use(cors({
 Berikan ini supaya saya bisa fix:
 
 1. **Backend URL** sekarang apa?
+
    - Production: `https://...`?
    - Local: `http://localhost:...`?
 
 2. **Endpoint path** yang correct?
+
    - `/api/auth/login`?
    - `/auth/login`?
    - `/login`?
 
 3. **Console error** apa exactly?
+
    - Copy paste message dengan emoji
 
 4. **Network response** apa?
@@ -122,17 +136,17 @@ Di browser console, jalankan:
 
 ```javascript
 // Test fetch ke backend
-fetch('http://localhost:3000/api/auth/login', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ 
-    email: 'admin@songrate.com', 
-    password: 'password123' 
-  })
+fetch("http://localhost:3000/api/auth/login", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    email: "admin@songrate.com",
+    password: "password123",
+  }),
 })
-.then(r => r.json())
-.then(d => console.log('✅ Success:', d))
-.catch(e => console.log('❌ Error:', e))
+  .then((r) => r.json())
+  .then((d) => console.log("✅ Success:", d))
+  .catch((e) => console.log("❌ Error:", e));
 ```
 
 Lihat apa response-nya

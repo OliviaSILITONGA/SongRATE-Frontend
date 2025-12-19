@@ -5,29 +5,34 @@
 Jika Anda baru pertama kali, baca file ini dalam urutan:
 
 1. **[QUICK_START.md](QUICK_START.md)** ⭐ START HERE (5 menit)
+
    - Setup cepat
    - Login testing
    - Basic features
    - Common issues
 
 2. **[IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)** (10 menit)
+
    - Overview lengkap
    - Fitur yang diimplementasikan
    - Architecture & flow
    - Testing checklist
 
 3. **[LOGIN_AND_AUTH_TESTING.md](LOGIN_AND_AUTH_TESTING.md)** (15 menit)
+
    - Testing guide detail
    - 10 test scenarios
    - Error handling
    - API response format
 
 4. **[LOGIN_GUIDE.md](LOGIN_GUIDE.md)** (Optional)
+
    - Security features
    - Session management
    - Production notes
 
 5. **[ADMIN_FEATURES.md](ADMIN_FEATURES.md)** (Optional)
+
    - Admin dashboard features
    - Song management
    - User management
@@ -98,27 +103,30 @@ SongRATE/
 ## 🔑 Key Files
 
 ### ✨ New Features
-| File | Purpose | Size |
-|------|---------|------|
-| [src/utils/authHelper.js](src/utils/authHelper.js) | Auth utilities | 90 lines |
-| [QUICK_START.md](QUICK_START.md) | Quick setup guide | 180 lines |
+
+| File                                                   | Purpose           | Size      |
+| ------------------------------------------------------ | ----------------- | --------- |
+| [src/utils/authHelper.js](src/utils/authHelper.js)     | Auth utilities    | 90 lines  |
+| [QUICK_START.md](QUICK_START.md)                       | Quick setup guide | 180 lines |
 | [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) | Complete overview | 350 lines |
-| [LOGIN_AND_AUTH_TESTING.md](LOGIN_AND_AUTH_TESTING.md) | Testing guide | 300 lines |
-| [CHANGELOG.md](CHANGELOG.md) | Version history | 400 lines |
+| [LOGIN_AND_AUTH_TESTING.md](LOGIN_AND_AUTH_TESTING.md) | Testing guide     | 300 lines |
+| [CHANGELOG.md](CHANGELOG.md)                           | Version history   | 400 lines |
 
 ### ✏️ Modified Files
-| File | Changes |
-|------|---------|
-| [src/pages/LoginPage.jsx](src/pages/LoginPage.jsx) | Auth logic, auto redirect |
-| [src/pages/AdminDashboard.jsx](src/pages/AdminDashboard.jsx) | Navigation, validation |
-| [src/components/AdminRoute.jsx](src/components/AdminRoute.jsx) | Better protection |
-| [src/components/AdminSidebar.jsx](src/components/AdminSidebar.jsx) | Logout using authHelper |
+
+| File                                                               | Changes                   |
+| ------------------------------------------------------------------ | ------------------------- |
+| [src/pages/LoginPage.jsx](src/pages/LoginPage.jsx)                 | Auth logic, auto redirect |
+| [src/pages/AdminDashboard.jsx](src/pages/AdminDashboard.jsx)       | Navigation, validation    |
+| [src/components/AdminRoute.jsx](src/components/AdminRoute.jsx)     | Better protection         |
+| [src/components/AdminSidebar.jsx](src/components/AdminSidebar.jsx) | Logout using authHelper   |
 
 ---
 
 ## ⚡ Quick Commands
 
 ### Development
+
 ```bash
 # Start dev server
 npm run dev
@@ -134,17 +142,18 @@ npm run lint
 ```
 
 ### Browser Console (for debugging)
+
 ```javascript
 // Check login status
-localStorage.getItem("token")
-JSON.parse(localStorage.getItem("user"))
-localStorage.getItem("role")
+localStorage.getItem("token");
+JSON.parse(localStorage.getItem("user"));
+localStorage.getItem("role");
 
 // Clear session
-localStorage.clear()
+localStorage.clear();
 
 // Check if admin
-localStorage.getItem("role") === "admin"
+localStorage.getItem("role") === "admin";
 ```
 
 ---
@@ -152,6 +161,7 @@ localStorage.getItem("role") === "admin"
 ## 🎯 Main Features
 
 ### ✅ Authentication
+
 - [x] Login form dengan validasi
 - [x] JWT token management
 - [x] Auto redirect berdasarkan role
@@ -159,6 +169,7 @@ localStorage.getItem("role") === "admin"
 - [x] Logout functionality
 
 ### ✅ Admin Dashboard
+
 - [x] Statistics overview
 - [x] Recent activity
 - [x] Song management (CRUD)
@@ -166,6 +177,7 @@ localStorage.getItem("role") === "admin"
 - [x] Sidebar navigation
 
 ### ✅ Security
+
 - [x] Protected routes
 - [x] Role-based access control
 - [x] Token verification
@@ -176,6 +188,7 @@ localStorage.getItem("role") === "admin"
 ## 🧪 Testing
 
 ### Scenarios (10 test cases)
+
 1. Admin login → /admin
 2. User login → /home
 3. Email validation
@@ -207,6 +220,7 @@ localStorage.getItem("role") === "admin"
 ## 📈 Development Roadmap
 
 ### Phase 1: ✅ DONE
+
 - [x] Login system
 - [x] Admin dashboard
 - [x] Song management
@@ -214,12 +228,14 @@ localStorage.getItem("role") === "admin"
 - [x] Protected routes
 
 ### Phase 2: TODO
+
 - [ ] Refresh token mechanism
 - [ ] 2FA implementation
 - [ ] Email verification
 - [ ] Advanced filters/search
 
 ### Phase 3: TODO
+
 - [ ] Analytics dashboard
 - [ ] Reporting features
 - [ ] Export data (CSV/PDF)
@@ -230,47 +246,51 @@ localStorage.getItem("role") === "admin"
 ## 🐛 Support & Troubleshooting
 
 ### Common Issues
-| Issue | Solution |
-|-------|----------|
-| "Failed to connect" | Check backend running, verify API URL |
-| "Email not found" | Use registered email from backend |
-| "Incorrect password" | Check caps lock, verify password |
-| Login stuck | Check DevTools Network tab for API response |
-| Admin can't access /admin | Verify role="admin" in database |
-| Session lost on refresh | Check localStorage for token persistence |
+
+| Issue                     | Solution                                    |
+| ------------------------- | ------------------------------------------- |
+| "Failed to connect"       | Check backend running, verify API URL       |
+| "Email not found"         | Use registered email from backend           |
+| "Incorrect password"      | Check caps lock, verify password            |
+| Login stuck               | Check DevTools Network tab for API response |
+| Admin can't access /admin | Verify role="admin" in database             |
+| Session lost on refresh   | Check localStorage for token persistence    |
 
 ### Debug Mode
+
 ```javascript
 // In browser console
-localStorage.clear()           // Clear all data
-window.location.href="/login"  // Force to login
+localStorage.clear(); // Clear all data
+window.location.href = "/login"; // Force to login
 ```
 
 ---
 
 ## 📊 Project Stats
 
-| Metric | Value |
-|--------|-------|
-| Files Modified | 4 |
-| New Files | 5 |
-| Lines Added | ~1600 |
-| Components | 6+ |
-| Auth Functions | 6 |
-| Test Scenarios | 10 |
-| Documentation Pages | 6 |
+| Metric              | Value |
+| ------------------- | ----- |
+| Files Modified      | 4     |
+| New Files           | 5     |
+| Lines Added         | ~1600 |
+| Components          | 6+    |
+| Auth Functions      | 6     |
+| Test Scenarios      | 10    |
+| Documentation Pages | 6     |
 
 ---
 
 ## 🚀 Deployment
 
 ### Requirements
+
 - Node.js 14+
 - npm or yarn
 - Backend API running
 - Valid .env configuration
 
 ### Steps
+
 1. Update `.env` dengan production URL
 2. Run `npm run build`
 3. Deploy `dist/` folder
@@ -294,12 +314,14 @@ window.location.href="/login"  // Force to login
 ## 💡 Tips & Best Practices
 
 ### For Developers
+
 1. Always use `authHelper` untuk auth operations
 2. Check `localStorage.getItem("role")` sebelum conditional render
 3. Use `AdminRoute` untuk protect admin pages
 4. Handle errors gracefully dengan specific messages
 
 ### For Deployment
+
 1. Use secure HTTP-only cookies (tidak localStorage)
 2. Implement refresh token
 3. Add rate limiting di backend
@@ -369,6 +391,7 @@ For DevOps:
 ## 🏆 Success Criteria
 
 ✅ All criteria met:
+
 - [x] Login works
 - [x] Admin redirect to /admin
 - [x] User redirect to /home

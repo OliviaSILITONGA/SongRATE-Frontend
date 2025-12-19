@@ -12,7 +12,7 @@ export default function LoginPage() {
     password: "",
   });
 
-  const [errors, setErrors] = useState({}); 
+  const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -41,7 +41,7 @@ export default function LoginPage() {
       [name]: value,
     }));
     if (errors[name]) {
-        setErrors((prev) => ({ ...prev, [name]: null }));
+      setErrors((prev) => ({ ...prev, [name]: null }));
     }
   };
 
@@ -50,18 +50,18 @@ export default function LoginPage() {
     const newErrors = {};
 
     if (!formData.email.trim()) {
-        newErrors.email = "Email is required";
-    } else if (!formData.email.includes("@")) { 
-        newErrors.email = "Invalid email format (must contain @)";
+      newErrors.email = "Email is required";
+    } else if (!formData.email.includes("@")) {
+      newErrors.email = "Invalid email format (must contain @)";
     }
 
     if (!formData.password.trim()) {
-        newErrors.password = "Password is required";
+      newErrors.password = "Password is required";
     }
 
     if (Object.keys(newErrors).length > 0) {
-        setErrors(newErrors);
-        return;
+      setErrors(newErrors);
+      return;
     }
 
     setIsLoading(true);
@@ -84,13 +84,17 @@ export default function LoginPage() {
         // Handle error dari API
         const errorMessage = result.error || "Login failed";
         console.error("❌ Login error message:", errorMessage);
-        
+
         if (errorMessage.toLowerCase().includes("password")) {
-            setErrors({ password: "Incorrect password" });
-        } else if (errorMessage.toLowerCase().includes("user") || errorMessage.toLowerCase().includes("email") || errorMessage.toLowerCase().includes("not found")) {
-            setErrors({ email: "Email not found" });
+          setErrors({ password: "Incorrect password" });
+        } else if (
+          errorMessage.toLowerCase().includes("user") ||
+          errorMessage.toLowerCase().includes("email") ||
+          errorMessage.toLowerCase().includes("not found")
+        ) {
+          setErrors({ email: "Email not found" });
         } else {
-            setErrors({ email: errorMessage });
+          setErrors({ email: errorMessage });
         }
       }
     } catch (error) {
@@ -104,10 +108,10 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#1D2128] to-[#30353F] px-6">
       {/* Modal Sukses */}
-      <Modal 
-        isOpen={showModal} 
-        onClose={() => navigate("/home")} 
-        title="Welcome Back!" 
+      <Modal
+        isOpen={showModal}
+        onClose={() => navigate("/home")}
+        title="Welcome Back!"
         message="Login successful."
         type="success"
       />
@@ -121,9 +125,7 @@ export default function LoginPage() {
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           {/* Email */}
           <div className="flex flex-col text-left">
-            <label className="text-white font-medium mb-1">
-              Email
-            </label>
+            <label className="text-white font-medium mb-1">Email</label>
             <input
               type="text"
               name="email"
@@ -134,7 +136,9 @@ export default function LoginPage() {
               disabled={isLoading}
             />
             {/* Error Merah */}
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+            )}
           </div>
 
           {/* Password */}
@@ -150,7 +154,9 @@ export default function LoginPage() {
               disabled={isLoading}
             />
             {/* Error Merah */}
-            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+            )}
           </div>
 
           <a
@@ -164,8 +170,8 @@ export default function LoginPage() {
             type="submit"
             disabled={isLoading}
             className={`font-bold py-2 rounded-lg transition ${
-              isLoading 
-                ? "bg-gray-500 cursor-not-allowed text-gray-300" 
+              isLoading
+                ? "bg-gray-500 cursor-not-allowed text-gray-300"
                 : "bg-[#FAD64F] text-black hover:bg-[#e6c247]"
             }`}
           >
