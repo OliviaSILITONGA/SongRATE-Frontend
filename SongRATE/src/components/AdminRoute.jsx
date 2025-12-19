@@ -2,22 +2,26 @@ import { Navigate } from "react-router-dom";
 
 export default function AdminRoute({ children }) {
   const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
+  const userStr = localStorage.getItem("user");
+  const role = localStorage.getItem("role");
 
   // Belum login
-  if (!token || !user) {
+  if (!token || !userStr) {
+    return <Navigate to="/login" replace />;
+  }
+
+  let user;
+  try {
+    user = JSON.parse(userStr);
+  } catch (error) {
     return <Navigate to="/login" replace />;
   }
 
   // Login tapi bukan admin
-  if (user.role !== "admin") {
+  if (role !== "admin" || user.role !== "admin") {
     return <Navigate to="/home" replace />;
   }
 
   // Admin boleh masuk
   return children;
-
-  console.log("TOKEN:", token);
-  console.log("USER:", user);
-  console.log("ROLE:", user?.role);
 }

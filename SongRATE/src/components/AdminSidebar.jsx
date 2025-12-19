@@ -1,7 +1,15 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { logoutUser } from "../utils/authHelper";
 
 export default function AdminSidebar({ isOpen, setIsOpen, activeTab, setActiveTab }) {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logoutUser();
+    navigate("/login", { replace: true });
+  };
+
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: "📊" },
     { id: "users", label: "Users", icon: "👥" },
@@ -55,11 +63,7 @@ export default function AdminSidebar({ isOpen, setIsOpen, activeTab, setActiveTa
         {/* Logout Button */}
         <div className="mt-8 p-4 border-t border-gray-700">
           <button
-            onClick={() => {
-              localStorage.removeItem("adminToken");
-              localStorage.removeItem("isAdmin");
-              window.location.href = "/login";
-            }}
+            onClick={handleLogout}
             className="w-full flex items-center space-x-3 p-3 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30"
           >
             <span>🚪</span>

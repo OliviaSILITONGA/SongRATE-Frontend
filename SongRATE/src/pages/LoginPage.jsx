@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Logo from "../components/Logo";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
+import { loginUser } from "../utils/authHelper";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -13,7 +14,25 @@ export default function LoginPage() {
 
   const [errors, setErrors] = useState({}); 
   const [isLoading, setIsLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false); 
+  const [showModal, setShowModal] = useState(false);
+
+  // Cek apakah sudah login, jika iya redirect
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (token && user) {
+      try {
+        const userData = JSON.parse(user);
+        if (userData.role === "admin") {
+          navigate("/admin", { replace: true });
+        } else {
+          navigate("/home", { replace: true });
+        }
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      }
+    }
+  }, [navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -47,48 +66,36 @@ export default function LoginPage() {
 
     setIsLoading(true);
 
-    const API_URL = import.meta.env.VITE_API_URL;
-
     try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+      console.log("🔑 Attempting login with:", formData.email);
+      const result = await loginUser(formData.email, formData.password);
+      console.log("🔑 Login result:", result);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        // Simpan token
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        localStorage.setItem("role", data.user.role); // 🔑 PENTING
-        
+      if (result.success) {
         // Redirect berdasarkan role
-        if (data.user.role === "admin") {
-          navigate("/admin");
+        if (result.isAdmin) {
+          // Langsung ke admin dashboard tanpa modal
+          navigate("/admin", { replace: true });
         } else {
+          // User biasa, tampilkan modal terlebih dahulu
           setShowModal(true);
         }
       } else {
-        console.log(data);
-        if (data.message?.toLowerCase().includes("password")) {
+        // Handle error dari API
+        const errorMessage = result.error || "Login failed";
+        console.error("❌ Login error message:", errorMessage);
+        
+        if (errorMessage.toLowerCase().includes("password")) {
             setErrors({ password: "Incorrect password" });
-        } else if (data.message?.toLowerCase().includes("user") || data.message?.toLowerCase().includes("email")) {
+        } else if (errorMessage.toLowerCase().includes("user") || errorMessage.toLowerCase().includes("email") || errorMessage.toLowerCase().includes("not found")) {
             setErrors({ email: "Email not found" });
         } else {
-            // Error umum jika tidak spesifik
-            setErrors({ email: data.message || "Login failed" });
+            setErrors({ email: errorMessage });
         }
       }
     } catch (error) {
-      console.error("Login error:", error);
-      alert("Failed to connect to server.");
+      console.error("🚨 Login exception:", error);
+      setErrors({ email: `Connection error: ${error.message}` });
     } finally {
       setIsLoading(false);
     }
