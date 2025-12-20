@@ -9,7 +9,6 @@ export default function SongManagement() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  // Normalize API base: prefer Vite env and ensure protocol present
   let API_BASE = import.meta.env.VITE_API_URL || "";
   if (API_BASE && !/^https?:\/\//.test(API_BASE))
     API_BASE = `https://${API_BASE}`;

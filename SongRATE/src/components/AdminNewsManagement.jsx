@@ -13,8 +13,8 @@ export default function AdminNewsManagement() {
   if (API_BASE && !/^https?:\/\//.test(API_BASE))
     API_BASE = `https://${API_BASE}`;
   API_BASE = API_BASE.replace(/\/$/, "");
-  const buildApi = (path) => `${API_BASE}${path}`;
-
+  
+  const buildApi = (path) => (API_BASE ? `${API_BASE}${path}` : path);
   const token = localStorage.getItem("token");
 
   const [formData, setFormData] = useState({
