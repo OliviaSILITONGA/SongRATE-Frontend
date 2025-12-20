@@ -1,563 +1,547 @@
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import Home from "../components/Home";
-import { useState } from "react";
+import { getAuthHeaders } from "../utils/authHelper";
 
 export default function NewReleasesPage() {
+  const navigate = useNavigate();
   const [releaseType, setReleaseType] = useState("all");
   const [timeFilter, setTimeFilter] = useState("thisWeek");
-  
-  // STATE UNTUK LIKE
   const [likedItems, setLikedItems] = useState([]);
+  const [releases, setReleases] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // FUNGSI TOGGLE LIKE
+  const API_BASE = import.meta.env.VITE_API_URL || "";
+
+  useEffect(() => {
+    const fetchSongs = async () => {
+      try {
+        setLoading(true);
+        const headers = getAuthHeaders
+          ? getAuthHeaders()
+          : { "Content-Type": "application/json" };
+        // Use relative path when no API base provided (dev proxy)
+        const endpoint = `${API_BASE || ""}/api/songs`;
+        const res = await fetch(endpoint, { headers });
+        if (!res.ok) throw new Error("Failed to fetch songs");
+        const data = await res.json();
+        // If backend provides uploader info, try to show admin-uploaded songs here.
+        const isAdminUpload = (item) => {
+          if (!item) return false;
+          if (item.uploadedBy && item.uploadedBy.role)
+            return item.uploadedBy.role === "admin";
+          if (item.uploaderRole) return item.uploaderRole === "admin";
+          if (item.isAdminUpload !== undefined) return !!item.isAdminUpload;
+          return false;
+        };
+
+        let list = Array.isArray(data) ? data : [];
+        const adminOnly = list.filter(isAdminUpload);
+        // If backend has no uploader info, fall back to showing all releases
+        setReleases(adminOnly.length > 0 ? adminOnly : list);
+      } catch (err) {
+        setError(err.message);
+        // Fallback mock data jika API error
+        setReleases(generateMockReleases());
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSongs();
+  }, []);
+
   const toggleLike = (id) => {
-    if (likedItems.includes(id)) {
-      setLikedItems(likedItems.filter((itemId) => itemId !== id));
-    } else {
-      setLikedItems([...likedItems, id]);
-    }
+    setLikedItems((prev) =>
+      prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
+    );
   };
-
-  const newReleasesData = {
-    featured: [
-      {
-        id: 1,
-        title: "The Tortured Poets Department",
-        artist: "Taylor Swift",
-        type: "album",
-        releaseDate: "April 19, 2024",
-        genre: "Pop",
-        tracks: 16,
-        duration: "65:22",
-        image: "https://i.scdn.co/image/ab67616d0000b2738ecc33f195df6aa257c39eaa",
-        description: "Taylor Swift's highly anticipated 11th studio album exploring themes of heartbreak, poetry, and self-discovery.",
-        highlight: true
-      }
-    ],
-    albums: [
-      {
-        id: 2,
-        title: "Hit Me Hard and Soft",
-        artist: "Billie Eilish",
-        type: "album",
-        releaseDate: "May 17, 2024",
-        genre: "Alternative Pop",
-        tracks: 10,
-        duration: "42:15",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQODF6BfOgkBmIePFVoq5xwp2u5nvFpi4UGIA&s",
-        description: "Billie Eilish's third studio album featuring a blend of soft ballads and hard-hitting tracks."
-      },
-      {
-        id: 3,
-        title: "Radical Optimism",
-        artist: "Dua Lipa",
-        type: "album",
-        releaseDate: "May 3, 2024",
-        genre: "Dance-pop",
-        tracks: 11,
-        duration: "48:30",
-        image: "https://upload.wikimedia.org/wikipedia/en/thumb/f/fa/Dua_Lipa_-_Radical_Optimism.png/250px-Dua_Lipa_-_Radical_Optimism.png",
-        description: "Dua Lipa's psychedelic-inspired third album exploring themes of joy and resilience."
-      },
-      {
-        id: 4,
-        title: "The Great Western Road",
-        artist: "Noah Kahan",
-        type: "album",
-        releaseDate: "April 26, 2024",
-        genre: "Folk-pop",
-        tracks: 14,
-        duration: "52:10",
-        image: "https://upload.wikimedia.org/wikipedia/en/0/03/Deacon_Blue_-_The_Great_Western_Road.webp",
-        description: "A soulful journey through Americana and folk traditions."
-      }
-    ],
-    singles: [
-      {
-        id: 5,
-        title: "Espresso",
-        artist: "Sabrina Carpenter",
-        type: "single",
-        releaseDate: "April 12, 2024",
-        genre: "Pop",
-        duration: "3:02",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiuI0SOAGRbcUPg4kdJMo_5356l8oiTLCmGA&s",
-        description: "Upbeat summer pop anthem about morning coffee and romance."
-      },
-      {
-        id: 6,
-        title: "A Bar Song (Tipsy)",
-        artist: "Shaboozey",
-        type: "single",
-        releaseDate: "April 5, 2024",
-        genre: "Country Rap",
-        duration: "3:48",
-        image: "https://i.scdn.co/image/ab67616d0000b273efa97e80fdb012456a40532c",
-        description: "Country-meets-hip-hop track about weekend celebrations."
-      },
-      {
-        id: 7,
-        title: "I Can Do It With A Broken Heart",
-        artist: "Taylor Swift",
-        type: "single",
-        releaseDate: "April 19, 2024",
-        genre: "Synth-pop",
-        duration: "3:32",
-        image: "https://i.abcnewsfe.com/a/19621697-7e0f-4f53-8fe0-a53b91293ade/taylor-swift-03-ht-jt-240820_1724193669006_hpEmbed_21x11.jpg",
-        description: "Upbeat synth-pop track about performing through pain."
-      },
-      {
-        id: 8,
-        title: "Million Dollar Baby",
-        artist: "Tommy Richman",
-        type: "single",
-        releaseDate: "April 26, 2024",
-        genre: "R&B",
-        duration: "2:55",
-        image: "https://www.billboard.com/wp-content/uploads/2024/04/Tommy-Richman-cr-Alf-Bordallo-press-2024-billboard-1548.jpg",
-        description: "Smooth R&B track about luxury and success."
-      }
-    ],
-    eps: [
-      {
-        id: 9,
-        title: "Digital Witness",
-        artist: "St. Vincent",
-        type: "ep",
-        releaseDate: "May 1, 2024",
-        genre: "Art Rock",
-        tracks: 4,
-        duration: "15:20",
-        image: "https://i.ytimg.com/vi/-7LsBjrqqHA/maxresdefault.jpg",
-        description: "Experimental art rock EP exploring digital consciousness."
-      },
-      {
-        id: 10,
-        title: "Midnight Sessions",
-        artist: "FKJ",
-        type: "ep",
-        releaseDate: "April 28, 2024",
-        genre: "Electronic",
-        tracks: 5,
-        duration: "22:45",
-        image: "https://i.ytimg.com/vi/CHX-Dso7KzU/maxresdefault.jpg",
-        description: "Late-night electronic jazz fusion EP."
-      }
-    ]
-  };
-
-  const upcomingReleases = [
-    {
-      id: 11,
-      title: "Untitled Album",
-      artist: "Rihanna",
-      type: "album",
-      releaseDate: "June 2024",
-      genre: "Pop/R&B",
-      status: "highlyAnticipated"
-    },
-    {
-      id: 12,
-      title: "Untitled Project",
-      artist: "Frank Ocean",
-      type: "album",
-      releaseDate: "TBA 2024",
-      genre: "Alternative R&B",
-      status: "rumored"
-    },
-    {
-      id: 13,
-      title: "New Single",
-      artist: "The Weeknd",
-      type: "single",
-      releaseDate: "May 24, 2024",
-      genre: "R&B",
-      status: "confirmed"
-    }
-  ];
 
   const filteredReleases = () => {
-    let releases = [];
-    
-    if (releaseType === "all") {
-      releases = [
-        ...newReleasesData.featured,
-        ...newReleasesData.albums,
-        ...newReleasesData.singles,
-        ...newReleasesData.eps
-      ];
-    } else if (releaseType === "albums") {
-      releases = newReleasesData.albums;
-    } else if (releaseType === "singles") {
-      releases = newReleasesData.singles;
-    } else if (releaseType === "eps") {
-      releases = newReleasesData.eps;
+    let list = releases;
+
+    if (releaseType !== "all") {
+      list = list.filter((r) => r.type === releaseType.slice(0, -1));
     }
 
-    if (timeFilter === "today") {
-      return releases.slice(0, 3);
-    } else if (timeFilter === "thisWeek") {
-      return releases;
-    } else if (timeFilter === "thisMonth") {
-      return [...releases, ...newReleasesData.albums.slice(0, 2)];
+    // Filter berdasarkan waktu (untuk demo)
+    switch (timeFilter) {
+      case "today":
+        return list.slice(0, 4);
+      case "thisWeek":
+        return list.slice(0, 8);
+      case "thisMonth":
+        return list;
+      default:
+        return list;
     }
-
-    return releases;
   };
 
   const getTypeColor = (type) => {
-    switch(type) {
-      case "album": return "bg-purple-500";
-      case "single": return "bg-blue-500";
-      case "ep": return "bg-green-500";
-      default: return "bg-gray-500";
-    }
+    const colors = {
+      album: "bg-purple-500",
+      single: "bg-blue-500",
+      ep: "bg-pink-500",
+      mixtape: "bg-orange-500",
+      compilation: "bg-teal-500",
+    };
+    return colors[type] || "bg-gray-500";
   };
 
-  const getStatusBadge = (status) => {
-    switch(status) {
-      case "highlyAnticipated":
-        return <span className="px-2 py-1 text-xs bg-red-500/20 text-red-400 rounded">Highly Anticipated</span>;
-      case "rumored":
-        return <span className="px-2 py-1 text-xs bg-yellow-500/20 text-yellow-400 rounded">Rumored</span>;
-      case "confirmed":
-        return <span className="px-2 py-1 text-xs bg-green-500/20 text-green-400 rounded">Confirmed</span>;
-      default:
-        return null;
-    }
+  const getTypeIcon = (type) => {
+    const icons = {
+      album: "💿",
+      single: "🎵",
+      ep: "📀",
+      mixtape: "🎤",
+      compilation: "🎧",
+    };
+    return icons[type] || "🎶";
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-bl pt-[180px] from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white">
-      <Home />
-
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Title */}
-        <h2 className="text-5xl text-center font-bold mb-2">New Releases</h2>
-        <p className="text-center text-gray-400 mb-8">Discover the latest music from your favorite artists</p>
-
-        {/* Featured Release */}
-        <div className="mb-12">
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#3E424B] to-[#2E333E]">
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/30 z-10"></div>
-            <div className="relative z-20 p-8 md:p-12">
-              <div className="flex flex-col md:flex-row items-center">
-                <div className="md:w-1/3 mb-6 md:mb-0 md:mr-8">
-                  <div className="relative">
-                    <img 
-                      src={newReleasesData.featured[0].image} 
-                      alt={newReleasesData.featured[0].title}
-                      className="rounded-xl shadow-2xl w-full max-w-md mx-auto"
-                    />
-                    <div className="absolute -top-2 -right-2">
-                      <span className="px-3 py-1 bg-yellow-500 text-black text-sm font-bold rounded-full">
-                        FEATURED
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="md:w-2/3">
-                  <div className="flex items-center mb-4">
-                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getTypeColor(newReleasesData.featured[0].type)}`}>
-                      {newReleasesData.featured[0].type.toUpperCase()}
-                    </span>
-                    <span className="ml-4 text-gray-400">{newReleasesData.featured[0].releaseDate}</span>
-                  </div>
-                  <h3 className="text-3xl md:text-4xl font-bold mb-3">{newReleasesData.featured[0].title}</h3>
-                  <p className="text-xl text-gray-300 mb-4">by {newReleasesData.featured[0].artist}</p>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    <span className="px-3 py-1 bg-gray-700 rounded-full text-sm">{newReleasesData.featured[0].genre}</span>
-                    <span className="px-3 py-1 bg-gray-700 rounded-full text-sm">{newReleasesData.featured[0].tracks} tracks</span>
-                    <span className="px-3 py-1 bg-gray-700 rounded-full text-sm">{newReleasesData.featured[0].duration}</span>
-                  </div>
-                  <p className="text-gray-300 mb-6">{newReleasesData.featured[0].description}</p>
-                  <div className="flex space-x-4">
-                    <button className="flex-1 bg-yellow-500 text-black font-semibold py-3 rounded-lg hover:bg-yellow-600 transition duration-300 flex items-center justify-center">
-                      <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                      </svg>
-                      Listen Now
-                    </button>
-                    
-                    {/* BUTTON 1: LIKE ICON (Sekarang di kiri) */}
-                    <button 
-                        onClick={() => toggleLike(newReleasesData.featured[0].id)}
-                        className={`px-6 py-3 border border-gray-600 rounded-lg transition duration-300 ${
-                            likedItems.includes(newReleasesData.featured[0].id) 
-                            ? "bg-red-500/20 border-red-500 text-red-500 hover:bg-red-500/30" 
-                            : "hover:bg-gray-700 text-white"
-                        }`}
-                    >
-                      <svg className="w-5 h-5" fill={likedItems.includes(newReleasesData.featured[0].id) ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                      </svg>
-                    </button>
-
-                    {/* BUTTON 2: SHARE ICON (Sekarang di kanan) */}
-                    <button className="px-6 py-3 border border-gray-600 rounded-lg hover:bg-gray-700 transition duration-300 text-white">
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
+  // Error State
+  if (error && releases.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F]">
+        <Home />
+        <div className="pt-[180px] flex items-center justify-center px-4">
+          <div className="text-center max-w-md">
+            <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl">⚠️</span>
             </div>
-          </div>
-        </div>
-
-        {/* Filters */}
-        <div className="mb-8">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <h3 className="text-xl font-bold mb-3">Browse Releases</h3>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  className={`px-4 py-2 rounded-lg transition ${releaseType === "all" ? "bg-yellow-500 text-black font-semibold" : "bg-[#3E424B] hover:bg-[#4A4F5A]"}`}
-                  onClick={() => setReleaseType("all")}
-                >
-                  All Releases
-                </button>
-                <button
-                  className={`px-4 py-2 rounded-lg transition ${releaseType === "albums" ? "bg-yellow-500 text-black font-semibold" : "bg-[#3E424B] hover:bg-[#4A4F5A]"}`}
-                  onClick={() => setReleaseType("albums")}
-                >
-                  Albums
-                </button>
-                <button
-                  className={`px-4 py-2 rounded-lg transition ${releaseType === "singles" ? "bg-yellow-500 text-black font-semibold" : "bg-[#3E424B] hover:bg-[#4A4F5A]"}`}
-                  onClick={() => setReleaseType("singles")}
-                >
-                  Singles
-                </button>
-                <button
-                  className={`px-4 py-2 rounded-lg transition ${releaseType === "eps" ? "bg-yellow-500 text-black font-semibold" : "bg-[#3E424B] hover:bg-[#4A4F5A]"}`}
-                  onClick={() => setReleaseType("eps")}
-                >
-                  EPs
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center space-x-2">
-                <span className="text-gray-400">Time:</span>
-                <div className="flex bg-[#3E424B] rounded-lg p-1">
-                  <button
-                    className={`px-3 py-1 rounded-md text-sm transition ${timeFilter === "today" ? "bg-yellow-500 text-black font-semibold" : "hover:bg-[#4A4F5A]"}`}
-                    onClick={() => setTimeFilter("today")}
-                  >
-                    Today
-                  </button>
-                  <button
-                    className={`px-3 py-1 rounded-md text-sm transition ${timeFilter === "thisWeek" ? "bg-yellow-500 text-black font-semibold" : "hover:bg-[#4A4F5A]"}`}
-                    onClick={() => setTimeFilter("thisWeek")}
-                  >
-                    This Week
-                  </button>
-                  <button
-                    className={`px-3 py-1 rounded-md text-sm transition ${timeFilter === "thisMonth" ? "bg-yellow-500 text-black font-semibold" : "hover:bg-[#4A4F5A]"}`}
-                    onClick={() => setTimeFilter("thisMonth")}
-                  >
-                    This Month
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Releases Grid */}
-        <div className="mb-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredReleases().map((release) => (
-              <div 
-                key={release.id} 
-                className="bg-gradient-to-b from-[#3E424B] to-[#2E333E] rounded-xl overflow-hidden hover:shadow-2xl transition duration-300 group"
-              >
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src={release.image} 
-                    alt={release.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                  />
-                  <div className="absolute top-3 left-3">
-                    <span className={`px-2 py-1 text-xs font-bold rounded ${getTypeColor(release.type)}`}>
-                      {release.type.toUpperCase()}
-                    </span>
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
-                    <button className="w-12 h-12 rounded-full bg-yellow-500 flex items-center justify-center mx-auto mb-4 transform translate-y-4 group-hover:translate-y-0 transition duration-300">
-                      <svg className="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h4 className="font-bold text-lg mb-1 truncate">{release.title}</h4>
-                  <p className="text-gray-400 text-sm mb-2">{release.artist}</p>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-gray-500 text-xs">{release.releaseDate}</span>
-                    <span className="text-gray-500 text-xs">{release.genre}</span>
-                  </div>
-                  <p className="text-gray-300 text-sm line-clamp-2 mb-4">{release.description}</p>
-                  
-                  {/* CARD ACTIONS: LIKE & SHARE (SWAPPED) */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex space-x-2">
-                      
-                      {/* BUTTON 1: LIKE ICON (Sekarang di Kiri) */}
-                      <button 
-                        onClick={() => toggleLike(release.id)}
-                        className={`p-2 rounded-full transition transform active:scale-95 ${
-                            likedItems.includes(release.id) 
-                            ? "text-red-500" 
-                            : "text-gray-400 hover:text-white hover:bg-gray-700"
-                        }`}
-                      >
-                        <svg className="w-4 h-4" fill={likedItems.includes(release.id) ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                      </button>
-
-                      {/* BUTTON 2: SHARE ICON (Sekarang di Kanan) */}
-                      <button className="p-2 hover:bg-gray-700 rounded-full transition text-white">
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
-                        </svg>
-                      </button>
-
-                    </div>
-                    <span className="text-gray-400 text-sm">
-                      {release.tracks ? `${release.tracks} tracks` : release.duration}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Upcoming Releases & Newsletter */}
-        <div className="mb-16">
-          <h3 className="text-2xl font-bold mb-6 flex items-center">
-            <svg className="w-6 h-6 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-            </svg>
-            Upcoming Releases
-          </h3>
-          <div className="bg-gradient-to-r from-[#3E424B] to-[#2E333E] rounded-xl p-6">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-gray-700">
-                    <th className="text-left py-3 px-4 text-gray-400 font-semibold">Release</th>
-                    <th className="text-left py-3 px-4 text-gray-400 font-semibold">Artist</th>
-                    <th className="text-left py-3 px-4 text-gray-400 font-semibold">Type</th>
-                    <th className="text-left py-3 px-4 text-gray-400 font-semibold">Release Date</th>
-                    <th className="text-left py-3 px-4 text-gray-400 font-semibold">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {upcomingReleases.map((release) => (
-                    <tr key={release.id} className="border-b border-gray-800 hover:bg-gray-800/50 transition">
-                      <td className="py-3 px-4">
-                        <div className="font-semibold">{release.title}</div>
-                        <div className="text-gray-400 text-sm">{release.genre}</div>
-                      </td>
-                      <td className="py-3 px-4 font-medium">{release.artist}</td>
-                      <td className="py-3 px-4">
-                        <span className={`px-2 py-1 text-xs rounded ${getTypeColor(release.type)}`}>
-                          {release.type.toUpperCase()}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4">{release.releaseDate}</td>
-                      <td className="py-3 px-4">
-                        {getStatusBadge(release.status)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        {/* Newsletter Section */}
-        <div className="mb-16">
-          <div className="bg-gradient-to-r from-[#3E424B] to-[#2A2D35] rounded-2xl p-8 text-center">
-            <h3 className="text-2xl font-bold mb-4">Never Miss a Release</h3>
-            <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-              Get notified when your favorite artists drop new music. We'll send you personalized release alerts based on your listening history.
-            </p>
-            <div className="flex max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full px-4 py-3 rounded-l-lg bg-[#2E333E] text-gray-200 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              />
-              <button className="bg-yellow-500 text-black font-semibold px-6 py-3 rounded-r-lg hover:bg-yellow-600 transition duration-300">
-                Get Notified
-              </button>
-            </div>
+            <h3 className="text-xl font-bold text-white mb-2">
+              Oops! Something went wrong
+            </h3>
+            <p className="text-gray-400 mb-6">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-2 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-lg transition-colors"
+            >
+              Try Again
+            </button>
           </div>
         </div>
       </div>
+    );
+  }
 
-      {/* FOOTER */}
-      <footer className="bg-[#3E424B85] text-gray-300 py-10 px-4 md:px-20">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
-          {/* CONTACT */}
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Contact</h2>
-            <ul className="space-y-2">
-              <li className="flex items-center">
-                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                </svg>
-                Text Message
-              </li>
-              <li className="flex items-center">
-                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
-                </svg>
-                Instagram
-              </li>
-              <li className="flex items-center">
-                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.441 16.892c-2.102.144-6.784.144-8.883 0C5.279 16.736 5.018 15.022 5 12c.018-3.024.279-4.736 2.558-4.892 2.099-.144 6.782-.144 8.883 0C18.721 7.264 18.982 8.978 19 12c-.018 3.024-.279 4.736-2.559 4.892zM10 9.658l4.917 2.338L10 14.342V9.658z"/>
-                </svg>
-                TikTok
-              </li>
-            </ul>
-          </div>
+  return (
+    <div className="min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F] text-white overflow-x-hidden">
+      <Home />
 
-          {/* SUBSCRIBE */}
-          <div>
-            <h2 className="text-lg font-semibold mb-4">Subscribe to Us</h2>
-            <p className="text-sm mb-4">
-              We'll send you the latest releases, news, and offers.
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="pt-32 md:pt-40 pb-20 px-4 sm:px-6 lg:px-8"
+      >
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.1 }}
+            className="text-center mb-12"
+          >
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-white bg-clip-text text-transparent">
+              New Releases
+            </h1>
+            <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto">
+              Discover the latest music from your favorite artists and rising
+              stars
             </p>
+          </motion.div>
 
-            <div className="flex">
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-full px-4 py-2 rounded-l-lg bg-[#3E424B] text-gray-200 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              />
-              <button className="bg-yellow-500 px-4 rounded-r-lg hover:bg-yellow-600 transition duration-300">
-                <svg width="20" height="20" fill="black" viewBox="0 0 24 24">
-                  <path d="M2 21l21-9L2 3v7l15 2-15 2z" />
-                </svg>
-              </button>
+          {/* Filters */}
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="mb-10"
+          >
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 p-6 rounded-2xl bg-gradient-to-r from-[#2E333E]/50 to-[#3E424B]/30 backdrop-blur-sm border border-gray-700/30">
+              <div className="flex-1">
+                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <span className="text-yellow-500">🎯</span>
+                  Browse Releases
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {["all", "albums", "singles", "eps"].map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => setReleaseType(type)}
+                      className={`px-5 py-2.5 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+                        releaseType === type
+                          ? "bg-gradient-to-r from-yellow-500 to-yellow-600 text-black shadow-lg shadow-yellow-500/30"
+                          : "bg-[#3E424B] hover:bg-gray-700 text-gray-300"
+                      }`}
+                    >
+                      {type === "all"
+                        ? "All Releases"
+                        : type === "albums"
+                        ? "Albums"
+                        : type === "singles"
+                        ? "Singles"
+                        : "EPs"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex-1 lg:text-right">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                  <span className="text-gray-400 font-medium flex items-center gap-2">
+                    <span className="text-yellow-500">⏰</span>
+                    Time Range:
+                  </span>
+                  <div className="flex bg-[#2E333E] rounded-xl p-1.5 shadow-inner">
+                    {["today", "thisWeek", "thisMonth"].map((time) => (
+                      <button
+                        key={time}
+                        onClick={() => setTimeFilter(time)}
+                        className={`px-5 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          timeFilter === time
+                            ? "bg-gradient-to-r from-yellow-500 to-yellow-600 text-black shadow-md"
+                            : "text-gray-400 hover:text-white hover:bg-gray-700/50"
+                        }`}
+                      >
+                        {time === "today"
+                          ? "Today"
+                          : time === "thisWeek"
+                          ? "This Week"
+                          : "This Month"}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className="text-center text-gray-500 text-sm mt-10">
-          © 2025 SongRate
+            {/* Stats */}
+            <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="bg-[#2E333E]/50 p-4 rounded-xl border border-gray-700/30">
+                <p className="text-gray-400 text-sm">Total Releases</p>
+                <p className="text-2xl font-bold">{releases.length}</p>
+              </div>
+              <div className="bg-[#2E333E]/50 p-4 rounded-xl border border-gray-700/30">
+                <p className="text-gray-400 text-sm">Showing</p>
+                <p className="text-2xl font-bold">
+                  {filteredReleases().length}
+                </p>
+              </div>
+              <div className="bg-[#2E333E]/50 p-4 rounded-xl border border-gray-700/30">
+                <p className="text-gray-400 text-sm">Your Likes</p>
+                <p className="text-2xl font-bold">{likedItems.length}</p>
+              </div>
+              <div className="bg-[#2E333E]/50 p-4 rounded-xl border border-gray-700/30">
+                <p className="text-gray-400 text-sm">Active Filter</p>
+                <p className="text-lg font-bold capitalize">
+                  {releaseType.replace(/([A-Z])/g, " $1")}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Releases Grid */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="mb-16"
+          >
+            {filteredReleases().length === 0 ? (
+              <div className="text-center py-16">
+                <div className="w-24 h-24 bg-gray-700/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <span className="text-4xl">🎵</span>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-3">
+                  No Releases Found
+                </h3>
+                <p className="text-gray-400 mb-8 max-w-md mx-auto">
+                  Try changing your filters or check back later for new releases
+                </p>
+                <button
+                  onClick={() => {
+                    setReleaseType("all");
+                    setTimeFilter("thisWeek");
+                  }}
+                  className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-bold rounded-xl hover:shadow-lg hover:shadow-yellow-500/30 transition-all"
+                >
+                  Reset Filters
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredReleases().map((release, index) => (
+                  <motion.div
+                    key={release.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{ y: -8, transition: { duration: 0.2 } }}
+                    className="group cursor-pointer"
+                  >
+                    <div className="bg-gradient-to-b from-[#2E333E] to-[#1C1F26] rounded-2xl overflow-hidden border border-gray-700/30 hover:border-yellow-500/30 transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-yellow-500/10">
+                      {/* Image Container */}
+                      <div className="relative h-56 overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+                        <img
+                          src={release.image}
+                          alt={release.title}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+
+                        {/* Badge */}
+                        <div className="absolute top-4 left-4 z-20">
+                          <span
+                            className={`px-3 py-1.5 text-xs font-bold rounded-full ${getTypeColor(
+                              release.type
+                            )} flex items-center gap-1.5`}
+                          >
+                            {getTypeIcon(release.type)}
+                            {(release.type || "").toUpperCase()}
+                          </span>
+                        </div>
+
+                        {/* Like Button */}
+                        <button
+                          onClick={() => toggleLike(release.id)}
+                          className="absolute top-4 right-4 z-20 p-2.5 bg-black/40 backdrop-blur-sm rounded-full hover:bg-black/60 transition-colors"
+                        >
+                          <svg
+                            className={`w-5 h-5 ${
+                              likedItems.includes(release.id)
+                                ? "text-red-500 fill-red-500"
+                                : "text-white"
+                            }`}
+                            fill={
+                              likedItems.includes(release.id)
+                                ? "currentColor"
+                                : "none"
+                            }
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+
+                      {/* Content */}
+                      <div className="p-5">
+                        <div className="mb-3">
+                          <h4 className="font-bold text-lg mb-1 truncate group-hover:text-yellow-400 transition-colors">
+                            {release.title}
+                          </h4>
+                          <p className="text-gray-400 text-sm mb-2 truncate">
+                            {release.artist}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center justify-between mb-4 text-xs">
+                          <span className="text-gray-500 flex items-center gap-1">
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                              />
+                            </svg>
+                            {release.releaseDate || release.releaseYear}
+                          </span>
+                          <span className="px-3 py-1 bg-gray-700/50 rounded-full text-gray-300">
+                            {release.genre}
+                          </span>
+                        </div>
+
+                        <p className="text-gray-300 text-sm line-clamp-2 mb-5 leading-relaxed">
+                          {release.description}
+                        </p>
+
+                        <div className="flex items-center justify-between pt-4 border-t border-gray-700/30">
+                          <div className="flex gap-2">
+                            <button className="p-2.5 hover:bg-gray-700 rounded-full transition-colors group/share">
+                              <svg
+                                className="w-5 h-5 text-gray-400 group-hover/share:text-white"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+                              </svg>
+                            </button>
+                            <button className="p-2.5 hover:bg-gray-700 rounded-full transition-colors">
+                              <svg
+                                className="w-5 h-5 text-gray-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                          <span className="text-gray-400 text-sm font-medium">
+                            {release.tracks
+                              ? `${release.tracks} tracks`
+                              : release.duration}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+
+          {/* Load More Button */}
+          {filteredReleases().length > 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="text-center"
+            >
+              <button
+                onClick={() => navigate("/load-more-releases")}
+                className="px-8 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-bold rounded-xl hover:shadow-lg hover:shadow-yellow-500/30 transition-all transform hover:scale-105 active:scale-95"
+              >
+                Load More Releases
+              </button>
+              <p className="text-gray-500 text-sm mt-4">
+                Showing {filteredReleases().length} of {releases.length} total
+                releases
+              </p>
+            </motion.div>
+          )}
         </div>
-      </footer>
+      </motion.div>
     </div>
   );
+}
+
+// Helper function for mock data
+function generateMockReleases() {
+  const mockData = [
+    {
+      id: 1,
+      title: "Eternal Sunshine",
+      artist: "Ariana Grande",
+      type: "album",
+      genre: "Pop",
+      releaseDate: "2024-03-08",
+      image:
+        "https://via.placeholder.com/400x400/8B5CF6/FFFFFF?text=Eternal+Sunshine",
+      description:
+        "The highly anticipated seventh studio album exploring themes of love and self-discovery.",
+      tracks: 13,
+      duration: "45:22",
+    },
+    {
+      id: 2,
+      title: "Golden",
+      artist: "HUNTR/X, EJAE, AUDREY NUNA",
+      type: "single",
+      genre: "Electronic",
+      releaseDate: "2024-03-10",
+      image: "https://via.placeholder.com/400x400/3B82F6/FFFFFF?text=Golden",
+      description:
+        "Collaborative single featuring multiple artists in the electronic scene.",
+      tracks: 1,
+      duration: "3:45",
+    },
+    {
+      id: 3,
+      title: "The Life of a Showgirl",
+      artist: "Taylor Swift",
+      type: "album",
+      genre: "Pop",
+      releaseDate: "2024-03-05",
+      image: "https://via.placeholder.com/400x400/EC4899/FFFFFF?text=Showgirl",
+      description:
+        "A visual album experience showcasing theatrical pop performances.",
+      tracks: 16,
+      duration: "52:18",
+    },
+    {
+      id: 4,
+      title: "Ordinary",
+      artist: "Alex Warren",
+      type: "ep",
+      genre: "Indie",
+      releaseDate: "2024-03-12",
+      image: "https://via.placeholder.com/400x400/10B981/FFFFFF?text=Ordinary",
+      description:
+        "A collection of heartfelt indie tracks about everyday life.",
+      tracks: 5,
+      duration: "18:30",
+    },
+    {
+      id: 5,
+      title: "Debi Titar Mas Fotos",
+      artist: "Bad Bunny",
+      type: "album",
+      genre: "Reggaeton",
+      releaseDate: "2024-03-01",
+      image: "https://via.placeholder.com/400x400/F59E0B/FFFFFF?text=Bad+Bunny",
+      description: "Latest reggaeton album with urban latin vibes.",
+      tracks: 14,
+      duration: "48:15",
+    },
+    {
+      id: 6,
+      title: "WHERE IS MY HUSBAND!",
+      artist: "RAYE",
+      type: "single",
+      genre: "R&B",
+      releaseDate: "2024-03-15",
+      image: "https://via.placeholder.com/400x400/6366F1/FFFFFF?text=RAYE",
+      description: "Powerful R&B single with emotional vocals.",
+      tracks: 1,
+      duration: "3:22",
+    },
+    {
+      id: 7,
+      title: "Music",
+      artist: "Playboi Carti",
+      type: "album",
+      genre: "Hip Hop",
+      releaseDate: "2024-03-07",
+      image: "https://via.placeholder.com/400x400/8B5CF6/FFFFFF?text=Music",
+      description: "Experimental hip hop album pushing genre boundaries.",
+      tracks: 12,
+      duration: "38:45",
+    },
+    {
+      id: 8,
+      title: "back to friends",
+      artist: "sombr",
+      type: "ep",
+      genre: "Alternative",
+      releaseDate: "2024-03-14",
+      image: "https://via.placeholder.com/400x400/EC4899/FFFFFF?text=sombr",
+      description: "Alternative EP about friendship and nostalgia.",
+      tracks: 4,
+      duration: "15:20",
+    },
+  ];
+
+  return mockData;
 }

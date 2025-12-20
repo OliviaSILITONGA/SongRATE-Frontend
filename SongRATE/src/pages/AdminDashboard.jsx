@@ -6,6 +6,7 @@ import AdminStatsCard from "../components/AdminStatsCard";
 import AdminSongTable from "../components/AdminSongTable";
 import AdminUserTable from "../components/AdminUserTable";
 import AdminRecentActivity from "../components/AdminRecentActivity";
+import ArtistManagement from "../components/ArtistManagement";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function AdminDashboard() {
   });
   const [loading, setLoading] = useState({
     songs: false,
-    users: false
+    users: false,
   });
 
   // Set sidebar state berdasarkan screen size
@@ -66,7 +67,7 @@ export default function AdminDashboard() {
   }, []);
 
   const fetchSongs = async () => {
-    setLoading(prev => ({ ...prev, songs: true }));
+    setLoading((prev) => ({ ...prev, songs: true }));
     try {
       // Ganti dengan API endpoint yang sesuai
       const response = await fetch("/api/songs");
@@ -84,7 +85,7 @@ export default function AdminDashboard() {
             genre: "Pop",
             duration: "3:45",
             ratings: 1078,
-            imageUrl: "https://via.placeholder.com/150"
+            imageUrl: "https://via.placeholder.com/150",
           },
           {
             id: 2,
@@ -94,7 +95,7 @@ export default function AdminDashboard() {
             genre: "Pop",
             duration: "4:12",
             ratings: 1158,
-            imageUrl: "https://via.placeholder.com/150"
+            imageUrl: "https://via.placeholder.com/150",
           },
           {
             id: 3,
@@ -104,7 +105,7 @@ export default function AdminDashboard() {
             genre: "Indie",
             duration: "3:30",
             ratings: 997,
-            imageUrl: "https://via.placeholder.com/150"
+            imageUrl: "https://via.placeholder.com/150",
           },
         ]);
       }
@@ -119,7 +120,7 @@ export default function AdminDashboard() {
           genre: "Pop",
           duration: "3:45",
           ratings: 1078,
-          imageUrl: "https://via.placeholder.com/150"
+          imageUrl: "https://via.placeholder.com/150",
         },
         {
           id: 2,
@@ -129,7 +130,7 @@ export default function AdminDashboard() {
           genre: "Pop",
           duration: "4:12",
           ratings: 1158,
-          imageUrl: "https://via.placeholder.com/150"
+          imageUrl: "https://via.placeholder.com/150",
         },
         {
           id: 3,
@@ -139,16 +140,16 @@ export default function AdminDashboard() {
           genre: "Indie",
           duration: "3:30",
           ratings: 997,
-          imageUrl: "https://via.placeholder.com/150"
+          imageUrl: "https://via.placeholder.com/150",
         },
       ]);
     } finally {
-      setLoading(prev => ({ ...prev, songs: false }));
+      setLoading((prev) => ({ ...prev, songs: false }));
     }
   };
 
   const fetchUsers = async () => {
-    setLoading(prev => ({ ...prev, users: true }));
+    setLoading((prev) => ({ ...prev, users: true }));
     try {
       // Ganti dengan API endpoint yang sesuai
       const response = await fetch("/api/users");
@@ -164,7 +165,7 @@ export default function AdminDashboard() {
             name: "John Doe",
             createdAt: "2025-01-01",
             status: "active",
-            ratingsCount: 45
+            ratingsCount: 45,
           },
           {
             id: 2,
@@ -172,7 +173,7 @@ export default function AdminDashboard() {
             name: "Alice Smith",
             createdAt: "2025-01-02",
             status: "active",
-            ratingsCount: 89
+            ratingsCount: 89,
           },
           {
             id: 3,
@@ -180,7 +181,7 @@ export default function AdminDashboard() {
             name: "Bob Wilson",
             createdAt: "2025-01-03",
             status: "inactive",
-            ratingsCount: 12
+            ratingsCount: 12,
           },
         ]);
       }
@@ -193,7 +194,7 @@ export default function AdminDashboard() {
           name: "John Doe",
           createdAt: "2025-01-01",
           status: "active",
-          ratingsCount: 45
+          ratingsCount: 45,
         },
         {
           id: 2,
@@ -201,19 +202,19 @@ export default function AdminDashboard() {
           name: "Alice Smith",
           createdAt: "2025-01-02",
           status: "active",
-          ratingsCount: 89
+          ratingsCount: 89,
         },
         {
           id: 3,
           email: "user3@example.com",
           name: "Bob Wilson",
           createdAt: "2025-01-03",
-            status: "inactive",
-          ratingsCount: 12
+          status: "inactive",
+          ratingsCount: 12,
         },
       ]);
     } finally {
-      setLoading(prev => ({ ...prev, users: false }));
+      setLoading((prev) => ({ ...prev, users: false }));
     }
   };
 
@@ -289,7 +290,11 @@ export default function AdminDashboard() {
       if (response.ok) {
         if (editingSong) {
           // Update songs list
-          setSongs(songs.map((s) => (s.id === editingSong.id ? { ...s, ...formData } : s)));
+          setSongs(
+            songs.map((s) =>
+              s.id === editingSong.id ? { ...s, ...formData } : s
+            )
+          );
         } else {
           // Add new song
           setSongs([...songs, { ...formData, id: Date.now(), ratings: 0 }]);
@@ -300,7 +305,11 @@ export default function AdminDashboard() {
       console.error("Error saving song:", error);
       // Mock save - untuk demo tanpa API
       if (editingSong) {
-        setSongs(songs.map((s) => (s.id === editingSong.id ? { ...s, ...formData } : s)));
+        setSongs(
+          songs.map((s) =>
+            s.id === editingSong.id ? { ...s, ...formData } : s
+          )
+        );
       } else {
         setSongs([...songs, { ...formData, id: Date.now(), ratings: 0 }]);
       }
@@ -310,7 +319,7 @@ export default function AdminDashboard() {
 
   const handleDeleteSong = async (songId) => {
     if (!window.confirm("Are you sure you want to delete this song?")) return;
-    
+
     try {
       const response = await fetch(`/api/songs/${songId}`, {
         method: "DELETE",
@@ -349,8 +358,18 @@ export default function AdminDashboard() {
                 onClick={() => setIsOpen(!isOpen)}
                 className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 </svg>
               </button>
               <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-white truncate">
@@ -359,8 +378,7 @@ export default function AdminDashboard() {
                 {activeTab === "users" && "User Management"}
                 {activeTab === "albums" && "Album Management"}
                 {activeTab === "ratings" && "Rating Management"}
-                {activeTab === "analytics" && "Analytics"}
-                {activeTab === "settings" && "Settings"}
+                {activeTab === "artist" && "Artist Management"}
               </h1>
             </div>
             <div className="flex items-center space-x-3 md:space-x-4">
@@ -374,8 +392,18 @@ export default function AdminDashboard() {
                 onClick={handleLogout}
                 className="px-3 py-2 md:px-4 md:py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors text-sm md:text-base flex items-center gap-2"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
                 </svg>
                 <span className="hidden sm:inline">Logout</span>
               </button>
@@ -411,13 +439,16 @@ export default function AdminDashboard() {
                 />
                 <AdminStatsCard
                   label="Active Users"
-                  value={users.filter(u => u.status === 'active').length}
+                  value={users.filter((u) => u.status === "active").length}
                   icon="✅"
                   color="bg-yellow-500"
                 />
                 <AdminStatsCard
                   label="Total Ratings"
-                  value={songs.reduce((sum, song) => sum + (song.ratings || 0), 0)}
+                  value={songs.reduce(
+                    (sum, song) => sum + (song.ratings || 0),
+                    0
+                  )}
                   icon="⭐"
                   color="bg-purple-500"
                 />
@@ -426,7 +457,9 @@ export default function AdminDashboard() {
               {/* Recent Activity */}
               <div className="bg-[#1C1F26]/50 rounded-xl p-4 md:p-6 border border-gray-700/30">
                 <div className="flex justify-between items-center mb-4 md:mb-6">
-                  <h2 className="text-lg md:text-xl font-bold text-white">Recent Activity</h2>
+                  <h2 className="text-lg md:text-xl font-bold text-white">
+                    Recent Activity
+                  </h2>
                   <button className="text-sm text-yellow-500 hover:text-yellow-400">
                     View All →
                   </button>
@@ -437,15 +470,26 @@ export default function AdminDashboard() {
               {/* Quick Stats */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-[#1C1F26]/50 rounded-xl p-4 md:p-6 border border-gray-700/30">
-                  <h3 className="text-lg font-bold text-white mb-4">Top Rated Songs</h3>
+                  <h3 className="text-lg font-bold text-white mb-4">
+                    Top Rated Songs
+                  </h3>
                   <div className="space-y-3">
                     {songs.slice(0, 3).map((song, index) => (
-                      <div key={song.id} className="flex items-center justify-between p-3 hover:bg-gray-700/30 rounded-lg transition-colors">
+                      <div
+                        key={song.id}
+                        className="flex items-center justify-between p-3 hover:bg-gray-700/30 rounded-lg transition-colors"
+                      >
                         <div className="flex items-center space-x-3">
-                          <span className="text-lg font-bold text-gray-400">#{index + 1}</span>
+                          <span className="text-lg font-bold text-gray-400">
+                            #{index + 1}
+                          </span>
                           <div>
-                            <p className="font-medium text-white">{song.title}</p>
-                            <p className="text-sm text-gray-400">{song.artist}</p>
+                            <p className="font-medium text-white">
+                              {song.title}
+                            </p>
+                            <p className="text-sm text-gray-400">
+                              {song.artist}
+                            </p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -458,12 +502,16 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="bg-[#1C1F26]/50 rounded-xl p-4 md:p-6 border border-gray-700/30">
-                  <h3 className="text-lg font-bold text-white mb-4">System Status</h3>
+                  <h3 className="text-lg font-bold text-white mb-4">
+                    System Status
+                  </h3>
                   <div className="space-y-4">
                     <div>
                       <div className="flex justify-between text-sm mb-2">
                         <span className="text-gray-300">API Status</span>
-                        <span className="text-green-400 font-medium">Online</span>
+                        <span className="text-green-400 font-medium">
+                          Online
+                        </span>
                       </div>
                       <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
                         <div className="h-full bg-green-500 w-full"></div>
@@ -472,14 +520,18 @@ export default function AdminDashboard() {
                     <div>
                       <div className="flex justify-between text-sm mb-2">
                         <span className="text-gray-300">Storage</span>
-                        <span className="text-blue-400 font-medium">65% used</span>
+                        <span className="text-blue-400 font-medium">
+                          65% used
+                        </span>
                       </div>
                       <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
                         <div className="h-full bg-blue-500 w-3/4"></div>
                       </div>
                     </div>
                     <div className="pt-4 border-t border-gray-700/30">
-                      <p className="text-sm text-gray-400">Last updated: {new Date().toLocaleDateString()}</p>
+                      <p className="text-sm text-gray-400">
+                        Last updated: {new Date().toLocaleDateString()}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -496,13 +548,25 @@ export default function AdminDashboard() {
               className="space-y-4 md:space-y-6"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <h2 className="text-2xl md:text-3xl font-bold text-white">Song Management</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-white">
+                  Song Management
+                </h2>
                 <button
                   onClick={() => openSongModal()}
                   className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black rounded-lg font-bold transition-colors flex items-center justify-center gap-2"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
                   </svg>
                   Add New Song
                 </button>
@@ -532,13 +596,27 @@ export default function AdminDashboard() {
               className="space-y-4 md:space-y-6"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <h2 className="text-2xl md:text-3xl font-bold text-white">User Management</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-white">
+                  User Management
+                </h2>
                 <button
-                  onClick={() => {/* Add user functionality */}}
+                  onClick={() => {
+                    /* Add user functionality */
+                  }}
                   className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-bold transition-colors flex items-center justify-center gap-2"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
                   </svg>
                   Add New User
                 </button>
@@ -566,9 +644,12 @@ export default function AdminDashboard() {
               <div className="w-24 h-24 rounded-full bg-gray-700/50 flex items-center justify-center mb-6">
                 <span className="text-4xl">💿</span>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2">Album Management</h3>
+              <h3 className="text-2xl font-bold text-white mb-2">
+                Album Management
+              </h3>
               <p className="text-gray-400 mb-6 max-w-md">
-                This feature is currently under development. You'll be able to manage albums and their details soon.
+                This feature is currently under development. You'll be able to
+                manage albums and their details soon.
               </p>
             </motion.div>
           )}
@@ -583,44 +664,24 @@ export default function AdminDashboard() {
               <div className="w-24 h-24 rounded-full bg-gray-700/50 flex items-center justify-center mb-6">
                 <span className="text-4xl">⭐</span>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2">Rating Management</h3>
+              <h3 className="text-2xl font-bold text-white mb-2">
+                Rating Management
+              </h3>
               <p className="text-gray-400 mb-6 max-w-md">
                 View and manage user ratings and reviews. Coming soon!
               </p>
             </motion.div>
           )}
 
-          {activeTab === "analytics" && (
+          {/* Artists Tab */}
+          {activeTab === "artist" && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="flex flex-col items-center justify-center py-12 text-center"
+              className="space-y-4 md:space-y-6"
             >
-              <div className="w-24 h-24 rounded-full bg-gray-700/50 flex items-center justify-center mb-6">
-                <span className="text-4xl">📈</span>
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-2">Analytics Dashboard</h3>
-              <p className="text-gray-400 mb-6 max-w-md">
-                Detailed analytics and insights about your platform. Coming soon!
-              </p>
-            </motion.div>
-          )}
-
-          {activeTab === "settings" && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="flex flex-col items-center justify-center py-12 text-center"
-            >
-              <div className="w-24 h-24 rounded-full bg-gray-700/50 flex items-center justify-center mb-6">
-                <span className="text-4xl">⚙️</span>
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-2">Settings</h3>
-              <p className="text-gray-400 mb-6 max-w-md">
-                Configure platform settings and preferences. Coming soon!
-              </p>
+              <ArtistManagement />
             </motion.div>
           )}
         </div>
@@ -651,8 +712,18 @@ export default function AdminDashboard() {
                   onClick={closeSongModal}
                   className="p-2 hover:bg-gray-700 rounded-lg"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               </div>

@@ -11,6 +11,7 @@ import TopArtistPage from "./pages/TopArtistPage";
 import PostedPage from "./pages/PostedPage";
 import ChartPage from "./pages/ChartPage";
 import NewReleasesPage from "./pages/NewReleasesPage";
+import LoadMoreReleasesPage from "./pages/LoadMoreReleasesPage";
 import NewsPage from "./pages/NewsPage";
 import ArtistDetailPage from "./pages/ArtistDetailPage";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -32,6 +33,7 @@ function App() {
         <Route path="/posted" element={<PostedPage />} />
         <Route path="/chart" element={<ChartPage />} />
         <Route path="/new-releases" element={<NewReleasesPage />} />
+        <Route path="/load-more-releases" element={<LoadMoreReleasesPage />} />
         <Route path="/news" element={<NewsPage />} />
         <Route path="/artist/:id" element={<ArtistDetailPage />} />
         <Route
