@@ -33,6 +33,20 @@ export default function AdminDashboard() {
     users: false,
   });
 
+  const [news, setNews] = useState([]);
+  const [loadingNews, setLoadingNews] = useState(false);
+  const [showNewsModal, setShowNewsModal] = useState(false);
+  const [editingNews, setEditingNews] = useState(null);
+
+  const [newsForm, setNewsForm] = useState({
+    title: "",
+    category: "",
+    excerpt: "",
+    content: "",
+    image: "",
+    status: "published",
+  });
+
   // Set sidebar state berdasarkan screen size
   useEffect(() => {
     const checkScreenSize = () => {
@@ -335,6 +349,46 @@ export default function AdminDashboard() {
     }
   };
 
+  const fetchNews = async () => {
+    setLoadingNews(true);
+    try {
+      const res = await fetch("/api/news");
+      const data = await res.json();
+      setNews(data);
+    } catch (err) {
+      console.error("Fetch news error:", err);
+    } finally {
+      setLoadingNews(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === "news") {
+      fetchNews();
+    }
+  }, [activeTab]);
+
+  const handleSaveNews = async () => {
+    const method = editingNews ? "PUT" : "POST";
+    const url = editingNews ? `/api/news/${editingNews.id}` : "/api/news";
+
+    await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newsForm),
+    });
+
+    setShowNewsModal(false);
+    fetchNews();
+  };
+
+  const handleDeleteNews = async (id) => {
+    if (!confirm("Delete this news?")) return;
+
+    await fetch(`/api/news/${id}`, { method: "DELETE" });
+    fetchNews();
+  };
+
   return (
     <div className="flex min-h-screen bg-gradient-to-bl from-[#2E333E] via-[#1C1F26] to-[#171A1F]">
       <AdminSidebar
@@ -584,6 +638,79 @@ export default function AdminDashboard() {
                   />
                 </div>
               )}
+            </motion.div>
+          )}
+
+          {/* News Tab */}
+          {activeTab === "news" && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-6"
+            >
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-white">
+                  News Management
+                </h2>
+                <button
+                  onClick={() => {
+                    setEditingNews(null);
+                    setNewsForm({
+                      title: "",
+                      category: "",
+                      excerpt: "",
+                      content: "",
+                      image: "",
+                      status: "published",
+                    });
+                    setShowNewsModal(true);
+                  }}
+                  className="px-4 py-2 bg-yellow-500 text-black font-bold rounded-lg"
+                >
+                  + Add News
+                </button>
+              </div>
+
+              <div className="bg-[#1C1F26]/50 rounded-xl border border-gray-700/30 overflow-hidden">
+                <table className="w-full text-sm text-gray-300">
+                  <thead className="bg-gray-800 text-gray-200">
+                    <tr>
+                      <th className="p-3 text-left">Title</th>
+                      <th>Category</th>
+                      <th>Status</th>
+                      <th className="text-right p-3">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {news.map((n) => (
+                      <tr key={n.id} className="border-t border-gray-700">
+                        <td className="p-3 font-medium">{n.title}</td>
+                        <td>{n.category}</td>
+                        <td>{n.status}</td>
+                        <td className="p-3 text-right space-x-2">
+                          <button
+                            onClick={() => {
+                              setEditingNews(n);
+                              setNewsForm(n);
+                              setShowNewsModal(true);
+                            }}
+                            className="text-yellow-400 hover:underline"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeleteNews(n.id)}
+                            className="text-red-400 hover:underline"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </motion.div>
           )}
 
@@ -851,6 +978,56 @@ export default function AdminDashboard() {
               </div>
             </motion.div>
           </motion.div>
+        )}
+
+        {showNewsModal && (
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+            <div className="bg-[#1C1F26] rounded-xl p-6 w-full max-w-lg">
+              <h2 className="text-xl font-bold text-white mb-4">
+                {editingNews ? "Edit News" : "Add News"}
+              </h2>
+
+              {["title", "category", "excerpt", "content", "image"].map(
+                (field) => (
+                  <input
+                    key={field}
+                    placeholder={field}
+                    value={newsForm[field]}
+                    onChange={(e) =>
+                      setNewsForm({ ...newsForm, [field]: e.target.value })
+                    }
+                    className="w-full mb-3 p-3 bg-gray-700 rounded text-white"
+                  />
+                )
+              )}
+
+              <select
+                value={newsForm.status}
+                onChange={(e) =>
+                  setNewsForm({ ...newsForm, status: e.target.value })
+                }
+                className="w-full p-3 bg-gray-700 text-white rounded mb-4"
+              >
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+              </select>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowNewsModal(false)}
+                  className="flex-1 bg-gray-600 p-3 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveNews}
+                  className="flex-1 bg-yellow-500 p-3 rounded font-bold"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </AnimatePresence>
     </div>

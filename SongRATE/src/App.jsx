@@ -13,6 +13,7 @@ import ChartPage from "./pages/ChartPage";
 import NewReleasesPage from "./pages/NewReleasesPage";
 import LoadMoreReleasesPage from "./pages/LoadMoreReleasesPage";
 import NewsPage from "./pages/NewsPage";
+import NewsDetailPage from "./pages/NewsDetailPage";
 import ArtistDetailPage from "./pages/ArtistDetailPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
@@ -35,6 +36,7 @@ function App() {
         <Route path="/new-releases" element={<NewReleasesPage />} />
         <Route path="/load-more-releases" element={<LoadMoreReleasesPage />} />
         <Route path="/news" element={<NewsPage />} />
+        <Route path="/news/:slug" element={<NewsDetailPage />} />
         <Route path="/artist/:id" element={<ArtistDetailPage />} />
         <Route
           path="/admin"

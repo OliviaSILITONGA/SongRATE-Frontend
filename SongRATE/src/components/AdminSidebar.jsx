@@ -24,6 +24,7 @@ export default function AdminSidebar({
     { id: "dashboard", label: "Dashboard", icon: "📊" },
     { id: "users", label: "Users", icon: "👥" },
     { id: "songs", label: "Songs", icon: "🎵" },
+    { id: "news", label: "News", icon: "📰" },
     { id: "albums", label: "Albums", icon: "💿" },
     { id: "ratings", label: "Ratings", icon: "⭐" },
     { id: "artist", label: "Artist", icon: "🎤" },
