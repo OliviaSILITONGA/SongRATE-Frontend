@@ -34,17 +34,13 @@ export default function AdminNewsManagement() {
 
   const fetchNews = async () => {
     try {
-      setLoading(true);
-      const res = await fetch(buildApi("/api/news"), {
+      const res = await fetch(`${API_BASE}/api/news`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch news");
-      const data = await res.json();
-      setNews(data || []);
+      setNews(await res.json());
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      console.error(err);
     }
   };
 
@@ -77,17 +73,14 @@ export default function AdminNewsManagement() {
       setError(null);
       setSuccess(null);
 
-      const res = await fetch(
-        buildApi(`/api/news/${currentNews.id}`),
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const res = await fetch(buildApi(`/api/news/${currentNews.id}`), {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (!res.ok) throw new Error("Failed to update news");
       setSuccess("News updated successfully!");
@@ -122,14 +115,14 @@ export default function AdminNewsManagement() {
 
   const resetForm = () => {
     setFormData({
-      title: "",
-      slug: "",
-      category: "",
-      excerpt: "",
-      content: "",
-      image: "",
-      isFeatured: false,
-      status: "published",
+      title: item.title,
+      slug: item.slug,
+      category: item.category,
+      excerpt: item.excerpt,
+      content: item.content,
+      image: item.image,
+      isFeatured: item.isFeatured,
+      status: item.status,
     });
     setCurrentNews(null);
   };
