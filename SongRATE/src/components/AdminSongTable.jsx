@@ -39,7 +39,7 @@ export default function SongManagement() {
 
   const fetchSongs = async () => {
     try {
-      setLoading(true);
+      setLoading(false);
       const res = await fetch(buildApi("/api/songs"), {
         headers: { Authorization: `Bearer ${token}` },
       });
