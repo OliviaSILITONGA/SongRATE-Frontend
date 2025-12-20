@@ -127,6 +127,8 @@ export default function AdminNewsManagement() {
     setCurrentNews(null);
   };
 
+  console.log("API_BASE:", API_BASE);
+
   return (
     <div className="p-8 text-white bg-[#1C1F26] min-h-screen">
       <h1 className="text-3xl font-bold mb-6">News Management</h1>
