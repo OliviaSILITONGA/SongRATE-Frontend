@@ -34,7 +34,7 @@ export default function AdminNewsManagement() {
 
   const fetchNews = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/news`, {
+      const res = await fetch(buildApi("/api/news"), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch news");
