@@ -1,9 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import GrammyImage from "../assets/Grammy_HD.png"; // Anda perlu menambahkan gambar Grammy
 
 export default function Banner() {
-  const navigate = useNavigate();
-
   return (
     <div className="relative mt-24 mx-4 md:mx-8 lg:mx-16 mb-12 md:mb-16">
       {/* Background dengan gradient dan efek blur */}
@@ -56,8 +53,10 @@ export default function Banner() {
               </p>
 
               <div className="space-y-4">
-                <button
-                  onClick={() => navigate("/grammy-nominations")}
+                <a
+                  href="https://www.grammy.com/news/2026-grammys-nominations-full-winners-nominees-list"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold py-4 px-10 rounded-lg text-lg md:text-xl hover:from-yellow-300 hover:to-yellow-400 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl inline-flex items-center gap-3 group"
                 >
                   <span>See the full nominees list</span>
@@ -74,7 +73,7 @@ export default function Banner() {
                       d="M17 8l4 4m0 0l-4 4m4-4H3"
                     />
                   </svg>
-                </button>
+                </a>
 
                 <div className="text-gray-200 text-sm md:text-base flex flex-wrap items-center justify-center lg:justify-start gap-4">
                   <span className="flex items-center gap-2">
