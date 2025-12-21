@@ -69,16 +69,27 @@ export default function AdminDashboard() {
 
   /* ===================== FETCH NEWS ===================== */
   const fetchNews = async () => {
-    setLoadingNews(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/news`);
-      if (!res.ok) throw new Error("News API error");
-      setNews(await res.json());
+      setLoading(true);
+      setError(null);
+
+      const res = await fetch(buildApi("/api/admin/news"), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || "Failed to fetch news");
+      }
+
+      const data = await res.json();
+      setNews(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error("Failed to fetch news:", err);
-      setNews([]);
+      setError(err.message);
     } finally {
-      setLoadingNews(false);
+      setLoading(false);
     }
   };
 

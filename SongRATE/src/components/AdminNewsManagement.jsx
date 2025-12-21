@@ -42,14 +42,19 @@ export default function AdminNewsManagement() {
       setLoading(true);
       setError(null);
 
-      const res = await fetch(buildApi("/api/news"), {
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await fetch(buildApi("/api/admin/news"), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
-      if (!res.ok) throw new Error("Failed to fetch news");
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || "Failed to fetch news");
+      }
 
       const data = await res.json();
-      setNews(data || []);
+      setNews(Array.isArray(data) ? data : []);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -67,6 +72,17 @@ export default function AdminNewsManagement() {
         setError("Title is required");
         return;
       }
+
+      const payload = {
+        ...formData,
+        slug:
+          formData.slug ||
+          formData.title
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)/g, ""),
+        excerpt: formData.excerpt || formData.content.slice(0, 120),
+      };
 
       const res = await fetch(buildApi("/api/admin/news"), {
         method: "POST",
@@ -93,17 +109,14 @@ export default function AdminNewsManagement() {
       setError(null);
       setSuccess(null);
 
-      const res = await fetch(
-        buildApi(`/api/admin/news/${currentNews.id}`),
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const res = await fetch(buildApi(`/api/admin/news/${currentNews.id}`), {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
 
       if (!res.ok) throw new Error("Failed to update news");
 
@@ -207,12 +220,8 @@ export default function AdminNewsManagement() {
                 {news.map((n) => (
                   <tr key={n.id} className="border-t border-gray-700">
                     <td className="px-6 py-4">{n.title}</td>
-                    <td className="px-6 py-4 text-gray-400">
-                      {n.category}
-                    </td>
-                    <td className="px-6 py-4 text-gray-400">
-                      {n.status}
-                    </td>
+                    <td className="px-6 py-4 text-gray-400">{n.category}</td>
+                    <td className="px-6 py-4 text-gray-400">{n.status}</td>
                     <td className="px-6 py-4 space-x-3">
                       <button
                         onClick={() => handleOpenEdit(n)}
@@ -257,6 +266,15 @@ export default function AdminNewsManagement() {
                 value={formData.category}
                 onChange={(e) =>
                   setFormData({ ...formData, category: e.target.value })
+                }
+              />
+
+              <input
+                className="w-full mb-3 px-4 py-2 bg-[#1C1F26] rounded"
+                placeholder="Excerpt"
+                value={formData.excerpt}
+                onChange={(e) =>
+                  setFormData({ ...formData, excerpt: e.target.value })
                 }
               />
 
