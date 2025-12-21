@@ -8,8 +8,15 @@ import AdminSongTable from "../components/AdminSongTable";
 import AdminUserTable from "../components/AdminUserTable";
 import AdminRecentActivity from "../components/AdminRecentActivity";
 import ArtistManagement from "../components/ArtistManagement";
+import AdminNewsManagement from "../components/AdminNewsManagement";
+import AdminRatingManagement from "../components/AdminRatingManagement";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// API Base URL dengan fallback
+let API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || "";
+if (API_BASE_URL && !/^https?:\/\//.test(API_BASE_URL)) {
+  API_BASE_URL = `https://${API_BASE_URL}`;
+}
+API_BASE_URL = API_BASE_URL.replace(/\/$/, "");
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -41,9 +48,10 @@ export default function AdminDashboard() {
   const fetchSongs = async () => {
     setLoading((l) => ({ ...l, songs: true }));
     try {
-      const res = await fetch(`${API_BASE_URL}/songs`);
+      const res = await fetch(`${API_BASE_URL}/api/songs`);
       if (!res.ok) throw new Error("Songs API error");
-      setSongs(await res.json());
+      const data = await res.json();
+      setSongs(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Failed to fetch songs:", err);
       setSongs([]);
@@ -56,9 +64,15 @@ export default function AdminDashboard() {
   const fetchUsers = async () => {
     setLoading((l) => ({ ...l, users: true }));
     try {
-      const res = await fetch(`${API_BASE_URL}/users`);
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${API_BASE_URL}/api/users`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!res.ok) throw new Error("Users API error");
-      setUsers(await res.json());
+      const data = await res.json();
+      setUsers(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Failed to fetch users:", err);
       setUsers([]);
@@ -70,10 +84,10 @@ export default function AdminDashboard() {
   /* ===================== FETCH NEWS ===================== */
   const fetchNews = async () => {
     try {
-      setLoading(true);
-      setError(null);
+      setLoadingNews(true);
+      const token = localStorage.getItem("token");
 
-      const res = await fetch(buildApi("/api/admin/news"), {
+      const res = await fetch(`${API_BASE_URL}/api/admin/news`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -87,9 +101,10 @@ export default function AdminDashboard() {
       const data = await res.json();
       setNews(Array.isArray(data) ? data : []);
     } catch (err) {
-      setError(err.message);
+      console.error("Failed to fetch news:", err);
+      setNews([]);
     } finally {
-      setLoading(false);
+      setLoadingNews(false);
     }
   };
 
@@ -159,25 +174,9 @@ export default function AdminDashboard() {
             <AdminUserTable users={users} loading={loading.users} />
           )}
 
-          {activeTab === "news" && (
-            <>
-              {loadingNews ? (
-                <p>Loading news...</p>
-              ) : (
-                <ul className="space-y-3">
-                  {news.map((n) => (
-                    <li
-                      key={n.id}
-                      className="border border-gray-700 p-4 rounded"
-                    >
-                      <h3 className="font-bold">{n.title}</h3>
-                      <p className="text-sm text-gray-400">{n.category}</p>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </>
-          )}
+          {activeTab === "news" && <AdminNewsManagement />}
+
+          {activeTab === "ratings" && <AdminRatingManagement />}
 
           {activeTab === "artist" && <ArtistManagement />}
         </div>

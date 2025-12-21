@@ -1,6 +1,13 @@
+// API Base URL dengan fallback
+let API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || "";
+if (API_BASE_URL && !/^https?:\/\//.test(API_BASE_URL)) {
+  API_BASE_URL = `https://${API_BASE_URL}`;
+}
+API_BASE_URL = API_BASE_URL.replace(/\/$/, "");
+
 export async function getAllNews() {
   try {
-    const res = await fetch("/api/news");
+    const res = await fetch(`${API_BASE_URL}/api/news`);
     if (!res.ok) {
       throw new Error("Failed to fetch news");
     }
@@ -8,18 +15,8 @@ export async function getAllNews() {
     return data;
   } catch (err) {
     console.error("getAllNews error:", err);
-    // Fallback mock data so frontend won't break during development
-    return [
-      {
-        id: 1,
-        title: "Welcome to SongRATE",
-        category: "Announcement",
-        excerpt: "Platform launched",
-        content: "This is a demo news item.",
-        image: "",
-        status: "published",
-      },
-    ];
+    // Return empty array so frontend won't break
+    return [];
   }
 }
 
@@ -27,15 +24,13 @@ export async function getNewsBySlug(slug) {
   if (!slug) return null;
   try {
     // Try endpoint by slug first
-    let res = await fetch(`/api/news/${encodeURIComponent(slug)}`);
+    let res = await fetch(`${API_BASE_URL}/api/news/${encodeURIComponent(slug)}`);
     if (res.ok) return await res.json();
 
-    // Try query param fallback
-    res = await fetch(`/api/news?slug=${encodeURIComponent(slug)}`);
+    // Try by ID as fallback
+    res = await fetch(`${API_BASE_URL}/api/news/${encodeURIComponent(slug)}`);
     if (res.ok) {
       const data = await res.json();
-      // if API returns array, return first match
-      if (Array.isArray(data)) return data[0] || null;
       return data;
     }
 
@@ -56,3 +51,4 @@ export async function getNewsBySlug(slug) {
     );
   }
 }
+

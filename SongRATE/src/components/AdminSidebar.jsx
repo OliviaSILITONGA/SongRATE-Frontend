@@ -25,7 +25,6 @@ export default function AdminSidebar({
     { id: "users", label: "Users", icon: "👥" },
     { id: "songs", label: "Songs", icon: "🎵" },
     { id: "news", label: "News", icon: "📰" },
-    { id: "albums", label: "Albums", icon: "💿" },
     { id: "ratings", label: "Ratings", icon: "⭐" },
     { id: "artist", label: "Artist", icon: "🎤" },
   ];
@@ -52,13 +51,13 @@ export default function AdminSidebar({
             onClick={() => navigate("/admin")}
             className="focus:outline-none hover:opacity-80 transition-transform hover:scale-105"
           >
-            <img 
-              src={Logo} 
-              alt="SongRATE Logo" 
-              className="h-10 w-auto md:h-12" 
+            <img
+              src={Logo}
+              alt="SongRATE Logo"
+              className="h-10 w-auto md:h-12"
             />
           </button>
-          
+
           {/* Admin Badge */}
           <div className="mt-2 bg-yellow-500/10 border border-yellow-500/30 rounded-full px-3 py-1">
             <span className="text-yellow-400 text-xs font-medium flex items-center gap-1">
@@ -93,11 +92,10 @@ export default function AdminSidebar({
                       setIsOpen(false);
                     }
                   }}
-                  className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 group ${
-                    activeTab === item.id
+                  className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 group ${activeTab === item.id
                       ? "bg-yellow-500 text-black font-bold shadow-lg"
                       : "hover:bg-gray-700/50 text-gray-300"
-                  }`}
+                    }`}
                 >
                   <span className={`text-lg ${activeTab === item.id ? 'text-black' : 'group-hover:text-yellow-400'}`}>
                     {item.icon}
@@ -125,7 +123,7 @@ export default function AdminSidebar({
               </svg>
               <span className="text-sm md:text-base">Logout Admin</span>
             </button>
-            
+
             {/* Current User Info */}
             <div className="mt-4 p-3 bg-gray-800/30 rounded-lg">
               <p className="text-xs text-gray-400 text-center">
