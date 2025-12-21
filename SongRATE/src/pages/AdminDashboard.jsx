@@ -9,6 +9,7 @@ import AdminUserTable from "../components/AdminUserTable";
 import AdminRecentActivity from "../components/AdminRecentActivity";
 import ArtistManagement from "../components/ArtistManagement";
 import AdminNewsManagement from "../components/AdminNewsManagement";
+import AdminRatingManagement from "../components/AdminRatingManagement";
 
 // API Base URL dengan fallback
 let API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || "";
@@ -174,6 +175,8 @@ export default function AdminDashboard() {
           )}
 
           {activeTab === "news" && <AdminNewsManagement />}
+
+          {activeTab === "ratings" && <AdminRatingManagement />}
 
           {activeTab === "artist" && <ArtistManagement />}
         </div>
