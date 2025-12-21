@@ -63,7 +63,12 @@ export default function AdminDashboard() {
   const fetchUsers = async () => {
     setLoading((l) => ({ ...l, users: true }));
     try {
-      const res = await fetch(`${API_BASE_URL}/api/users`);
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${API_BASE_URL}/api/users`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!res.ok) throw new Error("Users API error");
       const data = await res.json();
       setUsers(Array.isArray(data) ? data : []);
