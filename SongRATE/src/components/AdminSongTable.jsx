@@ -39,14 +39,18 @@ export default function SongManagement() {
 
   const fetchSongs = async () => {
     try {
-      setLoading(false);
+      setLoading(true);
       const res = await fetch(buildApi("/api/songs"), {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!res.ok) throw new Error("Failed to fetch songs");
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to fetch songs");
+      }
       const data = await res.json();
-      setSongs(data || []);
+      setSongs(Array.isArray(data) ? data : []);
     } catch (err) {
+      console.error("Fetch songs error:", err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -61,8 +65,8 @@ export default function SongManagement() {
         type === "checkbox"
           ? checked
           : name === "tracks" || name === "releaseYear"
-          ? parseInt(value)
-          : value,
+            ? parseInt(value)
+            : value,
     }));
   };
 
@@ -84,12 +88,20 @@ export default function SongManagement() {
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error("Failed to add song");
+      // Parse response untuk mendapatkan detail error
+      const responseData = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        const errorMessage = responseData.message || responseData.error || `Failed to add song (${res.status})`;
+        throw new Error(errorMessage);
+      }
+
       setSuccess("Song added successfully!");
       await fetchSongs();
       resetForm();
       setShowModal(false);
     } catch (err) {
+      console.error("Add song error:", err);
       setError(err.message);
     }
   };
@@ -112,12 +124,20 @@ export default function SongManagement() {
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error("Failed to update song");
+      // Parse response untuk mendapatkan detail error
+      const responseData = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        const errorMessage = responseData.message || responseData.error || `Failed to update song (${res.status})`;
+        throw new Error(errorMessage);
+      }
+
       setSuccess("Song updated successfully!");
       await fetchSongs();
       resetForm();
       setShowModal(false);
     } catch (err) {
+      console.error("Update song error:", err);
       setError(err.message);
     }
   };
@@ -130,10 +150,18 @@ export default function SongManagement() {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!res.ok) throw new Error("Failed to delete song");
+
+      const responseData = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        const errorMessage = responseData.message || responseData.error || `Failed to delete song (${res.status})`;
+        throw new Error(errorMessage);
+      }
+
       setSuccess("Song deleted successfully!");
       await fetchSongs();
     } catch (err) {
+      console.error("Delete song error:", err);
       setError(err.message);
     }
   };
